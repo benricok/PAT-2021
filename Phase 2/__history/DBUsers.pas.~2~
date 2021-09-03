@@ -1,0 +1,21 @@
+unit DBUsers;
+
+interface
+
+uses ADODB, Math, SysUtils, Classes, Windows, DB;
+
+type
+  TDBUsers = class
+  private
+    var
+      conDB: TADOConnection;
+      tblMusic: TADOtable;
+      qry: TADOQuery;
+      dsrTbl: TDataSource;
+      dsrSQL: TDataSource;
+      SQL: String;
+  end;
+
+implementation
+
+end.

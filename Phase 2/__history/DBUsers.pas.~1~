@@ -1,0 +1,14 @@
+unit DBUsers;
+
+interface
+
+uses ADODB, Math, SysUtils, Classes, Windows, DB;
+
+type
+  TDBUsers = class
+
+  end;
+
+implementation
+
+end.
