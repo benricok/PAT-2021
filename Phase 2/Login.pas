@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DBUsers_u;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls;
 
 type
   TfrmLogin = class(TForm)
@@ -32,6 +32,8 @@ implementation
 {$R *.dfm}
 
 { TfrmLogin }
+
+uses DBUsers_u;
 
 // Class getter
 procedure TfrmLogin.btnLoginClick(Sender: TObject);

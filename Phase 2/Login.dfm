@@ -6,7 +6,7 @@ object frmLogin: TfrmLogin
   BorderStyle = bsSizeToolWin
   Caption = 'Login'
   ClientHeight = 192
-  ClientWidth = 195
+  ClientWidth = 199
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls;
 
 type
-  TForm1 = class(TForm)
+  TfrmMain = class(TForm)
     tbcMain: TPageControl;
     tabDash: TTabSheet;
     tabHelp: TTabSheet;
@@ -21,7 +21,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  frmMain: TfrmMain;
 
 implementation
 
