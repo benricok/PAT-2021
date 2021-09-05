@@ -102,7 +102,7 @@
             <Form>frmLogin</Form>
         </DCCReference>
         <DCCReference Include="Main.pas">
-            <Form>Form1</Form>
+            <Form>frmMain</Form>
         </DCCReference>
         <DCCReference Include="DBUsers_u.pas"/>
         <BuildConfiguration Include="Release">
