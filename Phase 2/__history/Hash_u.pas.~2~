@@ -1,0 +1,11 @@
+unit Hash_u;
+
+interface
+
+uses SysUtils, System;
+
+
+
+implementation
+
+end.

@@ -1,0 +1,9 @@
+unit Hash;
+
+uses SysUtils, IdGlobal, IdHash, IdHashMessageDiges;
+
+interface
+
+implementation
+
+end.
