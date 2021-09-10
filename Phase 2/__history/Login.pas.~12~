@@ -1,0 +1,107 @@
+unit Login;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB;
+
+type
+  TfrmLogin = class(TForm)
+    pnlLogin: TPanel;
+    btnLogin: TBitBtn;
+    edtUser: TEdit;
+    edtPass: TEdit;
+    lblUser: TLabel;
+    lblPass: TLabel;
+    procedure btnLoginClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    var
+      bAuth : boolean;
+      conDB: TADOConnection;
+      tblMusic: TADOtable;
+      qry: TADOQuery;
+      dsrTbl: TDataSource;
+      dsrSQL: TDataSource;
+      SQL: String;
+  published
+    Procedure logout;
+    {Procedure connectDB;}
+    Function isAuthenticated : boolean;
+  end;
+
+var
+  frmLogin: TfrmLogin;
+  {conDB: TADOConnection;
+  tblMusic: TADOtable;
+  qry: TADOQuery;
+  dsrTbl: TDataSource;
+  dsrSQL: TDataSource;}
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmLogin }
+
+uses DBUsers_u;
+
+// Class getter
+procedure TfrmLogin.btnLoginClick(Sender: TObject);
+begin
+  if NOT((edtPass.Text = '') OR (edtUser.Text = '')) then begin
+
+  end else
+    MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
+end;
+
+procedure TfrmLogin.FormCreate(Sender: TObject);
+begin
+  DBUsers.connectDB;
+end;
+
+function TfrmLogin.isAuthenticated : boolean;
+begin
+  if bAuth then
+    result := true
+  else
+    result := false;
+end;
+
+// Class setter
+procedure TfrmLogin.logout;
+begin
+  bAuth := false;
+end;
+
+{Procedure TDBUsers.connectDB;
+begin
+  conDB := TADOConnection.Create(Self);
+  // replace DB name
+  conDB.ConnectionString :=
+    'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=Users.mdb;' +
+    'Mode=ReadWrite;Persist Security Info=False';
+
+  conDB.LoginPrompt := false;
+  conDB.Connected := true;
+
+  tblMusic := TADOtable.Create(Self);
+  tblMusic.Connection := conDB;
+  // replace TABLE Name
+  tblMusic.TableName := 'Users';
+  tblMusic.Active := true;
+
+  qry := TADOQuery.Create(Self);
+  qry.Connection := conDB;
+
+  dsrTbl := TDataSource.Create(Self);
+  dsrTbl.DataSet := tblMusic;
+
+  //dbgTable.DataSource := dsrTbl;
+
+  dsrSQL := TDataSource.Create(Self);
+  dsrSQL.DataSet := qry;
+
+end;}
+end.

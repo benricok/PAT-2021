@@ -4,19 +4,10 @@ interface
 
 uses ADODB, Math, SysUtils, Classes, Windows, DB;
 
-{uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ADODB, DB, Math, Jpeg, StdCtrls, Grids, DBGrids, ComCtrls, ExtCtrls;
-}
 type
   TDBUsers = class(TComponent)
   private
     var
-      conDB: TADOConnection;
-      tblMusic: TADOtable;
-      qry: TADOQuery;
-      dsrTbl: TDataSource;
-      dsrSQL: TDataSource;
       SQL: String;
   published
     Procedure connectDB;
@@ -24,15 +15,20 @@ type
 
 var
   DBUsers : TDBUsers;
+  conDB: TADOConnection;
+  tblMusic: TADOtable;
+  qry: TADOQuery;
+  dsrTbl: TDataSource;
+  dsrSQL: TDataSource;
 
 implementation
 
 Procedure TDBUsers.connectDB;
 begin
   conDB := TADOConnection.Create(Self);
-  // replace DB name
+
   conDB.ConnectionString :=
-    'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=Users.mdb;' +
+    'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=.\Users.MDB;' +
     'Mode=ReadWrite;Persist Security Info=False';
 
   conDB.LoginPrompt := false;
@@ -40,7 +36,7 @@ begin
 
   tblMusic := TADOtable.Create(Self);
   tblMusic.Connection := conDB;
-  // replace TABLE Name
+
   tblMusic.TableName := 'Users';
   tblMusic.Active := true;
 
@@ -49,8 +45,6 @@ begin
 
   dsrTbl := TDataSource.Create(Self);
   dsrTbl.DataSet := tblMusic;
-
-  //dbgTable.DataSource := dsrTbl;
 
   dsrSQL := TDataSource.Create(Self);
   dsrSQL.DataSet := qry;

@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB;
 
 type
   TfrmLogin = class(TForm)
@@ -19,6 +19,12 @@ type
   private
     var
       bAuth : boolean;
+      conDB: TADOConnection;
+      tblMusic: TADOtable;
+      qry: TADOQuery;
+      dsrTbl: TDataSource;
+      dsrSQL: TDataSource;
+      SQL: String;
   published
     Procedure logout;
     Function isAuthenticated : boolean;
@@ -42,7 +48,6 @@ begin
 
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
-
 end;
 
 procedure TfrmLogin.FormCreate(Sender: TObject);
@@ -63,5 +68,4 @@ procedure TfrmLogin.logout;
 begin
   bAuth := false;
 end;
-
 end.
