@@ -18,26 +18,31 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabLogout
+    ActivePage = tabDash
     TabOrder = 0
     object tabDash: TTabSheet
       Caption = 'Dashboard'
+      ExplicitWidth = 802
     end
     object tabChat: TTabSheet
       Caption = 'Chat'
       ImageIndex = 3
+      ExplicitWidth = 797
     end
     object tabHelp: TTabSheet
       Caption = 'Help'
       ImageIndex = 1
+      ExplicitWidth = 797
     end
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      ExplicitWidth = 797
     end
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
+      ExplicitWidth = 797
     end
   end
 end

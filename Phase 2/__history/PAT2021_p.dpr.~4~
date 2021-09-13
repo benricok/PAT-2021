@@ -4,8 +4,7 @@ uses
   Vcl.Forms,
   Login in 'Login.pas' {frmLogin},
   Main in 'Main.pas' {frmMain},
-  DBUsers_u in 'DBUsers_u.pas',
-  Algorithms_u in 'Algorithms_u.pas';
+  DBUsers_u in 'DBUsers_u.pas';
 
 {$R *.res}
 

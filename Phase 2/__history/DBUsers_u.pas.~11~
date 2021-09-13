@@ -14,9 +14,8 @@ type
   end;
 
 var
-  DBUsers : TDBUsers;
   conDB: TADOConnection;
-  tblUsers: TADOtable;
+  tblMusic: TADOtable;
   qry: TADOQuery;
   dsrTbl: TDataSource;
   dsrSQL: TDataSource;
@@ -34,17 +33,17 @@ begin
   conDB.LoginPrompt := false;
   conDB.Connected := true;
 
-  tblUsers := TADOtable.Create(Self);
-  tblUsers.Connection := conDB;
+  tblMusic := TADOtable.Create(Self);
+  tblMusic.Connection := conDB;
 
-  tblUsers.TableName := 'Users';
-  tblUSers.Active := true;
+  tblMusic.TableName := 'Users';
+  tblMusic.Active := true;
 
   qry := TADOQuery.Create(Self);
   qry.Connection := conDB;
 
   dsrTbl := TDataSource.Create(Self);
-  dsrTbl.DataSet := tblUsers;
+  dsrTbl.DataSet := tblMusic;
 
   dsrSQL := TDataSource.Create(Self);
   dsrSQL.DataSet := qry;

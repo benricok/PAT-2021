@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DBUsers_u;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Algorithms_u;
 
 type
   TfrmLogin = class(TForm)
@@ -19,6 +19,13 @@ type
   private
     var
       bAuth : boolean;
+      sPrivalige : string;
+      conDB: TADOConnection;
+      tblMusic: TADOtable;
+      qry: TADOQuery;
+      dsrTbl: TDataSource;
+      dsrSQL: TDataSource;
+      SQL: String;
   published
     Procedure logout;
     Function isAuthenticated : boolean;
@@ -33,14 +40,17 @@ implementation
 
 { TfrmLogin }
 
+uses DBUsers_u;
+
 // Class getter
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
 begin
   if NOT((edtPass.Text = '') OR (edtUser.Text = '')) then begin
-
+    tblUsers.open;
+    tblUsers.First;
+    tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]);
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
-
 end;
 
 procedure TfrmLogin.FormCreate(Sender: TObject);
@@ -61,5 +71,4 @@ procedure TfrmLogin.logout;
 begin
   bAuth := false;
 end;
-
 end.

@@ -1,0 +1,16 @@
+unit Hash_u;
+
+interface
+
+uses SysUtils, System;
+
+Function hash(sPassword : string) : string;
+
+implementation
+
+Function hash(sPassword : string) : string;
+begin
+
+end;
+
+end.

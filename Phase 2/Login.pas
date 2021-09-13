@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Algorithms_u;
 
 type
   TfrmLogin = class(TForm)
@@ -19,6 +19,7 @@ type
   private
     var
       bAuth : boolean;
+      sPrivilege : string;
       conDB: TADOConnection;
       tblMusic: TADOtable;
       qry: TADOQuery;
@@ -28,6 +29,7 @@ type
   published
     Procedure logout;
     Function isAuthenticated : boolean;
+    Function getPriv : string;
   end;
 
 var
@@ -43,8 +45,24 @@ uses DBUsers_u;
 
 // Class getter
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
+Var
+  bCorrect : boolean;
+  sHashed : string;
 begin
+  bCorrect := true;
+
   if NOT((edtPass.Text = '') OR (edtUser.Text = '')) then begin
+    tblUsers.open;
+    tblUsers.First;
+    if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
+      sHashed := hash(edtPass.Text);
+      if tblUsers['HashedPASS'] = sHashed then
+        bAuth := true;
+        sPrivilege := tblUsers[''];
+      else
+        bCorrect := false;
+    end else
+      bCorrect := false;
 
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
@@ -55,12 +73,14 @@ begin
   DBUsers.connectDB;
 end;
 
+function TfrmLogin.getPriv: string;
+begin
+  result := sPrivilege;
+end;
+
 function TfrmLogin.isAuthenticated : boolean;
 begin
-  if bAuth then
-    result := true
-  else
-    result := false;
+  result := bAuth;
 end;
 
 // Class setter

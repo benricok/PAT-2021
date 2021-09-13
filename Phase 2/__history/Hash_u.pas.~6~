@@ -1,0 +1,17 @@
+unit Hash_u;
+
+interface
+
+uses SysUtils, System, System.Hash;
+
+Function hash(sPassword : string) : string;
+
+implementation
+
+Function hash(sPassword : string) : string;
+begin
+// Hash password
+  result := THashMD5.GetHashString(ClearTextString)
+end;
+
+end.
