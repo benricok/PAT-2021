@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Algorithms_u;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Algorithms_u, Main;
 
 type
   TfrmLogin = class(TForm)
@@ -16,6 +16,7 @@ type
     lblPass: TLabel;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     var
       bAuth : boolean;
@@ -56,16 +57,26 @@ begin
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
       sHashed := hash(edtPass.Text);
-      if tblUsers['HashedPASS'] = sHashed then
+      if tblUsers['HashedPASS'] = sHashed then begin
         bAuth := true;
-        sPrivilege := tblUsers[''];
-      else
+        sPrivilege := tblUsers['Privilege'];
+      end else
         bCorrect := false;
     end else
       bCorrect := false;
-
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
+
+  if bCorrect then begin
+    frmLogin.Hide;
+    frmMain.Show;
+  end else
+    MessageDlg('Your username and password combination is incorrect', mtError, [mbOK], 0);
+end;
+
+procedure TfrmLogin.Button1Click(Sender: TObject);
+begin
+  showMessage(hash('admin'));
 end;
 
 procedure TfrmLogin.FormCreate(Sender: TObject);
@@ -87,5 +98,8 @@ end;
 procedure TfrmLogin.logout;
 begin
   bAuth := false;
+  sPrivilege := '';
+  frmLogin.Show;
+  frmMain.Hide;
 end;
 end.

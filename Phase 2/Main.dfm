@@ -11,6 +11,7 @@ object frmMain: TfrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   object tbcMain: TPageControl
@@ -18,7 +19,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabLogout
+    ActivePage = tabUserManagement
     TabOrder = 0
     object tabDash: TTabSheet
       Caption = 'Dashboard'
@@ -26,10 +27,18 @@ object frmMain: TfrmMain
     object tabChat: TTabSheet
       Caption = 'Chat'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tabHelp: TTabSheet
       Caption = 'Help'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
@@ -38,6 +47,7 @@ object frmMain: TfrmMain
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
+      OnEnter = tabLogoutEnter
     end
   end
 end

@@ -2,7 +2,7 @@ unit Algorithms_u;
 
 interface
 
-uses SysUtils, System, System.Hash;
+uses SysUtils, System.Hash;
 
 Function hash(sString : string) : string;
 
