@@ -3,7 +3,7 @@ object frmMain: TfrmMain
   Top = 0
   Caption = 'Main'
   ClientHeight = 448
-  ClientWidth = 796
+  ClientWidth = 798
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,6 +11,7 @@ object frmMain: TfrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnActivate = FormActivate
   OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
@@ -27,27 +28,37 @@ object frmMain: TfrmMain
     object tabChat: TTabSheet
       Caption = 'Chat'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tabHelp: TTabSheet
       Caption = 'Help'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      object dbGridUsers: TDBGrid
+        Left = 16
+        Top = 16
+        Width = 769
+        Height = 201
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+      end
+      object dbNavUsers: TDBNavigator
+        Left = 16
+        Top = 223
+        Width = 240
+        Height = 25
+        TabOrder = 1
+      end
     end
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
-      OnEnter = tabLogoutEnter
     end
   end
 end

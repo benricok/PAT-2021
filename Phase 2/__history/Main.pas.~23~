@@ -14,7 +14,8 @@ type
     tabUserManagement: TTabSheet;
     tabChat: TTabSheet;
     tabLogout: TTabSheet;
-    procedure tabLogoutShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -30,9 +31,16 @@ implementation
 
 uses Login;
 
-procedure TfrmMain.tabLogoutShow(Sender: TObject);
+procedure TfrmMain.FormActivate(Sender: TObject);
 begin
-  Login.frmLogin.logout;
+  tbcMain.TabIndex := 0;
+end;
+
+
+
+procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ Application.Terminate;
 end;
 
 end.

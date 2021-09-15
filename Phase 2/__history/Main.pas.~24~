@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Algorithms_u;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Algorithms_u, Grids, DBGrids, StdCtrls, ExtCtrls, ComCtrls, Data.DB,
+  Vcl.DBCtrls;
 
 type
   TfrmMain = class(TForm)
@@ -14,8 +15,10 @@ type
     tabUserManagement: TTabSheet;
     tabChat: TTabSheet;
     tabLogout: TTabSheet;
-    procedure tabLogoutShow(Sender: TObject);
+    dbGridUsers: TDBGrid;
+    dbNavUsers: TDBNavigator;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -31,14 +34,16 @@ implementation
 
 uses Login;
 
-procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TfrmMain.FormActivate(Sender: TObject);
 begin
-  Application.Terminate;
+  tbcMain.TabIndex := 0;
 end;
 
-procedure TfrmMain.tabLogoutShow(Sender: TObject);
+
+
+procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  Login.frmLogin.logout;
+ Application.Terminate;
 end;
 
 end.

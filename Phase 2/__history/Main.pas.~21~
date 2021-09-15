@@ -14,11 +14,8 @@ type
     tabUserManagement: TTabSheet;
     tabChat: TTabSheet;
     tabLogout: TTabSheet;
-    procedure tabLogoutShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure tabLogoutMouseActivate(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y, HitTest: Integer;
-      var MouseActivate: TMouseActivate);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -34,17 +31,14 @@ implementation
 
 uses Login;
 
-procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TfrmMain.FormActivate(Sender: TObject);
 begin
-  Application.Terminate;
+  tbcMain.TabIndex := 0;
 end;
 
-procedure TfrmMain.tabLogoutMouseActivate(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y, HitTest: Integer;
-  var MouseActivate: TMouseActivate);
+procedure TfrmMain.tabLogoutEnter(Sender: TObject);
 begin
   Login.frmLogin.logout;
 end;
-
 
 end.

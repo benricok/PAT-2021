@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Algorithms_u;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Algorithms_u, Main;
 
 type
   TfrmLogin = class(TForm)
@@ -16,6 +16,7 @@ type
     lblPass: TLabel;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     var
       bAuth : boolean;
@@ -63,8 +64,18 @@ begin
         bCorrect := false;
     end else
       bCorrect := false;
+    if bCorrect then begin
+      frmLogin.Hide;
+      frmMain.Show;
+    end else
+      MessageDlg('Your username and password combination is incorrect', mtError, [mbOK], 0);
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
+end;
+
+procedure TfrmLogin.Button1Click(Sender: TObject);
+begin
+  showMessage(hash('admin'));
 end;
 
 procedure TfrmLogin.FormCreate(Sender: TObject);
@@ -86,5 +97,8 @@ end;
 procedure TfrmLogin.logout;
 begin
   bAuth := false;
+  sPrivilege := '';
+  frmLogin.Show;
+  frmMain.Hide;
 end;
 end.

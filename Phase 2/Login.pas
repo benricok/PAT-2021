@@ -64,14 +64,13 @@ begin
         bCorrect := false;
     end else
       bCorrect := false;
+    if bCorrect then begin
+      frmLogin.Hide;
+      frmMain.Show;
+    end else
+      MessageDlg('Your username and password combination is incorrect', mtError, [mbOK], 0);
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
-
-  if bCorrect then begin
-    frmLogin.Hide;
-    frmMain.Show;
-  end else
-    MessageDlg('Your username and password combination is incorrect', mtError, [mbOK], 0);
 end;
 
 procedure TfrmLogin.Button1Click(Sender: TObject);

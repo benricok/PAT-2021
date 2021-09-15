@@ -15,9 +15,7 @@ type
     tabChat: TTabSheet;
     tabLogout: TTabSheet;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure tabLogoutMouseActivate(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y, HitTest: Integer;
-      var MouseActivate: TMouseActivate);
+    procedure tabLogoutEnter(Sender: TObject);
   private
     { Private declarations }
   public
@@ -38,12 +36,11 @@ begin
   Application.Terminate;
 end;
 
-procedure TfrmMain.tabLogoutMouseActivate(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y, HitTest: Integer;
-  var MouseActivate: TMouseActivate);
+procedure TfrmMain.tabLogoutEnter(Sender: TObject);
 begin
   Login.frmLogin.logout;
 end;
+
 
 
 end.
