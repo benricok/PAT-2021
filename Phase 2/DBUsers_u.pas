@@ -11,6 +11,7 @@ type
       SQL: String;
   published
     Procedure connectDB;
+    
   end;
 
 var

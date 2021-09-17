@@ -17,6 +17,7 @@ type
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     var
       bAuth : boolean;
@@ -78,6 +79,11 @@ begin
   showMessage(hash('admin'));
 end;
 
+procedure TfrmLogin.FormActivate(Sender: TObject);
+begin
+  edtUser.SetFocus;
+end;
+
 procedure TfrmLogin.FormCreate(Sender: TObject);
 begin
   DBUsers.connectDB;
@@ -100,5 +106,6 @@ begin
   sPrivilege := '';
   frmLogin.Show;
   frmMain.Hide;
+  edtUser.SetFocus;
 end;
 end.
