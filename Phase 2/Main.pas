@@ -58,7 +58,9 @@ uses Login, DBUsers_u, Algorithms_u;
 
 procedure TfrmMain.addUser;
 begin
-//
+  tblUsers.Last;
+  tblUsers.Insert;
+
 end;
 
 Procedure TfrmMain.btnAddUserClick(Sender: TObject);
