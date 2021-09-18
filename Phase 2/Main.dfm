@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserDash
+    ActivePage = tabUserManagement
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
@@ -233,12 +233,8 @@ object frmMain: TfrmMain
       end
     end
     object tabLogs: TTabSheet
-      Caption = 'EventLogger'
+      Caption = 'Event Logger'
       ImageIndex = 5
-    end
-    object tabHelp: TTabSheet
-      Caption = 'Help'
-      ImageIndex = 1
     end
     object tabLogout: TTabSheet
       Caption = 'Logout'

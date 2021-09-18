@@ -11,7 +11,6 @@ type
   TfrmMain = class(TForm)
     tbcMain: TPageControl;
     tabDash: TTabSheet;
-    tabHelp: TTabSheet;
     tabUserManagement: TTabSheet;
     tabChat: TTabSheet;
     tabLogout: TTabSheet;
@@ -41,6 +40,7 @@ type
     Procedure addUser;
     procedure FormCreate(Sender: TObject);
     procedure tbcMainChange(Sender: TObject);
+    Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
   private
     sPriv : string;
   public
@@ -123,19 +123,13 @@ begin
     2: ;
     3: ;
     4: ;
-    5: ;
-    6: Login.frmLogin.logout; // Log user out on tab logout click
+    5: Login.frmLogin.logout; // Log user out on tab logout click
   end;
 end;
 
 Function TfrmMain.validateUser(var sReason : string) : boolean;
-Var
-  i, j : integer;
-  scInvalid : set of char;
 begin
   result := true;
-               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
-  scInvalid := [#33..#44, #46..#64, #91..#96, #123..#126];
   sReason := '';
   { | Check if rpgGender, edtFullname, edtSurname and edtEmail are Null
     | Check if edtFullname and edtSurname contain ivalid values
@@ -146,16 +140,22 @@ begin
     result := false;
     sReason := sReason + 'Some fields are empty'#13;
   end;
-  for i := 1 to length(edtFullname.Text) do
-    if edtFullname.Text[i] IN scInvalid then begin
-      sReason := sReason + 'Fullname contains invalid characters, referance help for valid characters'#13;
-      result := false;
-      break;
-    end;
-  for j := 1 to length(edtSurname.Text) do
-    if edtSurname.Text[j] IN scInvalid then begin
-      sReason := sReason + 'Surname contains invalid characters, referance help for valid characters'#13;
-      result := false;
+  if (checkChar(sReason, edtFullname.Text, 'Fullname')) OR (checkChar(sReason, edtSurname.Text, 'Surname')) then
+    result := false
+end;
+
+function TfrmMain.checkChar(var sReason : string; sInput, sMessage : string): boolean;
+Var
+  i : integer;
+  scInvalid : set of char;
+begin
+               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
+  scInvalid := [#33..#44, #46..#64, #91..#96, #123..#126];
+  result := false;
+  for i := 1 to length(sInput) do
+    if sInput[i] IN scInvalid then begin
+      sReason := sReason + sMessage + ' contains invalid characters, referance help for valid characters'#13;
+      result := true;
       break;
     end;
 end;
