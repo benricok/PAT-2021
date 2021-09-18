@@ -21,29 +21,11 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserDash
+    ActivePage = tabLogs
     TabOrder = 0
     OnChange = tbcMainChange
-    object tabUserDash: TTabSheet
-      Caption = 'Dashboard'
-      ImageIndex = 6
-      object lblUserDash: TLabel
-        Left = 392
-        Top = 216
-        Width = 49
-        Height = 13
-        Caption = 'User Dash'
-      end
-    end
     object tabDash: TTabSheet
       Caption = 'Dashboard'
-      object lblHRDash: TLabel
-        Left = 384
-        Top = 208
-        Width = 41
-        Height = 13
-        Caption = 'HR Dash'
-      end
     end
     object tabChat: TTabSheet
       Caption = 'Chat'

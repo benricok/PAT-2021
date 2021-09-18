@@ -20,7 +20,7 @@ type
   private
     var
       bAuth : boolean;
-      sPrivilege : string;
+      sPrivilege, sPreUser : string;
       conDB: TADOConnection;
       tblMusic: TADOtable;
       qry: TADOQuery;
@@ -52,7 +52,10 @@ begin
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
       if tblUsers['HashedPASS'] = hash(edtPass.Text) then begin
         bAuth := true;
+        sPreUser := tblUsers['USername'];
         sPrivilege := tblUsers['Privilege'];
+        frmMain.Show;
+        frmLogin.Hide;
       end else
         MessageDlg('Invalid password', mtError, [mbOK], 0);
     end else

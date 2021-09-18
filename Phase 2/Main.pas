@@ -28,6 +28,10 @@ type
     btnAddUser: TBitBtn;
     lblNewUser: TLabel;
     edtEmail: TEdit;
+    tabLogs: TTabSheet;
+    tabUserDash: TTabSheet;
+    lblHRDash: TLabel;
+    lblUserDash: TLabel;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -38,7 +42,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure tbcMainChange(Sender: TObject);
   private
-    { Private declarations }
+    sPriv : string;
   public
     { Public declarations }
   end;
@@ -85,6 +89,16 @@ begin
   dbGridUsers.datasource := dsrTbl;
   tblUsers.First;
 
+  // Get privilege form login form and configure user interface acordingly
+  sPriv := Login.frmLogin.getPriv;
+  if sPriv = 'user' then begin
+    tbcMain.Pages[1].tabVisible := false;
+    tbcMain.Pages[3].tabVisible := false;
+    tbcMain.Pages[4].tabVisible := false;
+  end else if sPriv = 'HR' then begin
+    tbcMain.Pages[0].tabVisible := false;
+    tbcMain.Pages[4].tabVisible := false;
+  end;
 end;
 
 Procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -107,8 +121,10 @@ begin
     0: ;
     1: ;
     2: ;
-    3: pnlNewUser.SetFocus;
-    4: Login.frmLogin.logout; // Log user out on tab logout click
+    3: ;
+    4: ;
+    5: ;
+    6: Login.frmLogin.logout; // Log user out on tab logout click
   end;
 end;
 

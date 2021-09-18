@@ -28,6 +28,7 @@ type
     btnAddUser: TBitBtn;
     lblNewUser: TLabel;
     edtEmail: TEdit;
+    tabLogs: TTabSheet;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -36,8 +37,9 @@ type
     Function validateUser(var sReason : string) : boolean;
     Procedure addUser;
     procedure FormCreate(Sender: TObject);
+    procedure tbcMainChange(Sender: TObject);
   private
-    { Private declarations }
+    sPriv : string;
   public
     { Public declarations }
   end;
@@ -84,6 +86,16 @@ begin
   dbGridUsers.datasource := dsrTbl;
   tblUsers.First;
 
+  // Get privilege form login form and configure user interface acordingly
+  sPriv := Login.frmLogin.getPriv;
+  if sPriv = 'user' then begin
+    ShowMessage('I user');
+    tbcMain.Pages[0].Visible := false;
+    tbcMain.Pages[2].Visible := false;
+    tbcMain.Pages[3].Visible := false;
+  end else if sPriv = 'HR' then begin
+    tbcMain.Pages[3].Visible := false;
+  end;
 end;
 
 Procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -97,6 +109,19 @@ begin
   edtFullName.MaxLength := 40;
   edtSurname.MaxLength := 40;
   edtEmail.MaxLength := 40;
+end;
+
+procedure TfrmMain.tbcMainChange(Sender: TObject);
+begin
+  // Focus helper for user on tab change
+  case tbcMain.TabIndex of
+    0: ;
+    1: ;
+    2: ;
+    3: ;
+    4: ;
+    5: Login.frmLogin.logout; // Log user out on tab logout click
+  end;
 end;
 
 Function TfrmMain.validateUser(var sReason : string) : boolean;
@@ -120,15 +145,15 @@ begin
   for i := 1 to length(edtFullname.Text) do
     if edtFullname.Text[i] IN scInvalid then begin
       sReason := sReason + 'Fullname contains invalid characters, referance help for valid characters'#13;
+      result := false;
       break;
     end;
   for j := 1 to length(edtSurname.Text) do
     if edtSurname.Text[j] IN scInvalid then begin
       sReason := sReason + 'Surname contains invalid characters, referance help for valid characters'#13;
+      result := false;
       break;
     end;
-  if NOT((j = length(edtSurname.Text)) AND (i = length(edtFullname.Text))) then
-  result := false;
 end;
 
 end.
