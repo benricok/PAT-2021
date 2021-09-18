@@ -13,6 +13,7 @@ object frmMain: TfrmMain
   OldCreateOrder = False
   OnActivate = FormActivate
   OnClose = FormClose
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object tbcMain: TPageControl
@@ -22,6 +23,7 @@ object frmMain: TfrmMain
     Height = 449
     ActivePage = tabUserManagement
     TabOrder = 0
+    OnChange = tbcMainChange
     object tabDash: TTabSheet
       Caption = 'Dashboard'
     end
@@ -36,8 +38,6 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
-      ExplicitLeft = 13
-      ExplicitTop = 28
       object dbGridUsers: TDBGrid
         Left = 16
         Top = 16
@@ -60,43 +60,65 @@ object frmMain: TfrmMain
       object pnlNewUser: TPanel
         Left = 16
         Top = 272
-        Width = 561
-        Height = 149
+        Width = 305
+        Height = 137
         TabOrder = 2
-        object edtName: TEdit
-          Left = 34
-          Top = 8
-          Width = 121
+        object lblNewUser: TLabel
+          Left = 8
+          Top = 0
+          Width = 60
+          Height = 16
+          Caption = 'New User:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object edtFullname: TEdit
+          Left = 8
+          Top = 22
+          Width = 201
           Height = 21
           TabOrder = 0
           TextHint = 'Fullname'
         end
         object edtSurname: TEdit
-          Left = 34
-          Top = 35
-          Width = 121
+          Left = 8
+          Top = 49
+          Width = 201
           Height = 21
           TabOrder = 1
           TextHint = 'Surname'
         end
-        object BitBtn1: TBitBtn
-          Left = 472
-          Top = 74
-          Width = 75
-          Height = 25
-          Caption = 'BitBtn1'
-          TabOrder = 2
-        end
         object rpgGender: TRadioGroup
-          Left = 192
-          Top = 24
-          Width = 185
-          Height = 105
+          Left = 215
+          Top = 16
+          Width = 81
+          Height = 81
           Caption = 'Gender'
           Items.Strings = (
             'Male'
             'Female')
           TabOrder = 3
+        end
+        object btnAddUser: TBitBtn
+          Left = 215
+          Top = 103
+          Width = 81
+          Height = 25
+          Caption = '&Add User'
+          TabOrder = 4
+          OnClick = btnAddUserClick
+        end
+        object edtEmail: TEdit
+          Left = 8
+          Top = 76
+          Width = 201
+          Height = 21
+          TabOrder = 2
+          TextHint = 'Email'
         end
       end
       object btnDBnavUP: TBitBtn

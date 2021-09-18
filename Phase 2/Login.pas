@@ -16,7 +16,6 @@ type
     lblPass: TLabel;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
   private
     var
@@ -74,11 +73,6 @@ begin
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
 end;
 
-procedure TfrmLogin.Button1Click(Sender: TObject);
-begin
-  showMessage(hash('admin'));
-end;
-
 procedure TfrmLogin.FormActivate(Sender: TObject);
 begin
   edtUser.SetFocus;
@@ -89,17 +83,19 @@ begin
   DBUsers.connectDB;
 end;
 
+// Getter for sPrivilege
 function TfrmLogin.getPriv: string;
 begin
   result := sPrivilege;
 end;
 
+// Getter for bAuth
 function TfrmLogin.isAuthenticated : boolean;
 begin
   result := bAuth;
 end;
 
-// Class setter
+// Log out user and reset Application
 procedure TfrmLogin.logout;
 begin
   bAuth := false;

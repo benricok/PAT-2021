@@ -2,7 +2,7 @@ unit DBUsers_u;
 
 interface
 
-uses ADODB, Math, SysUtils, Classes, Windows, DB;
+uses ADODB, SysUtils, Classes, DB;
 
 type
   TDBUsers = class(TComponent)
@@ -11,19 +11,17 @@ type
       SQL: String;
   published
     Procedure connectDB;
-    
   end;
 
 var
   DBUsers : TDBUsers;
   conDB: TADOConnection;
   tblUsers: TADOtable;
-  qry: TADOQuery;
   dsrTbl: TDataSource;
-  dsrSQL: TDataSource;
 
 implementation
 
+// Connect to database
 Procedure TDBUsers.connectDB;
 begin
   conDB := TADOConnection.Create(Self);
@@ -35,20 +33,15 @@ begin
   conDB.LoginPrompt := false;
   conDB.Connected := true;
 
+  //Create tblUsers object and assign it to the Users tabel in the DB
   tblUsers := TADOtable.Create(Self);
   tblUsers.Connection := conDB;
 
   tblUsers.TableName := 'Users';
-  tblUSers.Active := true;
+  tblUsers.Active := true;
 
-  qry := TADOQuery.Create(Self);
-  qry.Connection := conDB;
-
+  // Create datasource object
   dsrTbl := TDataSource.Create(Self);
   dsrTbl.DataSet := tblUsers;
-
-  dsrSQL := TDataSource.Create(Self);
-  dsrSQL.DataSet := qry;
-
 end;
 end.
