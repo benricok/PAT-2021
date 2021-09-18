@@ -16,7 +16,7 @@ type
     lblPass: TLabel;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     var
       bAuth : boolean;
@@ -71,13 +71,11 @@ begin
       MessageDlg('Your username and password combination is incorrect', mtError, [mbOK], 0);
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
-
-  
 end;
 
-procedure TfrmLogin.Button1Click(Sender: TObject);
+procedure TfrmLogin.FormActivate(Sender: TObject);
 begin
-  showMessage(hash('admin'));
+  edtUser.SetFocus;
 end;
 
 procedure TfrmLogin.FormCreate(Sender: TObject);
@@ -85,22 +83,25 @@ begin
   DBUsers.connectDB;
 end;
 
+// Getter for sPrivilege
 function TfrmLogin.getPriv: string;
 begin
   result := sPrivilege;
 end;
 
+// Getter for bAuth
 function TfrmLogin.isAuthenticated : boolean;
 begin
   result := bAuth;
 end;
 
-// Class setter
+// Log out user and reset Application
 procedure TfrmLogin.logout;
 begin
   bAuth := false;
   sPrivilege := '';
   frmLogin.Show;
   frmMain.Hide;
+  edtUser.SetFocus;
 end;
 end.

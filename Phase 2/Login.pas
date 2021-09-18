@@ -44,31 +44,19 @@ implementation
 
 uses DBUsers_u;
 
-// Class getter
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
-Var
-  bCorrect : boolean;
-  sHashed : string;
 begin
-  bCorrect := true;
-
   if NOT((edtPass.Text = '') OR (edtUser.Text = '')) then begin
     tblUsers.open;
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
-      sHashed := hash(edtPass.Text);
-      if tblUsers['HashedPASS'] = sHashed then begin
+      if tblUsers['HashedPASS'] = hash(edtPass.Text) then begin
         bAuth := true;
         sPrivilege := tblUsers['Privilege'];
       end else
-        bCorrect := false;
+        MessageDlg('Invalid password', mtError, [mbOK], 0);
     end else
-      bCorrect := false;
-    if bCorrect then begin
-      frmLogin.Hide;
-      frmMain.Show;
-    end else
-      MessageDlg('Your username and password combination is incorrect', mtError, [mbOK], 0);
+      MessageDlg('Username does not exist', mtError, [mbOK], 0);
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
 end;
