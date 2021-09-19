@@ -14,9 +14,11 @@ type
     edtPass: TEdit;
     lblUser: TLabel;
     lblPass: TLabel;
+    Button1: TButton;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     var
       bAuth : boolean;
@@ -42,7 +44,7 @@ implementation
 
 { TfrmLogin }
 
-uses DBUsers_u;
+uses DBUsers_u, Password;
 
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
 begin
@@ -62,6 +64,11 @@ begin
       MessageDlg('Username does not exist', mtError, [mbOK], 0);
   end else
     MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
+end;
+
+procedure TfrmLogin.Button1Click(Sender: TObject);
+begin
+  Password.frmPassword.Show;
 end;
 
 procedure TfrmLogin.FormActivate(Sender: TObject);

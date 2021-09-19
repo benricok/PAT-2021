@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Grids, DBGrids, StdCtrls,
-  ExtCtrls, Vcl.DBCtrls, Vcl.Buttons, DB;
+  ExtCtrls, Vcl.DBCtrls, Vcl.Buttons, DB, Math;
 
 type
   TfrmMain = class(TForm)
@@ -37,9 +37,11 @@ type
     Procedure btnDBnavDOWNClick(Sender: TObject);
     Procedure btnAddUserClick(Sender: TObject);
     Function validateUser(var sReason : string) : boolean;
-    Procedure addUser;
-    procedure FormCreate(Sender: TObject);
-    procedure tbcMainChange(Sender: TObject);
+    Procedure addUser(sUsername, sPriv, sHashedPass : string);
+    Procedure genUsername(var sUsername : string);
+    Procedure FormCreate(Sender: TObject);
+    Procedure tbcMainChange(Sender: TObject);
+    Procedure getPriv(var sPriv : string);
     Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
   private
     sPriv : string;
@@ -56,20 +58,41 @@ implementation
 
 uses Login, DBUsers_u, Algorithms_u;
 
-procedure TfrmMain.addUser;
+procedure TfrmMain.genUsername(var sUsername: string);
 begin
+  { | Generate new username and set it to the passed referance varable:
+    | First character of the user's Fullname
+    | Add surname without spaces
+    | Add a Random number between 1000 and 9999
+    }
+  Randomize;
+  sUsername := LowerCase(edtFullname.Text[1] + noSpace(edtSurname.Text)) + IntToStr(RandomRange(1000, 10000));
+end;
+
+
+procedure TfrmMain.addUser(sUsername, sPriv, sHashedPass : string);
+begin
+  tblUsers.Open;
   tblUsers.Last;
   tblUsers.Insert;
-
+    tblUsers['Username'] := sUsername;
+    //tblUsers['HashedPASS'] := ;
+    tblUsers['Privilege'] := sPriv;
+    tblUsers['Gender'] := rpgGender.Items[rpgGender.ItemIndex];
+  tblUsers.Post;
 end;
 
 Procedure TfrmMain.btnAddUserClick(Sender: TObject);
 Var
-  sReason : string;
+  sReason, sUsername, sHashedPass, sPriv : string;
 begin
   // Pass referance to local varable for error responce
-  if validateUser(sReason) then
-    addUser
+  if validateUser(sReason) then begin
+    genUsername(sUsername);
+    getPriv(sPriv);
+    newPassword(sHashedPass);
+    addUser(sUsername, sPriv, sHashedPass);
+  end
   else
     MessageDlg('Invaild User information:'+ #13 + sReason, mtError, [mbOK], 0);
 end;
@@ -115,6 +138,8 @@ begin
   edtSurname.MaxLength := 40;
   edtEmail.MaxLength := 40;
 end;
+
+
 
 procedure TfrmMain.tbcMainChange(Sender: TObject);
 begin
