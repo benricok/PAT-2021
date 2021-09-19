@@ -85,7 +85,7 @@ end;
 
 procedure TUtil.getPriv(var sPriv: string);
 begin
-  if MessageDlg('Is this user part of the HR department?', mtConfirmation, [mbYes,mbNo], 7) = 7 then
+  if MessageDlg('Is this user part of the HR department?', mtConfirmation, [mbNo,mbYes], 7) = 7 then
     sPriv := 'user'
   else
     sPriv := 'HR';

@@ -87,6 +87,7 @@ begin
   edtSurname.Clear;
   edtEmail.Clear;
   rpgGender.ItemIndex := -1;
+  tbcMain.ActivePageIndex := 3;
 end;
 
 procedure TfrmMain.addUser(sUsername, sPriv, sHashedPass : string);
