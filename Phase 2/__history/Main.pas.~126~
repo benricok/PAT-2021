@@ -31,6 +31,7 @@ type
     tabUserDash: TTabSheet;
     lblHRDash: TLabel;
     lblUserDash: TLabel;
+    Button1: TButton;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -42,6 +43,7 @@ type
     Procedure FormCreate(Sender: TObject);
     Procedure tbcMainChange(Sender: TObject);
     Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
+    procedure Button1Click(Sender: TObject);
   private
     sPriv : string;
   public
@@ -87,8 +89,8 @@ begin
   // Pass referance to local varable for error responce
   if validateUser(sReason) then begin
     genUsername(sUsername);
-    util.getPriv(sPriv);
-    util.newPassword(sHashedPass, Password.Tstate.newPass);
+    //util.getPriv(sPriv);
+    //util.newPassword(sHashedPass, Password.Tstate.newPass);
     addUser(sUsername, sPriv, sHashedPass);
   end
   else
@@ -105,9 +107,17 @@ begin
   tblUsers.Prior;
 end;
 
-Procedure TfrmMain.FormActivate(Sender: TObject);
+procedure TfrmMain.Button1Click(Sender: TObject);
 Var
   sHashedPass : string;
+begin
+  if util.newPassword(sHashedPass, newPass) then
+    ShowMessage(sHashedPass)
+  else
+    ShowMessage('Canceled');
+end;
+
+Procedure TfrmMain.FormActivate(Sender: TObject);
 begin
   // Reset form and DB
   tbcMain.TabIndex := 0;
@@ -124,9 +134,6 @@ begin
     tbcMain.Pages[0].tabVisible := false;
     tbcMain.Pages[4].tabVisible := false;
   end;
-
-  util.newPassword(sHashedPass, Password.Tstate.newPass);
-  ShowMessage(sHashedPass);
 end;
 
 Procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);

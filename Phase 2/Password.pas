@@ -54,11 +54,10 @@ end;
 function TfrmPassword.checkChangePass: boolean;
 begin
   result := false;
-  if NOT((edtNewPass.Text = '') OR (edtNewPassConfirm.Text = '')) then
-    if (edtNewPass.Text = edtNewPassConfirm.Text) then begin
-      result := true;
-      ShowMessage('Ran');
-    end else
+  if NOT((edtNewPass.Text = '') OR (edtNewPassConfirm.Text = '') OR (edtOldPass.Text = '')) then
+    if (edtNewPass.Text = edtNewPassConfirm.Text) then
+      result := true
+    else
       util.error('Newly entered passwords do not match');
 end;
 
@@ -66,7 +65,7 @@ end;
 function TfrmPassword.checkNewPass: boolean;
 begin
   result := false;
-  if NOT((edtNewPass.Text = '') OR (edtNewPassConfirm.Text = '') OR (edtOldPass.Text = '')) then
+  if NOT((edtNewPass.Text = '') OR (edtNewPassConfirm.Text = '') ) then
     if (edtNewPass.Text = edtNewPassConfirm.Text) then
       result := true
     else

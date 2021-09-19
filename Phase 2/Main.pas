@@ -89,32 +89,11 @@ begin
   // Pass referance to local varable for error responce
   if validateUser(sReason) then begin
     genUsername(sUsername);
-    //util.getPriv(sPriv);
-    //util.newPassword(sHashedPass, Password.Tstate.newPass);
-    addUser(sUsername, sPriv, sHashedPass);
-  end
-  else
+    util.getPriv(sPriv);
+    if util.newPassword(sHashedPass, Tstate.newPass) then
+      addUser(sUsername, sPriv, sHashedPass);
+  end else
     util.error('Invaild User information:'+ #13 + sReason);
-end;
-
-Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
-begin
-  tblUsers.Next;
-end;
-
-Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
-begin
-  tblUsers.Prior;
-end;
-
-procedure TfrmMain.Button1Click(Sender: TObject);
-Var
-  sHashedPass : string;
-begin
-  if util.newPassword(sHashedPass, newPass) then
-    ShowMessage(sHashedPass)
-  else
-    ShowMessage('Canceled');
 end;
 
 Procedure TfrmMain.FormActivate(Sender: TObject);
@@ -148,8 +127,6 @@ begin
   edtSurname.MaxLength := 40;
   edtEmail.MaxLength := 40;
 end;
-
-
 
 procedure TfrmMain.tbcMainChange(Sender: TObject);
 begin
@@ -195,6 +172,16 @@ begin
       result := true;
       break;
     end;
+end;
+
+Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
+begin
+  tblUsers.Next;
+end;
+
+Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
+begin
+  tblUsers.Prior;
 end;
 
 end.

@@ -34,8 +34,6 @@ begin
       result := result + sString[i];
 end;
 
-
-
 Function TUtil.newPassword(var sHashedPass : string; frmConfig : Password.Tstate) : boolean;
 Var
   bChanged : boolean;
@@ -44,17 +42,21 @@ begin
   result := true;
   // Create dynamic form
   frmPassword := TfrmPassword.Create(nil);
+  //frmConfig := changePass;
   with frmPassword do begin
     setState(frmConfig);
     Show;
 
     while NOT((bChanged = true) OR (getState = canceled)) do begin
-      setState(frmConfig);
+
       // Wait for user to trigger cancel or ok button event to update state
-      while NOT(getstate IN [done, canceled]) do
+      while NOT(getstate IN [done,canceled]) do begin
         Application.ProcessMessages;
+        sleep(10);
+      end;
+      if getState = canceled then
+        break;
       if frmConfig = changePass then begin
-        ShowMessage('changePass');
         if checkChangePass then begin
           sHashedPass := hash(edtNewPass.Text);
           ShowMessage(edtNewPass.Text);
@@ -65,6 +67,7 @@ begin
       if frmConfig = newPass then
         if checkNewPass then begin
           sHashedPass := hash(edtNewPass.Text);
+          ShowMessage(edtNewPass.Text);
           bChanged := true;
         end else
           setState(frmConfig);

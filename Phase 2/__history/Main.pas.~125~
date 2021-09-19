@@ -89,8 +89,8 @@ begin
   // Pass referance to local varable for error responce
   if validateUser(sReason) then begin
     genUsername(sUsername);
-    util.getPriv(sPriv);
-    util.newPassword(sHashedPass, Password.Tstate.newPass);
+    //util.getPriv(sPriv);
+    //util.newPassword(sHashedPass, Password.Tstate.newPass);
     addUser(sUsername, sPriv, sHashedPass);
   end
   else
@@ -111,8 +111,10 @@ procedure TfrmMain.Button1Click(Sender: TObject);
 Var
   sHashedPass : string;
 begin
-  util.newPassword(sHashedPass, Password.Tstate.newPass);
-  ShowMessage(sHashedPass);
+  if util.newPassword(sHashedPass, Tstate.newPass) then
+    ShowMessage(sHashedPass)
+  else
+    ShowMessage('Canceled');
 end;
 
 Procedure TfrmMain.FormActivate(Sender: TObject);
