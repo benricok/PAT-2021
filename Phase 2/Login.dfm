@@ -56,6 +56,7 @@ object frmLogin: TfrmLogin
       Height = 21
       Cursor = crIBeam
       TabOrder = 1
+      Text = 'admin'
       TextHint = 'Enter your username'
     end
     object edtPass: TEdit
@@ -67,16 +68,8 @@ object frmLogin: TfrmLogin
       HelpType = htKeyword
       PasswordChar = '*'
       TabOrder = 2
+      Text = 'admin'
       TextHint = 'Enter your password'
-    end
-    object Button1: TButton
-      Left = 120
-      Top = 167
-      Width = 75
-      Height = 25
-      Caption = 'Button1'
-      TabOrder = 3
-      OnClick = Button1Click
     end
   end
 end

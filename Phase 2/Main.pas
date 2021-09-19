@@ -31,6 +31,7 @@ type
     tabUserDash: TTabSheet;
     lblHRDash: TLabel;
     lblUserDash: TLabel;
+    Button1: TButton;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -41,8 +42,8 @@ type
     Procedure genUsername(var sUsername : string);
     Procedure FormCreate(Sender: TObject);
     Procedure tbcMainChange(Sender: TObject);
-    Procedure getPriv(var sPriv : string);
     Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
+    procedure Button1Click(Sender: TObject);
   private
     sPriv : string;
   public
@@ -56,7 +57,7 @@ implementation
 
 {$R *.dfm}
 
-uses Login, DBUsers_u, Algorithms_u;
+uses Login, DBUsers_u, util_u, Password;
 
 procedure TfrmMain.genUsername(var sUsername: string);
 begin
@@ -66,9 +67,8 @@ begin
     | Add a Random number between 1000 and 9999
     }
   Randomize;
-  sUsername := LowerCase(edtFullname.Text[1] + noSpace(edtSurname.Text)) + IntToStr(RandomRange(1000, 10000));
+  sUsername := LowerCase(edtFullname.Text[1] + util.noSpace(edtSurname.Text)) + IntToStr(RandomRange(1000, 10000));
 end;
-
 
 procedure TfrmMain.addUser(sUsername, sPriv, sHashedPass : string);
 begin
@@ -89,12 +89,12 @@ begin
   // Pass referance to local varable for error responce
   if validateUser(sReason) then begin
     genUsername(sUsername);
-    getPriv(sPriv);
-    newPassword(sHashedPass);
+    //util.getPriv(sPriv);
+    //util.newPassword(sHashedPass, Password.Tstate.newPass);
     addUser(sUsername, sPriv, sHashedPass);
   end
   else
-    MessageDlg('Invaild User information:'+ #13 + sReason, mtError, [mbOK], 0);
+    util.error('Invaild User information:'+ #13 + sReason);
 end;
 
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
@@ -105,6 +105,16 @@ end;
 Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
 begin
   tblUsers.Prior;
+end;
+
+procedure TfrmMain.Button1Click(Sender: TObject);
+Var
+  sHashedPass : string;
+begin
+  if util.newPassword(sHashedPass, newPass) then
+    ShowMessage(sHashedPass)
+  else
+    ShowMessage('Canceled');
 end;
 
 Procedure TfrmMain.FormActivate(Sender: TObject);

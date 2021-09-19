@@ -67,6 +67,7 @@ object frmPassword: TfrmPassword
     Kind = bkOK
     NumGlyphs = 2
     TabOrder = 1
+    OnClick = btnPassOKClick
   end
   object btnPassCancel: TBitBtn
     Left = 69
@@ -76,5 +77,6 @@ object frmPassword: TfrmPassword
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 2
+    OnClick = btnPassCancelClick
   end
 end

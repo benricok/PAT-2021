@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Algorithms_u, Main;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Main;
 
 type
   TfrmLogin = class(TForm)
@@ -14,11 +14,9 @@ type
     edtPass: TEdit;
     lblUser: TLabel;
     lblPass: TLabel;
-    Button1: TButton;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
   private
     var
       bAuth : boolean;
@@ -44,7 +42,7 @@ implementation
 
 { TfrmLogin }
 
-uses DBUsers_u, Password;
+uses DBUsers_u, util_u, Password;
 
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
 begin
@@ -52,23 +50,18 @@ begin
     tblUsers.open;
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
-      if tblUsers['HashedPASS'] = hash(edtPass.Text) then begin
+      if tblUsers['HashedPASS'] = util.hash(edtPass.Text) then begin
         bAuth := true;
         sPreUser := tblUsers['USername'];
         sPrivilege := tblUsers['Privilege'];
         frmMain.Show;
         frmLogin.Hide;
       end else
-        MessageDlg('Invalid password', mtError, [mbOK], 0);
+        util.error('Invalid password');
     end else
-      MessageDlg('Username does not exist', mtError, [mbOK], 0);
+      util.error('Username does not exist');
   end else
-    MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
-end;
-
-procedure TfrmLogin.Button1Click(Sender: TObject);
-begin
-  Password.frmPassword.Show;
+    util.error('Please enter your credentials before submitting');
 end;
 
 procedure TfrmLogin.FormActivate(Sender: TObject);
