@@ -30,7 +30,7 @@ Var
 begin
   result := '';
   for i := 1 to length(sString) do
-    if sString[i] = ' ' then
+    if NOT(sString[i] = ' ') then
       result := result + sString[i];
 end;
 
@@ -40,15 +40,14 @@ Var
 begin
   bChanged := false;
   result := true;
+
   // Create dynamic form
   frmPassword := TfrmPassword.Create(nil);
-  //frmConfig := changePass;
   with frmPassword do begin
     setState(frmConfig);
     Show;
 
     while NOT((bChanged = true) OR (getState = canceled)) do begin
-
       // Wait for user to trigger cancel or ok button event to update state
       while NOT(getstate IN [done,canceled]) do begin
         Application.ProcessMessages;
@@ -59,7 +58,6 @@ begin
       if frmConfig = changePass then begin
         if checkChangePass then begin
           sHashedPass := hash(edtNewPass.Text);
-          ShowMessage(edtNewPass.Text);
           bChanged := true;
         end else
           setState(frmConfig);
@@ -67,7 +65,6 @@ begin
       if frmConfig = newPass then
         if checkNewPass then begin
           sHashedPass := hash(edtNewPass.Text);
-          ShowMessage(edtNewPass.Text);
           bChanged := true;
         end else
           setState(frmConfig);

@@ -14,9 +14,14 @@ type
     edtPass: TEdit;
     lblUser: TLabel;
     lblPass: TLabel;
+    btnShowPass: TBitBtn;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure btnShowPassMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure btnShowPassMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     var
       bAuth : boolean;
@@ -62,6 +67,18 @@ begin
       util.error('Username does not exist');
   end else
     util.error('Please enter your credentials before submitting');
+end;
+
+procedure TfrmLogin.btnShowPassMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  edtPass.PasswordChar := #0;
+end;
+
+procedure TfrmLogin.btnShowPassMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  edtPass.PasswordChar := '*';
 end;
 
 procedure TfrmLogin.FormActivate(Sender: TObject);

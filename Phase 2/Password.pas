@@ -17,8 +17,11 @@ type
     edtNewPass: TEdit;
     edtNewPassConfirm: TEdit;
     btnPassCancel: TBitBtn;
+    pnlNewPass: TPanel;
+    pnlPassButtons: TPanel;
     procedure btnPassCancelClick(Sender: TObject);
     procedure btnPassOKClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     state : Tstate;
   published
@@ -70,6 +73,18 @@ begin
       result := true
     else
       util.error('Newly entered passwords do not match');
+end;
+
+procedure TfrmPassword.FormActivate(Sender: TObject);
+begin
+  if state = newPass then begin
+    edtOldPass.Hide;
+    lblOldPass.Hide;
+    pnlNewPass.Top := 8;
+    pnlPasswordForm.Height := 91;
+    pnlPassButtons.Top := 87;
+    frmPassword.Height := 158;
+  end;
 end;
 
 // Form state getter

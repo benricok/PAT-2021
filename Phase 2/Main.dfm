@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabChat
+    ActivePage = tabLogs
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
@@ -55,7 +55,6 @@ object frmMain: TfrmMain
         Height = 25
         Caption = 'Button1'
         TabOrder = 0
-        OnClick = Button1Click
       end
     end
     object tabUserManagement: TTabSheet
@@ -73,19 +72,12 @@ object frmMain: TfrmMain
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
       end
-      object dbNavUsers: TDBNavigator
-        Left = 545
-        Top = 223
-        Width = 240
-        Height = 25
-        TabOrder = 1
-      end
       object pnlNewUser: TPanel
         Left = 16
         Top = 272
         Width = 305
         Height = 137
-        TabOrder = 2
+        TabOrder = 1
         object lblNewUser: TLabel
           Left = 8
           Top = 0
@@ -181,24 +173,8 @@ object frmMain: TfrmMain
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
-        TabOrder = 3
+        TabOrder = 2
         OnClick = btnDBnavUPClick
-      end
-      object BitBtn4: TBitBtn
-        Left = 256
-        Top = 223
-        Width = 75
-        Height = 25
-        Caption = 'BitBtn4'
-        TabOrder = 4
-      end
-      object BitBtn5: TBitBtn
-        Left = 360
-        Top = 223
-        Width = 75
-        Height = 25
-        Caption = 'BitBtn5'
-        TabOrder = 5
       end
       object btnDBnavDOWN: TBitBtn
         Left = 105
@@ -237,13 +213,29 @@ object frmMain: TfrmMain
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
-        TabOrder = 6
+        TabOrder = 3
         OnClick = btnDBnavDOWNClick
       end
     end
     object tabLogs: TTabSheet
       Caption = 'Event Logger'
       ImageIndex = 5
+      object RichEdit1: TRichEdit
+        Left = 3
+        Top = 3
+        Width = 782
+        Height = 415
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Lines.Strings = (
+          'RichEdit1')
+        ParentFont = False
+        TabOrder = 0
+        Zoom = 100
+      end
     end
     object tabLogout: TTabSheet
       Caption = 'Logout'

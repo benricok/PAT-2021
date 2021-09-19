@@ -15,13 +15,10 @@ type
     tabChat: TTabSheet;
     tabLogout: TTabSheet;
     dbGridUsers: TDBGrid;
-    dbNavUsers: TDBNavigator;
     edtFullname: TEdit;
     edtSurname: TEdit;
     pnlNewUser: TPanel;
     btnDBnavUP: TBitBtn;
-    BitBtn4: TBitBtn;
-    BitBtn5: TBitBtn;
     btnDBnavDOWN: TBitBtn;
     rpgGender: TRadioGroup;
     btnAddUser: TBitBtn;
@@ -32,6 +29,7 @@ type
     lblHRDash: TLabel;
     lblUserDash: TLabel;
     Button1: TButton;
+    RichEdit1: TRichEdit;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -43,7 +41,8 @@ type
     Procedure FormCreate(Sender: TObject);
     Procedure tbcMainChange(Sender: TObject);
     Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
-    procedure Button1Click(Sender: TObject);
+    Procedure resetNewUser;
+    Procedure loadEvents;
   private
     sPriv : string;
   public
@@ -70,16 +69,40 @@ begin
   sUsername := LowerCase(edtFullname.Text[1] + util.noSpace(edtSurname.Text)) + IntToStr(RandomRange(1000, 10000));
 end;
 
+procedure TfrmMain.loadEvents;
+Var
+  tFile : Textfile;
+begin
+  AssignFile(tFile, 'event.log');
+  if NOT(FileExists('event.log')) then
+    Rewrite(tFile)
+  else
+    Append(tFile);
+
+end;
+
+procedure TfrmMain.resetNewUser;
+begin
+  edtFullname.Clear;
+  edtSurname.Clear;
+  edtEmail.Clear;
+  rpgGender.ItemIndex := -1;
+end;
+
 procedure TfrmMain.addUser(sUsername, sPriv, sHashedPass : string);
 begin
   tblUsers.Open;
   tblUsers.Last;
   tblUsers.Insert;
     tblUsers['Username'] := sUsername;
-    //tblUsers['HashedPASS'] := ;
+    tblUsers['HashedPASS'] := sHashedPass;
     tblUsers['Privilege'] := sPriv;
+    tblUsers['Fullname'] := edtFullName.Text;
+    tblUsers['Surname'] := edtSurname.Text;
     tblUsers['Gender'] := rpgGender.Items[rpgGender.ItemIndex];
+    tblUsers['Email'] := edtEmail.Text;
   tblUsers.Post;
+  resetNewUser;
 end;
 
 Procedure TfrmMain.btnAddUserClick(Sender: TObject);
@@ -90,7 +113,7 @@ begin
   if validateUser(sReason) then begin
     genUsername(sUsername);
     util.getPriv(sPriv);
-    if util.newPassword(sHashedPass, Tstate.newPass) then
+    if util.newPassword(sHashedPass, newPass) then
       addUser(sUsername, sPriv, sHashedPass);
   end else
     util.error('Invaild User information:'+ #13 + sReason);
@@ -131,12 +154,12 @@ end;
 procedure TfrmMain.tbcMainChange(Sender: TObject);
 begin
   // Focus helper for user on tab change
-  case tbcMain.TabIndex of
+  case tbcMain.ActivePageIndex of
     0: ;
     1: ;
     2: ;
     3: ;
-    4: ;
+    4: loadEvents;
     5: Login.frmLogin.logout; // Log user out on tab logout click
   end;
 end;
