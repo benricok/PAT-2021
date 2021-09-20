@@ -29,7 +29,7 @@ type
     lblHRDash: TLabel;
     lblUserDash: TLabel;
     Button1: TButton;
-    RichEdit1: TRichEdit;
+    redEvent: TRichEdit;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -72,13 +72,12 @@ end;
 procedure TfrmMain.loadEvents;
 Var
   tFile : Textfile;
+  sTFname : string;
 begin
-  AssignFile(tFile, 'event.log');
-  if NOT(FileExists('event.log')) then
-    Rewrite(tFile)
-  else
-    Append(tFile);
-
+  sTFname := 'event.log';
+  util.initFile(sTFname, tFile);
+  redEvent.Clear;
+  redEvent.lines.LoadFromFile(sTFname);
 end;
 
 procedure TfrmMain.resetNewUser;

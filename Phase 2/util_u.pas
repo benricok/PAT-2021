@@ -10,6 +10,8 @@ type TUtil = class(TComponent)
   Function newPassword(var sHashedPass : string; frmConfig : Password.Tstate) : boolean;
   procedure getPriv(var sPriv: string);
   Procedure error(sError : string);
+  Procedure initFile(sFileName : string; var tFile : Textfile);
+  Procedure logevent(sEvent : string; iType : integer);
 end;
 
 Var
@@ -21,6 +23,25 @@ Function TUtil.hash(sString : string) : string;
 begin
 // Hash password
   result := THashMD5.GetHashString(sString);
+end;
+
+// Assign file and check if it exist, else create it
+procedure TUtil.initFile(sFileName: string; var tFile : Textfile);
+begin
+  AssignFile(tFile, sFileName);
+  if NOT(FileExists(sFileName)) then
+    Rewrite(tFile);
+end;
+
+//Event logger
+procedure TUtil.logevent(sEvent: string; iType: integer);
+Var
+  tFile : TextFile;
+begin
+  initFile('event.log', tFile);
+  Append(tFile);
+  Writeln(tfile, sEvent);
+  CloseFile(tFile);
 end;
 
 // Remove spaces in string
