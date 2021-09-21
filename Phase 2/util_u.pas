@@ -12,12 +12,72 @@ type TUtil = class(TComponent)
   Procedure error(sError : string);
   Procedure initFile(sFileName : string; var tFile : Textfile);
   Procedure logevent(sEvent : string; iType : integer);
+  Function ELFHash(const sKey : string) : String;
+  Function swapChar(s : string; c, b : integer) : string;
+  Function rotateLeft(sIn : string; p : integer) : string;
 end;
 
 Var
   Util : TUtil;
 
 implementation
+function TUtil.ELFHash(const sKey : string) : String;
+Var
+  iG, iTableSize, iHash : Int64;
+  i : integer;
+  sTemp : string;
+begin
+  iTableSize := 9952135015176462643; // Very large 64 bit prime number
+  iHash := 0;
+  for i := 1 to length(sKey) do begin
+    iHash := (iHash shl 4) + ord(sKey[i]);
+    iG := iHash and $F0000000;
+      if (iG<>0) then
+        iHash := iHash xor (iG shr 24) xor iG;
+  end;
+
+  sTemp := IntToStr(iHash mod iTableSize);
+  // Duplicate string to give the char swapper function exsta playing field.
+  sTemp := sTemp + sTemp;
+  result := swapChar(sTemp, 3, 20);
+end;
+
+function TUtil.rotateLeft(sIn: string; p: integer): string;
+begin
+  result := sIn.Substring(p) + sIn.Substring(0, p);
+end;
+
+function TUtil.swapChar(s: string; c, b: integer): string;
+Var
+  iLen, f, r, i: integer;
+  sP1, sP2, sTemp : string;
+  cTemp : char;
+begin
+  iLen := s.Length;
+  c := c mod iLen;
+
+  if c = 0 then begin
+    result := s;
+    exit;
+  end;
+
+  f := Round(b / iLen);
+  r := b mod iLen;
+
+  sP1 := rotateLeft(s.Substring(0, c), ((iLen mod c) * f) mod c);
+  sP2 := rotateLeft(s.Substring(c), ((c * f) mod (iLen -c)));
+
+  sTemp := sP1 + sP2;
+
+  for i := 1 to r do begin
+    cTemp := sTemp[i];
+    sTemp[i] := sTemp[(i+c) mod iLen];
+    sTemp[(i + c) mod iLen] := cTemp;
+  end;
+
+  result := sTemp;
+
+end;
 
 Function TUtil.hash(sString : string) : string;
 begin
@@ -78,14 +138,14 @@ begin
         break;
       if frmConfig = changePass then begin
         if checkChangePass then begin
-          sHashedPass := hash(edtNewPass.Text);
+          sHashedPass := ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
           setState(frmConfig);
       end;
       if frmConfig = newPass then
         if checkNewPass then begin
-          sHashedPass := hash(edtNewPass.Text);
+          sHashedPass := ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
           setState(frmConfig);

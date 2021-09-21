@@ -55,7 +55,7 @@ begin
     tblUsers.open;
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
-      if tblUsers['HashedPASS'] = util.hash(edtPass.Text) then begin
+      if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
         bAuth := true;
         sPreUser := tblUsers['USername'];
         sPrivilege := tblUsers['Privilege'];
