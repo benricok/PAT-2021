@@ -99,7 +99,7 @@ begin
     tblUsers['Privilege'] := sPriv;
     tblUsers['Fullname'] := edtFullName.Text;
     tblUsers['Surname'] := edtSurname.Text;
-    tblUsers['Gender'] := rpgGender.Items[rpgGender.ItemIndex];
+    tblUsers['Gender'] := rpgGender.Items[rpgGender.ItemIndex][1];
     tblUsers['Email'] := edtEmail.Text;
   tblUsers.Post;
   resetNewUser;
@@ -177,7 +177,7 @@ begin
     result := false;
     sReason := sReason + 'Some fields are empty'#13;
   end;
-  if (checkChar(sReason, edtFullname.Text, 'Fullname')) OR (checkChar(sReason, edtSurname.Text, 'Surname')) then
+  if (checkChar(sReason, edtFullname.Text, 'Your fullname')) OR (checkChar(sReason, edtSurname.Text, 'Your surname')) then
     result := false
 end;
 
@@ -191,7 +191,7 @@ begin
   result := false;
   for i := 1 to length(sInput) do
     if sInput[i] IN scInvalid then begin
-      sReason := sReason + sMessage + ' contains invalid characters, referance help for valid characters'#13;
+      sReason := sReason + sMessage + ' contains invalid characters, reference help for valid characters'#13;
       result := true;
       break;
     end;

@@ -14,11 +14,14 @@ type
     edtPass: TEdit;
     lblUser: TLabel;
     lblPass: TLabel;
-    Button1: TButton;
+    btnShowPass: TBitBtn;
     procedure btnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure btnShowPassMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure btnShowPassMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     var
       bAuth : boolean;
@@ -52,23 +55,32 @@ begin
     tblUsers.open;
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
-      if tblUsers['HashedPASS'] = hash(edtPass.Text) then begin
+      if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
         bAuth := true;
         sPreUser := tblUsers['USername'];
         sPrivilege := tblUsers['Privilege'];
         frmMain.Show;
         frmLogin.Hide;
       end else
-        MessageDlg('Invalid password', mtError, [mbOK], 0);
+        util.error('Invalid password');
+        util.logevent(edtUser.Text + ' invalid passphrase!', 0);
     end else
-      MessageDlg('Username does not exist', mtError, [mbOK], 0);
+      util.error('Username does not exist');
   end else
-    MessageDlg('Please enter your credentials before submitting', mtError, [mbOK], 0);
+    util.error('Please enter your credentials before submitting');
+
 end;
 
-procedure TfrmLogin.Button1Click(Sender: TObject);
+procedure TfrmLogin.btnShowPassMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
 begin
-  Password.frmPassword.Show;
+  edtPass.PasswordChar := #0;
+end;
+
+procedure TfrmLogin.btnShowPassMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  edtPass.PasswordChar := '*';
 end;
 
 procedure TfrmLogin.FormActivate(Sender: TObject);

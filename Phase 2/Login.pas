@@ -63,6 +63,7 @@ begin
         frmLogin.Hide;
       end else
         util.error('Invalid password');
+        util.logevent(edtUser.Text + ' invalid password entered!', 0);
     end else
       util.error('Username does not exist');
   end else

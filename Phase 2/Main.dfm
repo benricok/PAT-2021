@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabLogs
+    ActivePage = tabUserManagement
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
