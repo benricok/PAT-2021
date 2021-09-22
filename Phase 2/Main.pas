@@ -30,6 +30,9 @@ type
     lblUserDash: TLabel;
     Button1: TButton;
     redEvent: TRichEdit;
+    btnUserDel: TBitBtn;
+    BitBtn1: TBitBtn;
+    btnEnabled: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -43,6 +46,7 @@ type
     Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
     Procedure resetNewUser;
     Procedure loadEvents;
+    procedure btnUserDelClick(Sender: TObject);
   private
     sPriv : string;
   public
@@ -205,6 +209,12 @@ end;
 Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
 begin
   tblUsers.Prior;
+end;
+
+procedure TfrmMain.btnUserDelClick(Sender: TObject);
+begin
+  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then
+    tblUsers.Delete;
 end;
 
 end.
