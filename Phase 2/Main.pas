@@ -213,8 +213,11 @@ end;
 
 procedure TfrmMain.btnUserDelClick(Sender: TObject);
 begin
-  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then
+  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
+
     tblUsers.Delete;
+  end;
+
 end;
 
 end.

@@ -60,8 +60,6 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
-      ExplicitLeft = 8
-      ExplicitTop = 28
       object dbGridUsers: TDBGrid
         Left = 16
         Top = 16
