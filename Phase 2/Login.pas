@@ -62,12 +62,11 @@ begin
         frmMain.Show;
         frmLogin.Hide;
       end else
-        util.error('Invalid password');
-        util.logevent(edtUser.Text + ' invalid password entered!', 0);
+        util.error('Invalid password by user ' + edtUser.Text, true);
     end else
-      util.error('Username does not exist');
+      util.error(edtUser.Text + ' does not exist', true);
   end else
-    util.error('Please enter your credentials before submitting');
+    util.error('Please enter your credentials before submitting', false);
 
 end;
 

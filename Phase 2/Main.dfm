@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserManagement
+    ActivePage = tabLogs
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
@@ -56,8 +56,8 @@ object frmMain: TfrmMain
     object tabChat: TTabSheet
       Caption = 'Chat'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
+      ExplicitLeft = 8
+      ExplicitTop = 19
       ExplicitWidth = 0
       ExplicitHeight = 0
       object Button1: TButton
@@ -72,6 +72,10 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object dbGridUsers: TDBGrid
         Left = 16
         Top = 16
@@ -256,9 +260,9 @@ object frmMain: TfrmMain
       ImageIndex = 5
       object redEvent: TRichEdit
         Left = 3
-        Top = 3
+        Top = 0
         Width = 782
-        Height = 342
+        Height = 385
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -268,6 +272,17 @@ object frmMain: TfrmMain
         ScrollBars = ssVertical
         TabOrder = 0
         Zoom = 100
+      end
+      object btnClearLog: TBitBtn
+        Left = 3
+        Top = 393
+        Width = 75
+        Height = 25
+        Caption = '&Clear log'
+        Kind = bkCancel
+        NumGlyphs = 2
+        TabOrder = 1
+        OnClick = btnClearLogClick
       end
     end
     object tabLogout: TTabSheet
@@ -280,7 +295,7 @@ object frmMain: TfrmMain
     end
   end
   object BitBtn1: TBitBtn
-    Left = 717
+    Left = 714
     Top = 415
     Width = 75
     Height = 25

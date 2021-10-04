@@ -61,7 +61,7 @@ begin
     if (edtNewPass.Text = edtNewPassConfirm.Text) then
       result := true
     else
-      util.error('Newly entered passwords do not match');
+      util.error('Newly entered passwords do not match', false);
 end;
 
 // Check if fields are Null and if newly entered passwords match
@@ -72,7 +72,7 @@ begin
     if (edtNewPass.Text = edtNewPassConfirm.Text) then
       result := true
     else
-      util.error('Newly entered passwords do not match');
+      util.error('Newly entered passwords do not match', false);
 end;
 
 procedure TfrmPassword.FormActivate(Sender: TObject);

@@ -33,6 +33,7 @@ type
     btnUserDel: TBitBtn;
     BitBtn1: TBitBtn;
     btnEnabled: TBitBtn;
+    btnClearLog: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -47,6 +48,7 @@ type
     Procedure resetNewUser;
     Procedure loadEvents;
     procedure btnUserDelClick(Sender: TObject);
+    procedure btnClearLogClick(Sender: TObject);
   private
     sPriv : string;
   public
@@ -76,12 +78,53 @@ end;
 procedure TfrmMain.loadEvents;
 Var
   tFile : Textfile;
-  sTFname : string;
+  sLine, sDateTime, sType : string;
+  iPos, iLen, iTotChar : integer;
+  cType : char;
 begin
-  sTFname := 'event.log';
-  util.initFile(sTFname, tFile);
-  redEvent.Clear;
-  redEvent.lines.LoadFromFile(sTFname);
+  util.initFile('event.log', tFile);
+  Reset(tFile);
+  iTotChar := 0;
+  while NOT(EOF(tFile)) do begin
+    Readln(tFile, sLine);
+    iLen := length(sLine)+2;
+    iPos := Pos(';', sLine);
+    sDateTime := Copy(sLine, 1, iPos-1);
+    Delete(sLine, 1, iPos);
+    ctype := sLine[3];
+    iPos := Pos(';', sLine);
+    sType := Copy(sLine, 1, iPos-1);
+    Delete(sLine, 1, iPos);
+
+    with redEvent do begin
+      case cType of
+        'E': begin
+          selStart := iTotChar+1;
+          selLength := iLen;
+          selAttributes.Color := clGray;
+          selText := sDateTime + ' ';
+          selAttributes.Color := clRed;
+          selText := sType + ' ';
+          SelAttributes.Color := clWindowText;
+          selText := sLine + #13#10;
+          iTotChar := iTotChar + iLen;
+        end;
+        'I': begin
+          selStart := iTotChar+1;
+          selLength := iLen;
+          selAttributes.Color := clGray;
+          selText := sDateTime + ' ';
+          selAttributes.Color := clBlue;
+          selText := sType + ' ';
+          SelAttributes.Color := clWindowText;
+          selText := sLine + #13#10;
+          iTotChar := iTotChar + iLen;
+        end;
+      end;
+    end;
+  end;
+  CloseFile(tFile);
+  //redEvent.lines.LoadFromFile(sTFname);
 end;
 
 procedure TfrmMain.resetNewUser;
@@ -120,7 +163,19 @@ begin
     if util.newPassword(sHashedPass, newPass) then
       addUser(sUsername, sPriv, sHashedPass);
   end else
-    util.error('Invaild User information:'+ #13 + sReason);
+    util.error('Invaild User information:'+ #13 + sReason, false);
+end;
+
+procedure TfrmMain.btnClearLogClick(Sender: TObject);
+Var
+  tFile : TextFile;
+begin
+  if MessageDlg('Are you sure you want to clear the event log?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
+    DeleteFile('event.log');
+    Util.initFile('event.log', tFile);
+    CloseFile(tFile);
+    redEvent.Clear;
+  end;
 end;
 
 Procedure TfrmMain.FormActivate(Sender: TObject);
@@ -216,11 +271,10 @@ begin
   if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
     // Check if admin user is selected and throw error
     if tblUsers['Username'] = 'admin' then
-      Util.error('You cannot delete the admin user')
+      Util.error('You cannot delete the admin user', false)
     else
     tblUsers.Delete;
   end;
-
 end;
 
 end.
