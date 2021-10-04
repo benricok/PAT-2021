@@ -214,7 +214,10 @@ end;
 procedure TfrmMain.btnUserDelClick(Sender: TObject);
 begin
   if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
-
+    // Check if admin user is selected and throw error
+    if tblUsers['Username'] = 'admin' then
+      Util.error('You cannot delete the admin user')
+    else
     tblUsers.Delete;
   end;
 

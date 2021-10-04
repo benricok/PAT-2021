@@ -30,6 +30,9 @@ type
     lblUserDash: TLabel;
     Button1: TButton;
     redEvent: TRichEdit;
+    btnUserDel: TBitBtn;
+    BitBtn1: TBitBtn;
+    btnEnabled: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -43,6 +46,7 @@ type
     Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
     Procedure resetNewUser;
     Procedure loadEvents;
+    procedure btnUserDelClick(Sender: TObject);
   private
     sPriv : string;
   public
@@ -72,11 +76,12 @@ end;
 procedure TfrmMain.loadEvents;
 Var
   tFile : Textfile;
+  sTFname : string;
 begin
-  util.initFile('event.log', tFile);
+  sTFname := 'event.log';
+  util.initFile(sTFname, tFile);
   redEvent.Clear;
-  while NOT(EoF(tFile)) do
-    readln(tfile, redEvent.Lines.Add();
+  redEvent.lines.LoadFromFile(sTFname);
 end;
 
 procedure TfrmMain.resetNewUser;
@@ -98,7 +103,7 @@ begin
     tblUsers['Privilege'] := sPriv;
     tblUsers['Fullname'] := edtFullName.Text;
     tblUsers['Surname'] := edtSurname.Text;
-    tblUsers['Gender'] := rpgGender.Items[rpgGender.ItemIndex];
+    tblUsers['Gender'] := rpgGender.Items[rpgGender.ItemIndex][1];
     tblUsers['Email'] := edtEmail.Text;
   tblUsers.Post;
   resetNewUser;
@@ -176,7 +181,7 @@ begin
     result := false;
     sReason := sReason + 'Some fields are empty'#13;
   end;
-  if (checkChar(sReason, edtFullname.Text, 'Fullname')) OR (checkChar(sReason, edtSurname.Text, 'Surname')) then
+  if (checkChar(sReason, edtFullname.Text, 'Your fullname')) OR (checkChar(sReason, edtSurname.Text, 'Your surname')) then
     result := false
 end;
 
@@ -190,7 +195,7 @@ begin
   result := false;
   for i := 1 to length(sInput) do
     if sInput[i] IN scInvalid then begin
-      sReason := sReason + sMessage + ' contains invalid characters, referance help for valid characters'#13;
+      sReason := sReason + sMessage + ' contains invalid characters, reference help for valid characters'#13;
       result := true;
       break;
     end;
@@ -204,6 +209,17 @@ end;
 Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
 begin
   tblUsers.Prior;
+end;
+
+procedure TfrmMain.btnUserDelClick(Sender: TObject);
+begin
+  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
+    if tblUsers['Username'] = 'admin' then
+      Util.error('You cannot delete the admin user')
+    else
+    tblUsers.Delete;
+  end;
+
 end;
 
 end.
