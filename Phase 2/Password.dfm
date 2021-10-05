@@ -13,11 +13,14 @@ object frmPassword: TfrmPassword
   Font.Style = []
   OldCreateOrder = False
   OnActivate = FormActivate
+  DesignSize = (
+    231
+    164)
   PixelsPerInch = 96
   TextHeight = 13
   object pnlPasswordForm: TPanel
     Left = 0
-    Top = 0
+    Top = -5
     Width = 233
     Height = 178
     TabOrder = 0
@@ -74,12 +77,13 @@ object frmPassword: TfrmPassword
   object pnlPassButtons: TPanel
     Left = 0
     Top = 133
-    Width = 236
-    Height = 33
+    Width = 233
+    Height = 28
+    Anchors = [akLeft, akBottom]
     BevelOuter = bvNone
     TabOrder = 2
     object btnPassCancel: TBitBtn
-      Left = 73
+      Left = 69
       Top = 0
       Width = 75
       Height = 25

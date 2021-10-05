@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Main;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, DB, ADODB, Main, util_u;
 
 type
   TfrmLogin = class(TForm)
@@ -24,8 +24,8 @@ type
       Shift: TShiftState; X, Y: Integer);
   private
     var
+      activeUser : util_u.TUser;
       bAuth : boolean;
-      sPrivilege, sPreUser : string;
       conDB: TADOConnection;
       tblMusic: TADOtable;
       qry: TADOQuery;
@@ -34,8 +34,7 @@ type
       SQL: String;
   published
     Procedure logout;
-    Function isAuthenticated : boolean;
-    Function getPriv : string;
+    Function getUser : TUser;
   end;
 
 var
@@ -47,27 +46,52 @@ implementation
 
 { TfrmLogin }
 
-uses DBUsers_u, util_u, Password;
+uses DBUsers_u, Password;
 
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
+Var
+  sGender : string;
 begin
   if NOT((edtPass.Text = '') OR (edtUser.Text = '')) then begin
     tblUsers.open;
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
-      if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
-        bAuth := true;
-        sPreUser := tblUsers['USername'];
-        sPrivilege := tblUsers['Privilege'];
-        frmMain.Show;
-        frmLogin.Hide;
+      if tblUsers['Enabled'] = true then begin
+        if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
+          activeUser.username := tblUsers['Username'];
+          activeUser.privilege := tblUsers['Privilege'];
+            tblUserInfo.recNo := tblUsers.RecNo;
+            if NOT(tblUserInfo['Fullname'] = null) then
+              activeUser.fullname := tblUserInfo['Fullname']
+            else
+              activeUser.fullname := 'N/A';
+            if NOT(tblUserInfo['Surname'] = null) then
+              activeUser.Surname := tblUserInfo['Surname']
+            else
+              activeUser.Surname := 'N/A';
+            if NOT(tblUserInfo['Cellphone'] = null) then
+              activeUser.Cellphone := tblUserInfo['Cellphone']
+            else
+              activeUser.Cellphone := 'N/A';
+            if NOT(tblUserInfo['Gender'] = null) then begin
+              sGender := tblUserInfo['Gender'];
+              activeUser.gender := sGender[1]; // Why doesn't activeUser.gender := tblUserInfo['Gender'][1]; work???
+            end else
+              activeUser.gender := 'N';
+            if NOT(tblUserInfo['Email'] = null) then
+              activeUser.Email := tblUserInfo['Email']
+            else
+              activeUser.Email := 'N/A';
+          frmMain.Show;
+          frmLogin.Hide;
+        end else
+          util.error('Invalid password by user ' + edtUser.Text, true)
       end else
-        util.error('Invalid password by user ' + edtUser.Text, true);
+        util.error('User ' + edtUser.Text + ' is disabled', true);
     end else
       util.error(edtUser.Text + ' does not exist', true);
   end else
     util.error('Please enter your credentials before submitting', false);
-
 end;
 
 procedure TfrmLogin.btnShowPassMouseDown(Sender: TObject; Button: TMouseButton;
@@ -92,23 +116,15 @@ begin
   DBUsers.connectDB;
 end;
 
-// Getter for sPrivilege
-function TfrmLogin.getPriv: string;
+// Getter for active user record
+function TfrmLogin.getUser: util_u.TUser;
 begin
-  result := sPrivilege;
-end;
-
-// Getter for bAuth
-function TfrmLogin.isAuthenticated : boolean;
-begin
-  result := bAuth;
+  result := activeUser;
 end;
 
 // Log out user and reset Application
 procedure TfrmLogin.logout;
 begin
-  bAuth := false;
-  sPrivilege := '';
   frmLogin.Show;
   frmMain.Hide;
   edtUser.SetFocus;

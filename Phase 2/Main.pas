@@ -34,21 +34,37 @@ type
     BitBtn1: TBitBtn;
     btnEnabled: TBitBtn;
     btnClearLog: TBitBtn;
+    lblUsernameUser: TLabel;
+    pnlMyInfoUser: TPanel;
+    lblFullnameUser: TLabel;
+    lblSurnameUser: TLabel;
+    lblCellUser: TLabel;
+    lblEmailuser: TLabel;
+    lblHeadMyInfoUser: TLabel;
+    edtUserDashUser: TEdit;
+    edtFullnameDashUser: TEdit;
+    edtSurnameDashUser: TEdit;
+    edtCellDashUser: TEdit;
+    edtEmailDashUser: TEdit;
+    btnUserUpdate: TBitBtn;
+    btnChangePasswordUser: TBitBtn;
+    rpgGenderDashUser: TRadioGroup;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
     Procedure btnDBnavDOWNClick(Sender: TObject);
     Procedure btnAddUserClick(Sender: TObject);
-    Function validateUser(var sReason : string) : boolean;
+    Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
     Procedure addUser(sUsername, sPriv, sHashedPass : string);
     Procedure genUsername(var sUsername : string);
     Procedure FormCreate(Sender: TObject);
     Procedure tbcMainChange(Sender: TObject);
-    Function checkChar(var sReason : string; sInput, sMessage : string) : boolean;
     Procedure resetNewUser;
     Procedure loadEvents;
     procedure btnUserDelClick(Sender: TObject);
     procedure btnClearLogClick(Sender: TObject);
+    Procedure loadUserDash;
+    procedure btnUserUpdateClick(Sender: TObject);
   private
     sPriv : string;
   public
@@ -127,6 +143,39 @@ begin
   //redEvent.lines.LoadFromFile(sTFname);
 end;
 
+procedure TfrmMain.loadUserDash;
+begin
+  with frmLogin.getUser do begin
+    edtUserDashUser.Text := username;
+    edtFullnameDashUser.Text := fullname;
+    edtSurnameDashUser.Text := surname;
+    edtEmailDashUser.Text := email;
+    edtCellDashUser.Text := cellphone;
+    case gender of
+      'M': rpgGenderDashUser.ItemIndex := 0;
+      'F': rpgGenderDashUser.ItemIndex := 1;
+      'N': rpgGenderDashUser.ItemIndex := -1;
+    end;
+  end;
+end;
+
+procedure TfrmMain.btnUserUpdateClick(Sender: TObject);
+Var
+  newUser : TUser;
+  sReason : string;
+begin
+  if validateUserNames() AND util.cellValid(edtCellDashUser.Text) do
+  with newUser do begin
+    username := frmLogin.getUser.username;
+    fullname := edtFullnameDashUser.Text;
+    surname := edtSurnameDashUSer.Text;
+    email := edtEmailDashUser.Text;
+    cellphone := edtCellDashUSer.Text;
+
+  end;
+  loadUserDash;
+end;
+
 procedure TfrmMain.resetNewUser;
 begin
   edtFullname.Clear;
@@ -149,6 +198,7 @@ begin
     tblUsers['Gender'] := rpgGender.Items[rpgGender.ItemIndex][1];
     tblUsers['Email'] := edtEmail.Text;
   tblUsers.Post;
+  Util.logevent('New user ' + sUsername + ' added.', 2);
   resetNewUser;
 end;
 
@@ -157,7 +207,7 @@ Var
   sReason, sUsername, sHashedPass, sPriv : string;
 begin
   // Pass referance to local varable for error responce
-  if validateUser(sReason) then begin
+  if validateUserNames(sReason) then begin
     genUsername(sUsername);
     util.getPriv(sPriv);
     if util.newPassword(sHashedPass, newPass) then
@@ -173,6 +223,7 @@ begin
   if MessageDlg('Are you sure you want to clear the event log?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
     DeleteFile('event.log');
     Util.initFile('event.log', tFile);
+    Util.logevent('Event log was cleared', 2);
     CloseFile(tFile);
     redEvent.Clear;
   end;
@@ -186,12 +237,11 @@ begin
   tblUsers.First;
 
   // Get privilege form login form and configure user interface acordingly
-  sPriv := Login.frmLogin.getPriv;
-  if sPriv = 'user' then begin
+  if frmLogin.getUser.privilege = 'user' then begin
     tbcMain.Pages[1].tabVisible := false;
     tbcMain.Pages[3].tabVisible := false;
     tbcMain.Pages[4].tabVisible := false;
-  end else if sPriv = 'HR' then begin
+  end else if frmLogin.getUser.privilege = 'HR' then begin
     tbcMain.Pages[0].tabVisible := false;
     tbcMain.Pages[4].tabVisible := false;
   end;
@@ -205,16 +255,16 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   // Set max input length for edt boxes (equal to DB field limit)
-  edtFullName.MaxLength := 40;
-  edtSurname.MaxLength := 40;
-  edtEmail.MaxLength := 40;
+  edtFullName.MaxLength := 25;
+  edtSurname.MaxLength := 25;
+  edtEmail.MaxLength := 30;
 end;
 
 procedure TfrmMain.tbcMainChange(Sender: TObject);
 begin
   // Focus helper for user on tab change
   case tbcMain.ActivePageIndex of
-    0: ;
+    0: loadUserDash;
     1: ;
     2: ;
     3: ;
@@ -223,37 +273,27 @@ begin
   end;
 end;
 
-Function TfrmMain.validateUser(var sReason : string) : boolean;
+//TODO check email and gender
+
+Function TfrmMain.validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+var
+  sError : string;
 begin
   result := true;
   sReason := '';
+  sError := ' contains invalid characters, reference help for valid characters'#13;
   { | Check if rpgGender, edtFullname, edtSurname and edtEmail are Null
     | Check if edtFullname and edtSurname contain ivalid values
     | Return false if invalid characters are found
     | Set referanced varable (sReason) to applicable error message
     }
-  if (edtEmail.Text = '') OR (edtFullname.Text = '') OR (edtSurname.Text = '') OR (rpgGender.ItemIndex = -1) then begin
+  if (sFullname = '') OR (sSurname = '') then begin
     result := false;
     sReason := sReason + 'Some fields are empty'#13;
   end;
-  if (checkChar(sReason, edtFullname.Text, 'Your fullname')) OR (checkChar(sReason, edtSurname.Text, 'Your surname')) then
+  if (util.checkChar(sReason, edtFullname.Text, 'Your fullname' + sError, util.scInvalidNames)) OR
+     (util.checkChar(sReason, edtSurname.Text, 'Your surname' + sError, util.scInvalidNames)) then
     result := false
-end;
-
-function TfrmMain.checkChar(var sReason : string; sInput, sMessage : string): boolean;
-Var
-  i : integer;
-  scInvalid : set of char;
-begin
-               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
-  scInvalid := [#33..#44, #46..#64, #91..#96, #123..#126];
-  result := false;
-  for i := 1 to length(sInput) do
-    if sInput[i] IN scInvalid then begin
-      sReason := sReason + sMessage + ' contains invalid characters, reference help for valid characters'#13;
-      result := true;
-      break;
-    end;
 end;
 
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
@@ -276,5 +316,7 @@ begin
     tblUsers.Delete;
   end;
 end;
+
+
 
 end.

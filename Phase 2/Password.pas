@@ -81,9 +81,7 @@ begin
     edtOldPass.Hide;
     lblOldPass.Hide;
     pnlNewPass.Top := 8;
-    pnlPasswordForm.Height := 91;
-    pnlPassButtons.Top := 87;
-    frmPassword.Height := 158;
+    pnlPassButtons.Top := pnlNewPass.Top + pnlNewPass.Height + 6;
   end;
 end;
 

@@ -4,24 +4,63 @@ interface
 
 uses SysUtils, System.Hash, Classes, Password, Vcl.Forms, Vcl.Dialogs;
 
-type TUtil = class(TComponent)
-  Function hash(sString : string) : string;
-  Function noSpace(sString : string) : string;
-  Function newPassword(var sHashedPass : string; frmConfig : Password.Tstate) : boolean;
-  procedure getPriv(var sPriv: string);
-  procedure error(sError: string; log : boolean);
-  Procedure initFile(const sFileName : string; var tFile : Textfile);
-  Procedure logevent(sEvent : string; iType : integer);
-  Function ELFHash(const sKey : string) : String;
-  Function swapChar(s : string; c, b : integer) : string;
-  Function rotateLeft(sIn : string; p : integer) : string;
-  Procedure deleteFile(const sFileName : string);
-end;
+type
+  Tsc = set of char;
+  TUser = record
+    username : string[20];
+    fullname : string[25];
+    surname : string[25];
+    gender : char;
+    email : string[30];
+    privilege : string[5];
+    enabled : boolean;
+    cellPhone : string[11];
+  end;
+  TUtil = class(TComponent)
+    Function hash(sString : string) : string;
+    Function noSpace(sString : string) : string;
+    Function newPassword(var sHashedPass : string; frmConfig : Password.Tstate) : boolean;
+    procedure getPriv(var sPriv: string);
+    procedure error(sError: string; log : boolean);
+    Procedure initFile(const sFileName : string; var tFile : Textfile);
+    Procedure logevent(sEvent : string; iType : integer);
+    Function ELFHash(const sKey : string) : String;
+    Function swapChar(s : string; c, b : integer) : string;
+    Function rotateLeft(sIn : string; p : integer) : string;
+    Procedure deleteFile(const sFileName : string);
+    Function cellValid(const cellNr : string) : boolean;
+    Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
+    Var
+      const
+                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
+        scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
+  end;
 
 Var
   Util : TUtil;
 
 implementation
+
+function TUtil.cellValid(const cellNr: string): boolean;
+begin
+  // Validate cell number
+  result := true;
+end;
+
+Function TUtil.checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
+Var
+  i : integer;
+begin
+  //             {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
+  //scInvalid := [#33..#44, #46..#64, #91..#96, #123..#126];
+  result := false;
+  for i := 1 to length(sInput) do
+    if sInput[i] IN scInvalid then begin
+      sReason := sReason + sMessage;
+      result := true;
+      break;
+    end;
+end;
 
 procedure TUtil.deleteFile(const sFileName: string);
 begin

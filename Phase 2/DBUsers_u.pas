@@ -17,6 +17,7 @@ var
   DBUsers : TDBUsers;
   conDB: TADOConnection;
   tblUsers: TADOtable;
+  tblUserInfo : TADOtable;
   dsrTbl: TDataSource;
 
 implementation
@@ -40,8 +41,15 @@ begin
   tblUsers.TableName := 'Users';
   tblUsers.Active := true;
 
+  //tblUsersinfo
+  tblUserInfo := TADOtable.Create(Self);
+  tblUserInfo.Connection := conDB;
+
+  tblUserInfo.TableName := 'UserInfo';
+  tblUserInfo.Active := true;
+
   // Create datasource object
   dsrTbl := TDataSource.Create(Self);
-  dsrTbl.DataSet := tblUsers;
+  dsrTbl.DataSet := tblUserInfo;
 end;
 end.
