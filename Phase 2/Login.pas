@@ -58,30 +58,7 @@ begin
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
       if tblUsers['Enabled'] = true then begin
         if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
-          activeUser.username := tblUsers['Username'];
-          activeUser.privilege := tblUsers['Privilege'];
-            tblUserInfo.recNo := tblUsers.RecNo;
-            if NOT(tblUserInfo['Fullname'] = null) then
-              activeUser.fullname := tblUserInfo['Fullname']
-            else
-              activeUser.fullname := 'N/A';
-            if NOT(tblUserInfo['Surname'] = null) then
-              activeUser.Surname := tblUserInfo['Surname']
-            else
-              activeUser.Surname := 'N/A';
-            if NOT(tblUserInfo['Cellphone'] = null) then
-              activeUser.Cellphone := tblUserInfo['Cellphone']
-            else
-              activeUser.Cellphone := 'N/A';
-            if NOT(tblUserInfo['Gender'] = null) then begin
-              sGender := tblUserInfo['Gender'];
-              activeUser.gender := sGender[1]; // Why doesn't activeUser.gender := tblUserInfo['Gender'][1]; work???
-            end else
-              activeUser.gender := 'N';
-            if NOT(tblUserInfo['Email'] = null) then
-              activeUser.Email := tblUserInfo['Email']
-            else
-              activeUser.Email := 'N/A';
+          util.readUser(activeUser);
           frmMain.Show;
           frmLogin.Hide;
         end else

@@ -2,7 +2,7 @@ unit util_u;
 
 interface
 
-uses SysUtils, System.Hash, Classes, Password, Vcl.Forms, Vcl.Dialogs;
+uses SysUtils, System.Hash, Classes, Password, Vcl.Forms, Vcl.Dialogs, System.Variants;
 
 type
   Tsc = set of char;
@@ -28,14 +28,15 @@ type
     Function swapChar(s : string; c, b : integer) : string;
     Function rotateLeft(sIn : string; p : integer) : string;
     Procedure deleteFile(const sFileName : string);
-    Function cellValid(const cellNr : string) : boolean;
+    Function cellValid(var sReason : string; const cellNr : string) : boolean;
     Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
     Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
-    Procedure writeUser(const user : Tuser);
+    Procedure writeUser(const user : TUser);
+    Procedure readUser(var user : TUser);
     Var
       const
-                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
+                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
   end;
 
 Var
@@ -45,22 +46,57 @@ implementation
 
 Uses DBUsers_u;
 
-Procedure TUtil.writeUser(const user : Tuser);
+Procedure TUtil.readUser(var user : TUser);
+Var
+  sGender : string;
 begin
-  tblUsers['Username'] := user.username;
-  tblUserInfo['Username'] := user.username;
-  tblUsers['Privilege'] := user.privilege;
-  tblUserInfo['Fullname'] := user.fullname;
-  tblUserInfo['Surname'] := user.surname;
-  tblUserInfo['CellPhone'] := user.cellPhone;
-  tblUserInfo['Gender'] := user.gender;
-  tblUserInfo['Email'] := user.email;
+  with user do begin
+    tblUserInfo.recNo := tblUsers.RecNo;
+    username := tblUsers['Username'];
+    privilege := tblUsers['Privilege'];
+    if NOT(tblUserInfo['Fullname'] = Null) then
+      fullname := tblUserInfo['Fullname']
+    else
+      fullname := 'N/A';
+    if NOT(tblUserInfo['Surname'] = Null) then
+      Surname := tblUserInfo['Surname']
+    else
+      Surname := 'N/A';
+    if NOT(tblUserInfo['Cellphone'] = Null) then
+      Cellphone := tblUserInfo['Cellphone']
+    else
+      Cellphone := 'N/A';
+    if NOT(tblUserInfo['Gender'] = Null) then begin
+      sGender := tblUserInfo['Gender'];
+      gender := sGender[1]; // Why doesn't activeUser.gender := tblUserInfo['Gender'][1]; work???
+    end else
+      gender := 'N';
+    if NOT(tblUserInfo['Email'] = Null) then
+      Email := tblUserInfo['Email']
+    else
+      Email := 'N/A';
+  end;
 end;
 
-function TUtil.cellValid(const cellNr: string): boolean;
+Procedure TUtil.writeUser(const user : Tuser);
+begin
+  with user do begin
+    tblUsers['Username'] := username;
+    tblUserInfo['Username'] := username;
+    tblUsers['Privilege'] := privilege;
+    tblUserInfo['Fullname'] := fullname;
+    tblUserInfo['Surname'] := surname;
+    tblUserInfo['CellPhone'] := cellPhone;
+    tblUserInfo['Gender'] := gender;
+    tblUserInfo['Email'] := email;
+    tblUsers['Enabled'] := enabled;
+  end;
+end;
+
+function TUtil.cellValid(var sReason : string; const cellNr: string): boolean;
 begin
   // Validate cell number
-  result := true;
+  result := checkchar(sReason, cellNr, 'Cellphone numeber may only contain numerical numbers'#13, ['0'..'9']);
 end;
 
 Function TUtil.checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;

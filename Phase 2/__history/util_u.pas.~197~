@@ -2,7 +2,7 @@ unit util_u;
 
 interface
 
-uses SysUtils, System.Hash, Classes, Password, Vcl.Forms, Vcl.Dialogs;
+uses SysUtils, System.Hash, Classes, Password, Vcl.Forms, Vcl.Dialogs, System.Variants;
 
 type
   Tsc = set of char;
@@ -28,12 +28,16 @@ type
     Function swapChar(s : string; c, b : integer) : string;
     Function rotateLeft(sIn : string; p : integer) : string;
     Procedure deleteFile(const sFileName : string);
-    Function cellValid(const cellNr : string) : boolean;
+    Function cellValid(var sReason : string; const cellNr : string) : boolean;
     Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
+    Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+    Procedure writeUser(const user : TUser);
+    Procedure readUser(var user : TUser);
+    function checkGender(var sReason : string; iIndex : integer): boolean;
     Var
       const
-                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
+                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
   end;
 
 Var
@@ -41,10 +45,68 @@ Var
 
 implementation
 
-function TUtil.cellValid(const cellNr: string): boolean;
+Uses DBUsers_u;
+
+function TUtil.checkGender(var sReason : string; iIndex : integer): boolean;
+begin
+  // Check if gender is selected
+  result := true;
+  if iIndex = -1 then
+    result := false;
+  sReason := sReason + 'No gender were selected';
+end;
+
+Procedure TUtil.readUser(var user : TUser);
+Var
+  sGender : string;
+begin
+  with user do begin
+    tblUserInfo.recNo := tblUsers.RecNo;
+    username := tblUsers['Username'];
+    privilege := tblUsers['Privilege'];
+    if NOT(tblUserInfo['Fullname'] = Null) then
+      fullname := tblUserInfo['Fullname']
+    else
+      fullname := 'N/A';
+    if NOT(tblUserInfo['Surname'] = Null) then
+      Surname := tblUserInfo['Surname']
+    else
+      Surname := 'N/A';
+    if NOT(tblUserInfo['Cellphone'] = Null) then
+      Cellphone := tblUserInfo['Cellphone']
+    else
+      Cellphone := 'N/A';
+    if NOT(tblUserInfo['Gender'] = Null) then begin
+      sGender := tblUserInfo['Gender'];
+      gender := sGender[1]; // Why doesn't activeUser.gender := tblUserInfo['Gender'][1]; work???
+    end else
+      gender := 'N';
+    if NOT(tblUserInfo['Email'] = Null) then
+      Email := tblUserInfo['Email']
+    else
+      Email := 'N/A';
+  end;
+end;
+
+Procedure TUtil.writeUser(const user : Tuser);
+begin
+  with user do begin
+    tblUsers['Username'] := username;
+    tblUserInfo['Username'] := username;
+    tblUsers['Privilege'] := privilege;
+    tblUserInfo['Fullname'] := fullname;
+    tblUserInfo['Surname'] := surname;
+    tblUserInfo['CellPhone'] := cellPhone;
+    tblUserInfo['Gender'] := gender;
+    tblUserInfo['Email'] := email;
+    tblUsers['Enabled'] := enabled;
+  end;
+end;
+
+function TUtil.cellValid(var sReason : string; const cellNr: string): boolean;
 begin
   // Validate cell number
-  result := true;
+  result := checkchar(sReason, cellNr, 'Your cellphone number may only contain numerical values'#13, ['0'..'9']);
 end;
 
 Function TUtil.checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
@@ -60,6 +122,22 @@ begin
       result := true;
       break;
     end;
+end;
+
+Function TUtil.validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+var
+  sError : string;
+begin
+  result := true;
+  sReason := '';
+  sError := ' contains invalid characters, reference help for valid characters'#13;
+  if (sFullname = '') OR (sSurname = '') then begin
+    result := false;
+    sReason := sReason + 'Some fields are empty'#13;
+  end;
+  if (util.checkChar(sReason, sFullname, 'Your fullname' + sError, util.scInvalidNames)) OR
+     (util.checkChar(sReason, sSurname, 'Your surname' + sError, util.scInvalidNames)) then
+    result := false
 end;
 
 procedure TUtil.deleteFile(const sFileName: string);

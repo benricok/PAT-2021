@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserDash
+    ActivePage = tabUserManagement
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
@@ -126,40 +126,45 @@ object frmMain: TfrmMain
           Font.Style = []
           ParentFont = False
         end
-        object edtUserDashUser: TEdit
+        object lblUsernameDashUser: TLabel
           Left = 96
-          Top = 58
-          Width = 169
-          Height = 21
-          TabOrder = 0
+          Top = 60
+          Width = 4
+          Height = 16
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object edtFullnameDashUser: TEdit
           Left = 96
           Top = 85
           Width = 169
           Height = 21
-          TabOrder = 1
+          TabOrder = 0
         end
         object edtSurnameDashUser: TEdit
           Left = 96
           Top = 112
           Width = 169
           Height = 21
-          TabOrder = 2
+          TabOrder = 1
         end
         object edtCellDashUser: TEdit
           Left = 96
           Top = 139
           Width = 169
           Height = 21
-          TabOrder = 3
+          TabOrder = 2
         end
         object edtEmailDashUser: TEdit
           Left = 96
           Top = 166
           Width = 169
           Height = 21
-          TabOrder = 4
+          TabOrder = 3
         end
         object btnUserUpdate: TBitBtn
           Left = 167
@@ -170,7 +175,7 @@ object frmMain: TfrmMain
           Caption = '&Update'
           Kind = bkOK
           NumGlyphs = 2
-          TabOrder = 5
+          TabOrder = 4
           OnClick = btnUserUpdateClick
         end
         object btnChangePasswordUser: TBitBtn
@@ -220,7 +225,7 @@ object frmMain: TfrmMain
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFF3E5D1F3E5D1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFF}
-          TabOrder = 6
+          TabOrder = 5
         end
         object rpgGenderDashUser: TRadioGroup
           Left = 16
@@ -231,7 +236,7 @@ object frmMain: TfrmMain
           Items.Strings = (
             'Male'
             'Female')
-          TabOrder = 7
+          TabOrder = 6
         end
       end
     end
@@ -260,6 +265,21 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      ExplicitLeft = 8
+      ExplicitTop = 28
+      object lblHeadEnabled: TLabel
+        Left = 431
+        Top = 228
+        Width = 72
+        Height = 13
+        Caption = 'Selected user: '
+      end
+      object lblEnabled: TLabel
+        Left = 509
+        Top = 228
+        Width = 3
+        Height = 13
+      end
       object dbGridUsers: TDBGrid
         Left = 16
         Top = 16
@@ -335,6 +355,14 @@ object frmMain: TfrmMain
           Height = 21
           TabOrder = 2
           TextHint = 'Email'
+        end
+        object edtCellphone: TEdit
+          Left = 8
+          Top = 103
+          Width = 201
+          Height = 21
+          TabOrder = 5
+          TextHint = 'Cellphone number'
         end
       end
       object btnDBnavUP: TBitBtn
@@ -437,6 +465,7 @@ object frmMain: TfrmMain
         Kind = bkIgnore
         NumGlyphs = 2
         TabOrder = 5
+        OnClick = btnEnabledClick
       end
     end
     object tabLogs: TTabSheet
