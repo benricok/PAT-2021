@@ -54,7 +54,6 @@ type
     Procedure btnDBnavUPClick(Sender: TObject);
     Procedure btnDBnavDOWNClick(Sender: TObject);
     Procedure btnAddUserClick(Sender: TObject);
-    Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
     Procedure addUser(sUsername, sPriv, sHashedPass : string);
     Procedure genUsername(var sUsername : string);
     Procedure FormCreate(Sender: TObject);
@@ -164,16 +163,25 @@ Var
   newUser : TUser;
   sReason : string;
 begin
-  if validateUserNames() AND util.cellValid(edtCellDashUser.Text) do
+  if util.validateUserNames(sReason, edtFullnameDashUser.Text, edtSurnameDashUser.Text) AND util.cellValid(sReason, edtCellDashUser.Text) then
   with newUser do begin
     username := frmLogin.getUser.username;
     fullname := edtFullnameDashUser.Text;
     surname := edtSurnameDashUSer.Text;
     email := edtEmailDashUser.Text;
     cellphone := edtCellDashUSer.Text;
-
-  end;
-  loadUserDash;
+      tblUsers.Open;
+      tblUsers.Locate('Username', username, [loCaseInsensitive]);
+      tblUserInfo.RecNo := tblUsers.RecNo;
+      tblUsers.Edit;
+      tblUserinfo.Edit;
+        util.writeUser(newUser);
+      tblUsers.Post;
+      tblUserInfo.Post;
+    util.logevent('User ' + username + ' was updated', 2);
+    frmLogin.logout; // For security reasons we log out to refresh information
+  end else
+    util.error(sReason, false);
 end;
 
 procedure TfrmMain.resetNewUser;
@@ -207,7 +215,7 @@ Var
   sReason, sUsername, sHashedPass, sPriv : string;
 begin
   // Pass referance to local varable for error responce
-  if validateUserNames(sReason) then begin
+  if util.validateUserNames(sReason, edtFullname.Text, edtSurname.Text) then begin
     genUsername(sUsername);
     util.getPriv(sPriv);
     if util.newPassword(sHashedPass, newPass) then
@@ -241,10 +249,12 @@ begin
     tbcMain.Pages[1].tabVisible := false;
     tbcMain.Pages[3].tabVisible := false;
     tbcMain.Pages[4].tabVisible := false;
+    loadUserDash;
   end else if frmLogin.getUser.privilege = 'HR' then begin
     tbcMain.Pages[0].tabVisible := false;
     tbcMain.Pages[4].tabVisible := false;
-  end;
+  end else if frmLogin.getUser.privilege = 'admin' then
+    loadUserDash;
 end;
 
 Procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -275,27 +285,6 @@ end;
 
 //TODO check email and gender
 
-Function TfrmMain.validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
-var
-  sError : string;
-begin
-  result := true;
-  sReason := '';
-  sError := ' contains invalid characters, reference help for valid characters'#13;
-  { | Check if rpgGender, edtFullname, edtSurname and edtEmail are Null
-    | Check if edtFullname and edtSurname contain ivalid values
-    | Return false if invalid characters are found
-    | Set referanced varable (sReason) to applicable error message
-    }
-  if (sFullname = '') OR (sSurname = '') then begin
-    result := false;
-    sReason := sReason + 'Some fields are empty'#13;
-  end;
-  if (util.checkChar(sReason, edtFullname.Text, 'Your fullname' + sError, util.scInvalidNames)) OR
-     (util.checkChar(sReason, edtSurname.Text, 'Your surname' + sError, util.scInvalidNames)) then
-    result := false
-end;
-
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
 begin
   tblUsers.Next;
@@ -316,7 +305,5 @@ begin
     tblUsers.Delete;
   end;
 end;
-
-
 
 end.

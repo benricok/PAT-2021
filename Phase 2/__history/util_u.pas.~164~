@@ -30,6 +30,11 @@ type
     Procedure deleteFile(const sFileName : string);
     Function cellValid(const cellNr : string) : boolean;
     Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
+    Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+    Var
+      const
+                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
+        scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
   end;
 
 Var
@@ -52,10 +57,26 @@ begin
   result := false;
   for i := 1 to length(sInput) do
     if sInput[i] IN scInvalid then begin
-      sReason := sReason + sMessage + ' contains invalid characters, reference help for valid characters'#13;
+      sReason := sReason + sMessage;
       result := true;
       break;
     end;
+end;
+
+Function TUtil.validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+var
+  sError : string;
+begin
+  result := true;
+  sReason := '';
+  sError := ' contains invalid characters, reference help for valid characters'#13;
+  if (sFullname = '') OR (sSurname = '') then begin
+    result := false;
+    sReason := sReason + 'Some fields are empty'#13;
+  end;
+  if (util.checkChar(sReason, edtFullname.Text, 'Your fullname' + sError, util.scInvalidNames)) OR
+     (util.checkChar(sReason, edtSurname.Text, 'Your surname' + sError, util.scInvalidNames)) then
+    result := false
 end;
 
 procedure TUtil.deleteFile(const sFileName: string);

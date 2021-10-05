@@ -30,16 +30,33 @@ type
     Procedure deleteFile(const sFileName : string);
     Function cellValid(const cellNr : string) : boolean;
     Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
+    Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+    Procedure writeUser(const user : Tuser);
     Var
       const
-                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
+                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
   end;
 
 Var
   Util : TUtil;
 
 implementation
+
+Uses DBUsers_u;
+
+Procedure TUtil.writeUser(const user : Tuser);
+begin
+  tblUsers['Username'] := user.username;
+  tblUserInfo['Username'] := user.username;
+  tblUsers['Privilege'] := user.privilege;
+  tblUserInfo['Fullname'] := user.fullname;
+  tblUserInfo['Surname'] := user.surname;
+  tblUserInfo['CellPhone'] := user.cellPhone;
+  tblUserInfo['Gender'] := user.gender;
+  tblUserInfo['Email'] := user.email;
+  tblUsers['Enabled'] := user.enabled;
+end;
 
 function TUtil.cellValid(const cellNr: string): boolean;
 begin
@@ -60,6 +77,22 @@ begin
       result := true;
       break;
     end;
+end;
+
+Function TUtil.validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+var
+  sError : string;
+begin
+  result := true;
+  sReason := '';
+  sError := ' contains invalid characters, reference help for valid characters'#13;
+  if (sFullname = '') OR (sSurname = '') then begin
+    result := false;
+    sReason := sReason + 'Some fields are empty'#13;
+  end;
+  if (util.checkChar(sReason, sFullname, 'Your fullname' + sError, util.scInvalidNames)) OR
+     (util.checkChar(sReason, sSurname, 'Your surname' + sError, util.scInvalidNames)) then
+    result := false
 end;
 
 procedure TUtil.deleteFile(const sFileName: string);

@@ -5,9 +5,10 @@ interface
 uses SysUtils, System.Hash, Classes, Password, Vcl.Forms, Vcl.Dialogs;
 
 type
+  Tsc = set of char;
   TUser = record
     username : string[20];
-    firstname : string[25];
+    fullname : string[25];
     surname : string[25];
     gender : char;
     email : string[30];
@@ -27,12 +28,68 @@ type
     Function swapChar(s : string; c, b : integer) : string;
     Function rotateLeft(sIn : string; p : integer) : string;
     Procedure deleteFile(const sFileName : string);
+    Function cellValid(const cellNr : string) : boolean;
+    Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
+    Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+    Procedure writeUser(const user : Tuser);
+    Var
+      const
+                               {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
+        scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
   end;
 
 Var
   Util : TUtil;
 
 implementation
+
+Uses DBUsers_u;
+
+Procedure TUtil.writeUser(const user : Tuser);
+begin
+  tblUsers['Username'] := user.username;
+  tblUserInfo['Username'] := user.username;
+  tblUsers['Privilege'] := user.privilege;
+  tblUserInfo['Fullname'] := user.fullname;
+  tblUserInfo['Surname'] := user.surname;
+end;
+
+function TUtil.cellValid(const cellNr: string): boolean;
+begin
+  // Validate cell number
+  result := true;
+end;
+
+Function TUtil.checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
+Var
+  i : integer;
+begin
+  //             {!  to , ;  . to @ ;  [ to ' ;  {  to  " }
+  //scInvalid := [#33..#44, #46..#64, #91..#96, #123..#126];
+  result := false;
+  for i := 1 to length(sInput) do
+    if sInput[i] IN scInvalid then begin
+      sReason := sReason + sMessage;
+      result := true;
+      break;
+    end;
+end;
+
+Function TUtil.validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
+var
+  sError : string;
+begin
+  result := true;
+  sReason := '';
+  sError := ' contains invalid characters, reference help for valid characters'#13;
+  if (sFullname = '') OR (sSurname = '') then begin
+    result := false;
+    sReason := sReason + 'Some fields are empty'#13;
+  end;
+  if (util.checkChar(sReason, sFullname, 'Your fullname' + sError, util.scInvalidNames)) OR
+     (util.checkChar(sReason, sSurname, 'Your surname' + sError, util.scInvalidNames)) then
+    result := false
+end;
 
 procedure TUtil.deleteFile(const sFileName: string);
 begin
