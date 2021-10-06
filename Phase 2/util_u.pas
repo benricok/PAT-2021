@@ -91,7 +91,6 @@ end;
 
 Procedure TUtil.writeUser(const user : Tuser);
 begin
-
   with user do begin
     tblUsers['Username'] := username;
     tblUserInfo['Username'] := username;

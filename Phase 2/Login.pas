@@ -105,5 +105,6 @@ begin
   frmLogin.Show;
   frmMain.Hide;
   edtUser.SetFocus;
+  edtPass.Clear;
 end;
 end.
