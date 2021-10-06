@@ -65,41 +65,57 @@ begin
     username := tblUsers['Username'];
     privilege := tblUsers['Privilege'];
     enabled := tblUsers['Enabled'];
-    if NOT(tblUserInfo['Fullname'] = Null) then
+    if NOT(tblUserInfo['Fullname'] = '') then
       fullname := tblUserInfo['Fullname']
     else
       fullname := 'N/A';
-    if NOT(tblUserInfo['Surname'] = Null) then
+    if NOT(tblUserInfo['Surname'] = '') then
       Surname := tblUserInfo['Surname']
     else
       Surname := 'N/A';
-    if NOT(tblUserInfo['Cellphone'] = Null) then
+    if NOT(tblUserInfo['Cellphone'] = '') then
       Cellphone := tblUserInfo['Cellphone']
     else
       Cellphone := 'N/A';
-    if NOT(tblUserInfo['Gender'] = Null) then begin
+    if NOT(tblUserInfo['Gender'] = '') then begin
       sGender := tblUserInfo['Gender'];
       gender := sGender[1]; // Why doesn't activeUser.gender := tblUserInfo['Gender'][1]; work???
     end else
       gender := 'N';
-    if NOT(tblUserInfo['Email'] = Null) then
-      Email := tblUserInfo['Email']
+    if NOT(tblUserInfo['Email'] = '') then
+      email := tblUserInfo['Email']
     else
-      Email := 'N/A';
+      email := 'N/A';
   end;
 end;
 
 Procedure TUtil.writeUser(const user : Tuser);
 begin
+
   with user do begin
     tblUsers['Username'] := username;
     tblUserInfo['Username'] := username;
     tblUsers['Privilege'] := privilege;
-    tblUserInfo['Fullname'] := fullname;
-    tblUserInfo['Surname'] := surname;
-    tblUserInfo['CellPhone'] := cellPhone;
-    tblUserInfo['Gender'] := gender;
-    tblUserInfo['Email'] := email;
+    if NOT(fullname = 'N/A') then
+      tblUserInfo['Fullname'] := fullname
+    else
+      tblUserInfo['Fullname'] := Null;
+    if NOT(surname = 'N/A') then
+      tblUserInfo['Surname'] := surname
+    else
+      tblUserInfo['Surname'] := Null;
+    if NOT(cellPhone = 'N/A') then
+      tblUserInfo['CellPhone'] := cellPhone
+    else
+      tblUserInfo['CellPhone'] := Null;
+    if NOT(tblUserInfo['Gender'] = 'N') then
+      tblUserInfo['Gender'] := gender
+    else
+      tblUserInfo['Gender'] := Null;
+    if NOT(tblUserInfo['Email'] = 'N/A') then
+      tblUserInfo['Email'] := email
+    else
+      tblUserInfo['Email'] := Null;
     tblUsers['Enabled'] := enabled;
   end;
 end;

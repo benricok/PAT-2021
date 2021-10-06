@@ -300,7 +300,7 @@ begin
     0: loadUserDash;
     1: ;
     2: ;
-    3: ;
+    3: updateEnabledLbl;
     4: loadEvents;
     5: Login.frmLogin.logout; // Log user out on tab logout click
   end;
@@ -319,25 +319,34 @@ end;
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
 begin
   tblUserInfo.Next;
+  tblUsers.RecNo := tblUserInfo.RecNo;
   updateEnabledLbl;
 end;
 
 Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
 begin
   tblUserInfo.Prior;
+  tblUsers.RecNo := tblUserInfo.RecNo;
   updateEnabledLbl;
 end;
 
 procedure TfrmMain.btnEnabledClick(Sender: TObject);
 begin
-  tblUsers.Open;
-  tblUsers.Edit;
-  if tblUsers['Enabled'] = True then
-    tblUsers['Enabled'] := False
+  if NOT(tblUsers['Username'] = 'admin') then
+    if NOT(tblUsers['Username'] = frmLogin.getUser.username) then begin
+
+    tblUsers.Open;
+    tblUsers.Edit;
+    if tblUsers['Enabled'] = True then
+      tblUsers['Enabled'] := False
+    else
+      tblUsers['Enabled'] := True;
+    tblUsers.Post;
+    updateEnabledLbl;
+    end else
+      util.error('You cannot disable your own user', false)
   else
-    tblUsers['Enabled'] := True;
-  tblUsers.Post;
-  updateEnabledLbl;
+    util.error('You cannot disable the admin user', false);
 end;
 
 procedure TfrmMain.btnUserDelClick(Sender: TObject);

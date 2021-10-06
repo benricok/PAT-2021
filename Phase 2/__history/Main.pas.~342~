@@ -213,8 +213,10 @@ begin
     gender := rpgGender.Items[rpgGender.ItemIndex][1];
     email := edtEmail.Text;
     cellphone := edtCellphone.Text;
+    enabled := true;
   end;
   tblUsers.Open;
+  tblUserInfo.Open;
   tblUsers.Last;
   tblUserInfo.Last;
   tblUserInfo.Insert;
@@ -300,7 +302,7 @@ begin
     0: loadUserDash;
     1: ;
     2: ;
-    3: ;
+    3: updateEnabledLbl;
     4: loadEvents;
     5: Login.frmLogin.logout; // Log user out on tab logout click
   end;
@@ -332,7 +334,8 @@ end;
 
 procedure TfrmMain.btnEnabledClick(Sender: TObject);
 begin
-  if NOT(tblUsers['Username'] = 'admin') then begin
+  if NOT(tblUsers['Username'] = 'admin') then
+    if NOT(tblUsers['Username'] = frmLogin.getUser.username) then begin
     tblUsers.Open;
     tblUsers.Edit;
     if tblUsers['Enabled'] = True then
@@ -341,7 +344,10 @@ begin
       tblUsers['Enabled'] := True;
     tblUsers.Post;
     updateEnabledLbl;
-  end;
+    end else
+      util.error('You cannot disable your own user', false)
+  else
+    util.error('You cannot disable the admin user', false);
 end;
 
 procedure TfrmMain.btnUserDelClick(Sender: TObject);

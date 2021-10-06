@@ -95,10 +95,22 @@ begin
     tblUsers['Username'] := username;
     tblUserInfo['Username'] := username;
     tblUsers['Privilege'] := privilege;
-    tblUserInfo['Fullname'] := fullname;
-    tblUserInfo['Surname'] := surname;
-    tblUserInfo['CellPhone'] := cellPhone;
-    tblUserInfo['Gender'] := gender;
+    if NOT(fullname = 'N/A') then
+      tblUserInfo['Fullname'] := fullname
+    else
+      tblUserInfo['Fullname'] := Null;
+    if NOT(surname = 'N/A') then
+      tblUserInfo['Surname'] := surname
+    else
+      tblUserInfo['Surname'] := Null;
+    if NOT(cellPhone = 'N/A') then
+      tblUserInfo['CellPhone'] := cellPhone
+    else
+      tblUserInfo['CellPhone'] := Null;
+    if NOT(tblUserInfo['Gender'] = 'N') then
+      tblUserInfo['Gender'] := gender
+    else
+      tblUserInfo['Gender'] := Null;
     tblUserInfo['Email'] := email;
     tblUsers['Enabled'] := enabled;
   end;
@@ -107,7 +119,10 @@ end;
 function TUtil.cellValid(var sReason : string; const cellNr: string): boolean;
 begin
   // Validate cell number
-  result := checkchar(sReason, cellNr, 'Your cellphone number may only contain numerical values'#13, ['0'..'9']);
+  if cellNr = 'N/A' then
+    result := true
+  else
+    result := checkchar(sReason, cellNr, 'Your cellphone number may only contain numerical values' + #13, ['0'..'9']);
 end;
 
 Function TUtil.checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;

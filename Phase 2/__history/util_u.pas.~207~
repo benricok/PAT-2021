@@ -33,6 +33,7 @@ type
     Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
     Procedure writeUser(const user : TUser);
     Procedure readUser(var user : TUser);
+    function checkGender(var sReason : string; iIndex : integer): boolean;
     Var
       const
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
@@ -46,6 +47,15 @@ implementation
 
 Uses DBUsers_u;
 
+function TUtil.checkGender(var sReason : string; iIndex : integer): boolean;
+begin
+  // Check if gender is selected
+  result := true;
+  if iIndex = -1 then
+    result := false;
+  sReason := sReason + 'No gender were selected';
+end;
+
 Procedure TUtil.readUser(var user : TUser);
 Var
   sGender : string;
@@ -54,6 +64,7 @@ begin
     tblUserInfo.recNo := tblUsers.RecNo;
     username := tblUsers['Username'];
     privilege := tblUsers['Privilege'];
+    enabled := tblUsers['Enabled'];
     if NOT(tblUserInfo['Fullname'] = Null) then
       fullname := tblUserInfo['Fullname']
     else
@@ -80,15 +91,31 @@ end;
 
 Procedure TUtil.writeUser(const user : Tuser);
 begin
+
   with user do begin
     tblUsers['Username'] := username;
     tblUserInfo['Username'] := username;
     tblUsers['Privilege'] := privilege;
-    tblUserInfo['Fullname'] := fullname;
-    tblUserInfo['Surname'] := surname;
-    tblUserInfo['CellPhone'] := cellPhone;
-    tblUserInfo['Gender'] := gender;
-    tblUserInfo['Email'] := email;
+    if NOT(fullname = 'N/A') then
+      tblUserInfo['Fullname'] := fullname
+    else
+      tblUserInfo['Fullname'] := Null;
+    if NOT(surname = 'N/A') then
+      tblUserInfo['Surname'] := surname
+    else
+      tblUserInfo['Surname'] := Null;
+    if NOT(cellPhone = 'N/A') then
+      tblUserInfo['CellPhone'] := cellPhone
+    else
+      tblUserInfo['CellPhone'] := Null;
+    if NOT(tblUserInfo['Gender'] = 'N') then
+      tblUserInfo['Gender'] := gender
+    else
+      tblUserInfo['Gender'] := Null;
+    if NOT(tblUserInfo['Email'] = 'N/A') then
+      tblUserInfo['Email'] := email
+    else
+      tblUserInfo['Email'] := Null;
     tblUsers['Enabled'] := enabled;
   end;
 end;
@@ -96,8 +123,10 @@ end;
 function TUtil.cellValid(var sReason : string; const cellNr: string): boolean;
 begin
   // Validate cell number
-  result := checkchar(sReason, cellNr, 'Cellphone numeber may only contain numerical numbers'#13, ['0'..'9']);
-
+  if cellNr = 'N/A' then
+    result := true
+  else
+    result := checkchar(sReason, cellNr, 'Your cellphone number may only contain numerical values' + #13, ['0'..'9']);
 end;
 
 Function TUtil.checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;

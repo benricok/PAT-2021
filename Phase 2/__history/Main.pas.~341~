@@ -215,6 +215,7 @@ begin
     cellphone := edtCellphone.Text;
   end;
   tblUsers.Open;
+  tblUserInfo.Open;
   tblUsers.Last;
   tblUserInfo.Last;
   tblUserInfo.Insert;
@@ -300,7 +301,7 @@ begin
     0: loadUserDash;
     1: ;
     2: ;
-    3: ;
+    3: updateEnabledLbl;
     4: loadEvents;
     5: Login.frmLogin.logout; // Log user out on tab logout click
   end;
@@ -308,7 +309,7 @@ end;
 
 procedure TfrmMain.updateEnabledLbl;
 begin
- if tblUserInfo['Enabled'] = True then
+ if tblUsers['Enabled'] = True then
     lblEnabled.Caption := 'Enabled'
   else
     lblEnabled.Caption := 'Disabled';
@@ -319,25 +320,33 @@ end;
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
 begin
   tblUserInfo.Next;
+  tblUsers.RecNo := tblUserInfo.RecNo;
   updateEnabledLbl;
 end;
 
 Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
 begin
   tblUserInfo.Prior;
-  if tblUserInfo['Enabled'] = True then
-    lblEnabled.Caption := 'Enabled'
-  else
-    lblEnabled.Caption := 'Disabled';
+  tblUsers.RecNo := tblUserInfo.RecNo;
+  updateEnabledLbl;
 end;
 
 procedure TfrmMain.btnEnabledClick(Sender: TObject);
 begin
-  if tblUserInfo['Enabled'] = True then
-    tblUserInfo['Enabled'] := False
+  if NOT(tblUsers['Username'] = 'admin') then
+    if NOT(tblUsers['Username'] = frmLogin.getUser.username) then begin
+    tblUsers.Open;
+    tblUsers.Edit;
+    if tblUsers['Enabled'] = True then
+      tblUsers['Enabled'] := False
+    else
+      tblUsers['Enabled'] := True;
+    tblUsers.Post;
+    updateEnabledLbl;
+    end else
+      util.error('You cannot disable your own user', false)
   else
-    tblUserInfo['Enabled'] := True;
-  updateEnabledLbl;
+    util.error('You cannot disable the admin user', false);
 end;
 
 procedure TfrmMain.btnUserDelClick(Sender: TObject);

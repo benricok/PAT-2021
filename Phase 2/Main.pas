@@ -104,7 +104,7 @@ Var
 begin
   util.initFile('event.log', tFile);
   Reset(tFile);
-  iTotChar := 0;
+  iTotChar := 1;
   while NOT(EOF(tFile)) do begin
     Readln(tFile, sLine);
     iLen := length(sLine)+2;
@@ -176,6 +176,8 @@ begin
     surname := edtSurnameDashUSer.Text;
     email := edtEmailDashUser.Text;
     cellphone := edtCellDashUSer.Text;
+    privilege := frmlogin.getUser.privilege;
+    enabled := frmLogin.getUser.enabled;
       tblUsers.Open;
       tblUsers.Locate('Username', username, [loCaseInsensitive]);
       tblUserInfo.RecNo := tblUsers.RecNo;
@@ -213,8 +215,10 @@ begin
     gender := rpgGender.Items[rpgGender.ItemIndex][1];
     email := edtEmail.Text;
     cellphone := edtCellphone.Text;
+    enabled := true;
   end;
   tblUsers.Open;
+  tblUserInfo.Open;
   tblUsers.Last;
   tblUserInfo.Last;
   tblUserInfo.Insert;
@@ -334,7 +338,6 @@ procedure TfrmMain.btnEnabledClick(Sender: TObject);
 begin
   if NOT(tblUsers['Username'] = 'admin') then
     if NOT(tblUsers['Username'] = frmLogin.getUser.username) then begin
-
     tblUsers.Open;
     tblUsers.Edit;
     if tblUsers['Enabled'] = True then
