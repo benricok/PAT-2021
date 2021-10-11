@@ -21,14 +21,12 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserManagement
+    ActivePage = tabUserDash
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 19
       object lblUserDash: TLabel
         Left = 16
         Top = 16
@@ -265,8 +263,6 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
-      ExplicitLeft = 8
-      ExplicitTop = 28
       object lblHeadEnabled: TLabel
         Left = 431
         Top = 228
@@ -337,7 +333,7 @@ object frmMain: TfrmMain
           Items.Strings = (
             'Male'
             'Female')
-          TabOrder = 3
+          TabOrder = 4
         end
         object btnAddUser: TBitBtn
           Left = 271
@@ -345,7 +341,7 @@ object frmMain: TfrmMain
           Width = 81
           Height = 25
           Caption = '&Add User'
-          TabOrder = 4
+          TabOrder = 5
           OnClick = btnAddUserClick
         end
         object edtEmail: TEdit
@@ -361,7 +357,7 @@ object frmMain: TfrmMain
           Top = 103
           Width = 201
           Height = 21
-          TabOrder = 5
+          TabOrder = 3
           TextHint = 'Cellphone number'
         end
       end
@@ -465,6 +461,7 @@ object frmMain: TfrmMain
         Kind = bkIgnore
         NumGlyphs = 2
         TabOrder = 5
+        OnClick = btnEnabledClick
       end
     end
     object tabLogs: TTabSheet

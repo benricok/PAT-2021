@@ -43,12 +43,11 @@ object frmLogin: TfrmLogin
       Top = 120
       Width = 75
       Height = 25
-      Hint = 'Login'
       Caption = '&Login'
       Kind = bkIgnore
       NumGlyphs = 2
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 2
       OnClick = btnLoginClick
     end
@@ -59,8 +58,6 @@ object frmLogin: TfrmLogin
       Height = 21
       Cursor = crIBeam
       Hint = 'Enter your username'
-      ParentShowHint = False
-      ShowHint = True
       TabOrder = 0
       Text = 'admin'
       TextHint = 'Enter your username'

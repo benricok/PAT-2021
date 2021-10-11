@@ -21,14 +21,12 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserDash
+    ActivePage = tabUserManagement
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
-      ExplicitLeft = 8
-      ExplicitTop = 19
       object lblUserDash: TLabel
         Left = 16
         Top = 16
@@ -45,8 +43,8 @@ object frmMain: TfrmMain
       object pnlMyInfoUser: TPanel
         Left = 16
         Top = 45
-        Width = 281
-        Height = 248
+        Width = 289
+        Height = 300
         TabOrder = 0
         object lblUsernameUser: TLabel
           Left = 14
@@ -126,57 +124,68 @@ object frmMain: TfrmMain
           Font.Style = []
           ParentFont = False
         end
-        object edtUserDashUser: TEdit
+        object lblUsernameDashUser: TLabel
           Left = 96
-          Top = 58
-          Width = 169
-          Height = 21
-          TabOrder = 0
+          Top = 60
+          Width = 4
+          Height = 16
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object edtFullnameDashUser: TEdit
           Left = 96
           Top = 85
           Width = 169
           Height = 21
-          TabOrder = 1
+          Hint = 'Enter your Fullname'
+          TabOrder = 0
         end
         object edtSurnameDashUser: TEdit
           Left = 96
           Top = 112
           Width = 169
           Height = 21
-          TabOrder = 2
+          Hint = 'Enter your surname'
+          TabOrder = 1
         end
         object edtCellDashUser: TEdit
           Left = 96
           Top = 139
           Width = 169
           Height = 21
-          TabOrder = 3
+          Hint = 'Enter your cellphone (after +27)'
+          TabOrder = 2
         end
         object edtEmailDashUser: TEdit
           Left = 96
           Top = 166
           Width = 169
           Height = 21
-          TabOrder = 4
+          Hint = 'Enter your email'
+          TabOrder = 3
         end
         object btnUserUpdate: TBitBtn
-          Left = 63
-          Top = 209
+          Left = 167
+          Top = 257
           Width = 75
           Height = 25
           Hint = 'Update your personal information'
           Caption = '&Update'
           Kind = bkOK
           NumGlyphs = 2
-          TabOrder = 5
+          TabOrder = 4
+          OnClick = btnUserUpdateClick
         end
         object btnChangePasswordUser: TBitBtn
           Left = 144
-          Top = 207
+          Top = 226
           Width = 121
           Height = 25
+          Hint = 'Change your password'
           Caption = '&Change password'
           Glyph.Data = {
             E6040000424DE604000000000000360000002800000014000000140000000100
@@ -219,6 +228,17 @@ object frmMain: TfrmMain
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFF3E5D1F3E5D1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFF}
+          TabOrder = 5
+        end
+        object rpgGenderDashUser: TRadioGroup
+          Left = 16
+          Top = 209
+          Width = 122
+          Height = 81
+          Caption = 'Gender'
+          Items.Strings = (
+            'Male'
+            'Female')
           TabOrder = 6
         end
       end
@@ -248,6 +268,19 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      object lblHeadEnabled: TLabel
+        Left = 431
+        Top = 228
+        Width = 72
+        Height = 13
+        Caption = 'Selected user: '
+      end
+      object lblEnabled: TLabel
+        Left = 509
+        Top = 228
+        Width = 3
+        Height = 13
+      end
       object dbGridUsers: TDBGrid
         Left = 16
         Top = 16
@@ -285,6 +318,9 @@ object frmMain: TfrmMain
           Top = 22
           Width = 201
           Height = 21
+          Hint = 'Enter the user'#39's Fullname'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 0
           TextHint = 'Fullname'
         end
@@ -293,6 +329,9 @@ object frmMain: TfrmMain
           Top = 49
           Width = 201
           Height = 21
+          Hint = 'Enter the user'#39's Surname'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 1
           TextHint = 'Surname'
         end
@@ -305,7 +344,7 @@ object frmMain: TfrmMain
           Items.Strings = (
             'Male'
             'Female')
-          TabOrder = 3
+          TabOrder = 4
         end
         object btnAddUser: TBitBtn
           Left = 271
@@ -313,7 +352,7 @@ object frmMain: TfrmMain
           Width = 81
           Height = 25
           Caption = '&Add User'
-          TabOrder = 4
+          TabOrder = 5
           OnClick = btnAddUserClick
         end
         object edtEmail: TEdit
@@ -321,8 +360,22 @@ object frmMain: TfrmMain
           Top = 76
           Width = 201
           Height = 21
+          Hint = 'Enter the user'#39's email'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 2
           TextHint = 'Email'
+        end
+        object edtCellphone: TEdit
+          Left = 8
+          Top = 103
+          Width = 201
+          Height = 21
+          Hint = 'Add the user'#39's cellphone number (after +27)'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          TextHint = 'Cellphone number'
         end
       end
       object btnDBnavUP: TBitBtn
@@ -425,6 +478,7 @@ object frmMain: TfrmMain
         Kind = bkIgnore
         NumGlyphs = 2
         TabOrder = 5
+        OnClick = btnEnabledClick
       end
     end
     object tabLogs: TTabSheet

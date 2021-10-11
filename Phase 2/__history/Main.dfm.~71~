@@ -27,8 +27,6 @@ object frmMain: TfrmMain
     object tabUserDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 19
       object lblUserDash: TLabel
         Left = 16
         Top = 16
@@ -144,6 +142,7 @@ object frmMain: TfrmMain
           Width = 169
           Height = 21
           TabOrder = 0
+          TextHint = 'Enter your fullname'
         end
         object edtSurnameDashUser: TEdit
           Left = 96
@@ -265,6 +264,19 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      object lblHeadEnabled: TLabel
+        Left = 431
+        Top = 228
+        Width = 72
+        Height = 13
+        Caption = 'Selected user: '
+      end
+      object lblEnabled: TLabel
+        Left = 509
+        Top = 228
+        Width = 3
+        Height = 13
+      end
       object dbGridUsers: TDBGrid
         Left = 16
         Top = 16
@@ -322,7 +334,7 @@ object frmMain: TfrmMain
           Items.Strings = (
             'Male'
             'Female')
-          TabOrder = 3
+          TabOrder = 4
         end
         object btnAddUser: TBitBtn
           Left = 271
@@ -330,7 +342,7 @@ object frmMain: TfrmMain
           Width = 81
           Height = 25
           Caption = '&Add User'
-          TabOrder = 4
+          TabOrder = 5
           OnClick = btnAddUserClick
         end
         object edtEmail: TEdit
@@ -340,6 +352,14 @@ object frmMain: TfrmMain
           Height = 21
           TabOrder = 2
           TextHint = 'Email'
+        end
+        object edtCellphone: TEdit
+          Left = 8
+          Top = 103
+          Width = 201
+          Height = 21
+          TabOrder = 3
+          TextHint = 'Cellphone number'
         end
       end
       object btnDBnavUP: TBitBtn
@@ -442,6 +462,7 @@ object frmMain: TfrmMain
         Kind = bkIgnore
         NumGlyphs = 2
         TabOrder = 5
+        OnClick = btnEnabledClick
       end
     end
     object tabLogs: TTabSheet
