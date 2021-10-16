@@ -43,13 +43,12 @@ object frmLogin: TfrmLogin
       Top = 120
       Width = 75
       Height = 25
-      Hint = 'Login'
       Caption = '&Login'
       Kind = bkIgnore
       NumGlyphs = 2
       ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
+      ShowHint = False
+      TabOrder = 0
       OnClick = btnLoginClick
     end
     object edtUser: TEdit
@@ -58,10 +57,7 @@ object frmLogin: TfrmLogin
       Width = 177
       Height = 21
       Cursor = crIBeam
-      Hint = 'Enter your username'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
+      TabOrder = 1
       Text = 'admin'
       TextHint = 'Enter your username'
     end
@@ -71,12 +67,9 @@ object frmLogin: TfrmLogin
       Width = 177
       Height = 21
       Cursor = crIBeam
-      Hint = 'Enter your password'
       HelpType = htKeyword
-      ParentShowHint = False
       PasswordChar = '*'
-      ShowHint = True
-      TabOrder = 1
+      TabOrder = 2
       Text = 'admin'
       TextHint = 'Enter your password'
     end
