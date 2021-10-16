@@ -59,6 +59,7 @@ begin
       if tblUsers['Enabled'] = true then begin
         if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
           util.readUser(activeUser);
+          util.logevent('User ' + activeUser.username + ' logged in.', 2);
           frmMain.Show;
           frmLogin.Hide;
         end else
