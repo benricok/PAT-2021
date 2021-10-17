@@ -6,7 +6,8 @@ uses
   Main in 'Main.pas' {frmMain},
   DBUsers_u in 'DBUsers_u.pas',
   util_u in 'util_u.pas',
-  Password in 'Password.pas' {frmPassword};
+  Password in 'Password.pas' {frmPassword},
+  Algorithms in 'Algorithms.pas';
 
 {$R *.res}
 

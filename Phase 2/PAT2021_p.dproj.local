@@ -24,12 +24,13 @@
     <Transaction>2021/09/13 13:55:40.000.161,=C:\Users\BenricoIT11\Github\PAT-2021\Phase 2\Hash_u.pas</Transaction>
     <Transaction>2021/09/13 14:04:00.000.655,C:\Users\BenricoIT11\Github\PAT-2021\Phase 2\Algorithms_u.pas=C:\Users\BenricoIT11\Github\PAT-2021\Phase 2\Hash_u.pas</Transaction>
     <Transaction>2021/09/19 13:03:43.000.240,=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Unit1.pas</Transaction>
-    <Transaction>2021/09/19 13:04:09.000.861,C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Unit1.dfm=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Password.dfm</Transaction>
     <Transaction>2021/09/19 13:04:09.000.861,C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Unit1.pas=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Password.pas</Transaction>
+    <Transaction>2021/09/19 13:04:09.000.861,C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Unit1.dfm=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Password.dfm</Transaction>
     <Transaction>2021/09/19 13:46:41.000.689,=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Unit1.pas</Transaction>
     <Transaction>2021/09/19 13:47:13.000.227,C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Unit1.pas=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\util_p.pas</Transaction>
     <Transaction>2021/09/19 13:48:18.000.248,C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Algorithms_u.pas=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\util_p.pas</Transaction>
     <Transaction>2021/09/19 13:49:30.000.022,C:\Users\not microsoft\Documents\PAT 2021\Phase 2\util_p.pas=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\util_u.pas</Transaction>
+    <Transaction>2021/10/17 13:43:14.381,=C:\Users\not microsoft\Documents\PAT 2021\Phase 2\Algorithms.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="DBUsers_u.pas"/>
@@ -40,5 +41,6 @@
     <File Path="Password.pas"/>
     <File Path="Password.dfm"/>
     <File Path="util_u.pas"/>
+    <File Path="Algorithms.pas"/>
   </ProjectSortOrder>
 </BorlandProject>

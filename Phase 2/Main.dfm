@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserDash
+    ActivePage = tabChat
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
@@ -528,6 +528,10 @@ object frmMain: TfrmMain
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object BitBtn1: TBitBtn
