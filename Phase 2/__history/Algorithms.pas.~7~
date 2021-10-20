@@ -1,0 +1,266 @@
+unit Algorithms;
+
+interface
+uses
+  Windows, System.Classes, SysUtils, Math, Vcl.Dialogs;
+
+type
+  TCrypto = class(TComponent)
+    function  GenerateKey(iMin, iMax : integer; bUpChar, bLowChar, bNumbers, bSpecial : boolean) : String;
+    function  Encrypt(sMessage, sKeyIn : string) : string;
+    function  Decrypt(sEncryptedMsg, sKeyIn : string) : string;
+    function encrypt_vigenere(sMsg, sKeyIn : String) : String;
+    function decrypt_vigenere(sEncryptedMsg, sNewKey : String) : String;
+    function extend_key(sMsg, sKeyIn : String) : String;
+
+    // Hashing functions
+    Function ELFHash(const sKey : string) : String;
+    Function swapChar(s : string; c, b : integer) : string;
+    Function rotateLeft(sIn : string; p : integer) : string;
+    Var
+      sNewKey : String;
+
+    const
+      // Characters for vigenere algorithm
+      sAvalibleChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ';
+  end;
+
+implementation
+
+Function TUtil.hash(sString : string) : string;
+begin
+  // Hash password
+  result := THashMD5.GetHashString(sString);
+end;
+
+
+function TCrypto.ELFHash(const sKey : string) : String;
+Var
+  iG, iTableSize, iHash : Int64;
+  i : integer;
+  sTemp : string;
+begin
+  iTableSize := 9952135015176462643; // Very large 64 bit prime number
+  iHash := 0;
+  for i := 1 to length(sKey) do begin
+    iHash := (iHash shl 4) + ord(sKey[i]);
+    iG := iHash and $F0000000;
+      if (iG<>0) then
+        iHash := iHash xor (iG shr 24) xor iG;
+  end;
+
+  sTemp := IntToStr(iHash mod iTableSize);
+  // Duplicate string to give the char swapper function exsta playing field.
+  sTemp := sTemp + sTemp;
+  result := swapChar(sTemp, 3, 20);
+end;
+
+function TCrypto.rotateLeft(sIn: string; p: integer): string;
+begin
+{ | Rotating a string p times left is effectively cutting
+  | the first p characters and placing them at the end
+  }
+  result := sIn.Substring(p) + sIn.Substring(0, p);
+end;
+
+function TCrypto.swapChar(s: string; c, b: integer): string;
+Var
+  iLen, f, r, i: integer;
+  sP1, sP2, sTemp : string;
+  cTemp : char;
+begin
+  iLen := s.Length;
+  // If c is larger or equal to the length of the string is effectively the
+  // remainder of c divided by the length of the string
+  c := c mod iLen;
+
+  if c = 0 then begin
+    // No change will happen
+    result := s;
+    exit;
+  end;
+
+  f := Round(b / iLen);
+  r := b mod iLen;
+
+  // Rotate first c characters by (n % c) places f times
+  sP1 := rotateLeft(s.Substring(0, c), ((iLen mod c) * f) mod c);
+  // Rotate remaining character by (n * f) places
+  sP2 := rotateLeft(s.Substring(c), ((c * f) mod (iLen -c)));
+
+  // Concatenate the two parts and convert the resultant string
+  // formed after f full iterations to a string array (for final swaps)
+  sTemp := sP1 + sP2;
+
+  // Remaining swaps
+  for i := 1 to r do begin
+    // Swap ith character with (i + c)th character
+    cTemp := sTemp[i];
+    sTemp[i] := sTemp[(i+c) mod iLen];
+    sTemp[(i + c) mod iLen] := cTemp;
+  end;
+  // Return final string
+  result := sTemp;
+end;
+
+//Generate a random selection of characters determind by the user's selection on lenth and what characters may be used
+function GenerateKey(iMin, iMax : integer; bUpChar, bLowChar, bNumbers, bSpecial : boolean) : String;
+Var
+  iLengthKey, iLengthGenAvalible, i : integer;
+  sGenKey, sGenAvalible : String;
+
+Const
+  sGenUpChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  sGenLowChar = 'abcdefghijklmnopqrstuvwxyz';
+  sGenNumbers = '0123456789';
+  sGenSpecialChar = '!@#$%^&*';
+
+begin
+  //Check if Min value is smaller than Max value
+  if iMin >= iMax then
+    MessageDlg('Please enter the minimum and maximum values in correctly',mtError, mbOKCancel, 0)
+  else
+    begin
+      //Initilize for loop counter
+      i := 1;
+
+      //Radomise length of key
+      Randomize;
+      iLengthKey := RandomRange(iMin, iMax +1);
+
+      //Append Selected characters to string avalible to the randomizer to select from and get length of it
+      if bUpChar then
+        sGenAvalible:= sGenAvalible + sGenUpChar;
+      if bLowChar then
+        sGenAvalible:= sGenAvalible + sGenLowChar;
+      if bNumbers then
+        sGenAvalible:= sGenAvalible + sGenNumbers;
+      if bSpecial then
+        sGenAvalible:= sGenAvalible + sGenSpecialChar;
+
+      iLengthGenAvalible := length(sGenAvalible);
+
+      //Check if user selected characters
+      if iLengthGenAvalible = 0 then
+        MessageDlg('Please select characters for the gererator to use',mtError, mbOKCancel, 0);
+
+      //Generate Key
+      for i := 1 to iLengthKey do
+        begin
+          sGenKey := sGenKey + sGenAvalible[Randomrange(1, iLengthGenAvalible+1)];
+        end;
+
+      //Return Key
+      result := sGenKey;
+    end;
+end;
+
+//Main encrypt function
+function Encrypt(sMessage, sKeyIn : string) : string;
+Var
+  {sB64,} sVigenereMsg : String;
+begin
+  //sB64 := base64_encode(sMessage);
+  sVigenereMsg := encrypt_Vigenere({sB64} sMessage, sKeyIn);
+  result := sVigenereMsg;
+end;
+
+//Main decrypt function
+function Decrypt(sEncryptedMsg, sKeyIn : string) : string;
+Var
+  sOut{, sB64_encoded, sB64_decoded} : String;
+begin
+  sNewKey := extend_key(sEncryptedMsg, sKeyIn);
+  {sB64_encoded} sOut  := decrypt_vigenere(sEncryptedMsg, sNewKey);
+  // sB64_decoded := base64_decode(sB64_encoded);
+  result := sOut; {sB64_decoded}
+end;
+
+
+// Vingenere algorithm by phillipperemy writen in C++. Was translated by Benrico Krog into Pascal
+// https://github.com/philipperemy/easy-encryption/blob/master/vigenere.h
+function encrypt_vigenere(sMsg, sKeyIn : String) : String;
+Var
+  i, k : integer;
+  sEncryptedMsg : String;
+
+begin
+  i := 1;
+  k := 1;
+
+  //Generate key with length = to message's length
+  sNewKey := extend_key(sMsg, sKeyIn);
+
+  //fil string with placeholder characters
+  sEncryptedMsg := '';
+  for k := 1 to sMsg.length do
+    sEncryptedMsg := sEncryptedMsg + 'x';
+
+  //Encryption
+  for i := 1 to sMsg.length do
+    begin
+      if (upCase(sMsg[i]) IN ['A'..'Z', '0'..'9']) then
+        sEncryptedMsg[i] := sAvalibleChars[((Pos(sMsg[i], sAvalibleChars) + Pos(sNewKey[i], sAvalibleChars)) MOD sAvalibleChars.Length)]
+      else
+        sEncryptedMsg[i] := sMsg[i];
+    end;
+
+  //return Encrypted message
+  result := sEncryptedMsg;
+end;
+
+function decrypt_vigenere(sEncryptedMsg, sNewKey : String) : String;
+Var
+  i, k : integer;
+  sDecryptedMsg : String;
+
+begin
+  i := 1;
+  k := 1;
+
+  //fil string with placeholder characters
+  sDecryptedMsg := '';
+  for k := 1 to sEncryptedMsg.length do
+    sDecryptedMsg := sDecryptedMsg + 'x';
+
+  //Decryption
+  for i := 1 to sEncryptedMsg.length do
+    begin
+      if (upCase(sEncryptedMsg[i]) IN ['A'..'Z', '0'..'9']) then
+        sDecryptedMsg[i] := sAvalibleChars[(((Pos(sEncryptedMsg[i], sAvalibleChars) - Pos(sNewKey[i], sAvalibleChars)) + sAvalibleChars.Length) MOD sAvalibleChars.Length)]
+      else
+        sDecryptedMsg[i] := sEncryptedMsg[i];
+    end;
+
+  //return Decrypted message
+  result := sDecryptedMsg;
+end;
+
+//Generate new key
+function extend_key(sMsg, sKeyIn : String) : String;
+Var
+  i, j, k : integer;
+  sNewKeyGen : String;
+
+begin
+  i := 1;
+  j := 1;
+  k := 1;
+
+  sNewKeyGen := '';
+  for k := 1 to sMsg.length do
+    sNewKeyGen := sNewKeyGen + 'x';
+
+  //loop through already genarated key and exstend/shorten it acording to the length of the message
+  for i := 1 to sMsg.length do
+    begin
+      if j = sKeyIn.Length then
+         j := 1;
+
+      sNewKeyGen[i] := sKeyIn[j];
+      Inc(j);
+    end;
+  result := sNewKeyGen;
+end;
+
+end.

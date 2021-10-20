@@ -27,6 +27,10 @@ object frmMain: TfrmMain
     object tabUserDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblUserDash: TLabel
         Left = 16
         Top = 16
@@ -257,6 +261,10 @@ object frmMain: TfrmMain
     end
     object tabDash: TTabSheet
       Caption = 'Dashboard'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblHRDash: TLabel
         Left = 384
         Top = 208
@@ -280,6 +288,10 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblHeadEnabled: TLabel
         Left = 431
         Top = 228
@@ -498,6 +510,10 @@ object frmMain: TfrmMain
     object tabLogs: TTabSheet
       Caption = 'Event Logger'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object redEvent: TRichEdit
         Left = 3
         Top = 0

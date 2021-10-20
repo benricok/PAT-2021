@@ -7,7 +7,9 @@ uses
   DBUsers_u in 'DBUsers_u.pas',
   util_u in 'util_u.pas',
   Password in 'Password.pas' {frmPassword},
-  Algorithms in 'Algorithms.pas';
+  Algorithms_u in 'Algorithms_u.pas',
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.res}
 
