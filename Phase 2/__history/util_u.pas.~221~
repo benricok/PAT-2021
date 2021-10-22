@@ -2,7 +2,7 @@ unit util_u;
 
 interface
 
-uses SysUtils, System.Hash, Classes, Password, Vcl.Forms, Vcl.Dialogs, System.Variants;
+uses SysUtils, Classes, Password, Vcl.Forms, Vcl.Dialogs, System.Variants;
 
 type
   Tsc = set of char;
@@ -30,6 +30,7 @@ type
     Procedure writeUser(const user : TUser);
     Procedure readUser(var user : TUser);
     function checkGender(var sReason : string; iIndex : integer): boolean;
+    Procedure setupApplication;
     Var
       const
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
@@ -41,7 +42,7 @@ Var
 
 implementation
 
-Uses DBUsers_u;
+Uses DBUsers_u, Algorithms_u;
 
 function TUtil.checkGender(var sReason : string; iIndex : integer): boolean;
 begin
@@ -50,6 +51,11 @@ begin
   if iIndex = -1 then
     result := false;
   sReason := sReason + 'No gender were selected';
+end;
+
+Procedure TUtil.setupApplication;
+begin
+
 end;
 
 Procedure TUtil.readUser(var user : TUser);
@@ -223,13 +229,13 @@ begin
       // Check new password entered and update referanced varable sHashedPassword
       if frmConfig = changePass then begin
         if checkChangePass then begin
-          sHashedPass := ELFhash(edtNewPass.Text);
+          sHashedPass := Crypt.ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
           setState(frmConfig);
       end else if frmConfig = newPass then
         if checkNewPass then begin
-          sHashedPass := ELFhash(edtNewPass.Text);
+          sHashedPass := Crypt.ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
           setState(frmConfig);

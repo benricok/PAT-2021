@@ -46,7 +46,7 @@ implementation
 
 { TfrmLogin }
 
-uses DBUsers_u, Password;
+uses DBUsers_u, Password, Algorithms_u;
 
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
 Var
@@ -57,31 +57,9 @@ begin
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
       if tblUsers['Enabled'] = true then begin
-        if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
-          activeUser.username := tblUsers['Username'];
-          activeUser.privilege := tblUsers['Privilege'];
-            tblUserInfo.recNo := tblUsers.RecNo;
-            if NOT(tblUserInfo['Fullname'] = null) then
-              activeUser.fullname := tblUserInfo['Fullname']
-            else
-              activeUser.fullname := 'N/A';
-            if NOT(tblUserInfo['Surname'] = null) then
-              activeUser.Surname := tblUserInfo['Surname']
-            else
-              activeUser.Surname := 'N/A';
-            if NOT(tblUserInfo['Cellphone'] = null) then
-              activeUser.Cellphone := tblUserInfo['Cellphone']
-            else
-              activeUser.Cellphone := 'N/A';
-            if NOT(tblUserInfo['Gender'] = null) then begin
-              sGender := tblUserInfo['Gender'];
-              activeUser.gender := sGender[1]; // Why doesn't activeUser.gender := tblUserInfo['Gender'][1]; work???
-            end else
-              activeUser.gender := 'N';
-            if NOT(tblUserInfo['Email'] = null) then
-              activeUser.Email := tblUserInfo['Email']
-            else
-              activeUser.Email := 'N/A';
+        if tblUsers['HashedPASS'] = crypt.ELFhash(edtPass.Text) then begin
+          util.readUser(activeUser);
+          util.logevent('User ' + activeUser.username + ' logged in.', 2);
           frmMain.Show;
           frmLogin.Hide;
         end else
@@ -109,6 +87,7 @@ end;
 procedure TfrmLogin.FormActivate(Sender: TObject);
 begin
   edtUser.SetFocus;
+  util.setupApplication;
 end;
 
 procedure TfrmLogin.FormCreate(Sender: TObject);
@@ -128,5 +107,6 @@ begin
   frmLogin.Show;
   frmMain.Hide;
   edtUser.SetFocus;
+  edtPass.Clear;
 end;
 end.

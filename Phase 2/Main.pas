@@ -52,6 +52,7 @@ type
     edtCellphone: TEdit;
     lblHeadEnabled: TLabel;
     lblEnabled: TLabel;
+    Panel1: TPanel;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);

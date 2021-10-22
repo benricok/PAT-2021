@@ -21,16 +21,12 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabChat
+    ActivePage = tabLogs
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblUserDash: TLabel
         Left = 16
         Top = 16
@@ -48,7 +44,7 @@ object frmMain: TfrmMain
         Left = 16
         Top = 45
         Width = 289
-        Height = 300
+        Height = 340
         TabOrder = 0
         object lblUsernameUser: TLabel
           Left = 14
@@ -258,13 +254,17 @@ object frmMain: TfrmMain
           TabOrder = 6
         end
       end
+      object Panel1: TPanel
+        Left = 326
+        Top = 288
+        Width = 459
+        Height = 97
+        Caption = 'Panel1'
+        TabOrder = 1
+      end
     end
     object tabDash: TTabSheet
       Caption = 'Dashboard'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblHRDash: TLabel
         Left = 384
         Top = 208
@@ -288,10 +288,6 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblHeadEnabled: TLabel
         Left = 431
         Top = 228
@@ -510,10 +506,6 @@ object frmMain: TfrmMain
     object tabLogs: TTabSheet
       Caption = 'Event Logger'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object redEvent: TRichEdit
         Left = 3
         Top = 0
@@ -544,10 +536,6 @@ object frmMain: TfrmMain
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object BitBtn1: TBitBtn

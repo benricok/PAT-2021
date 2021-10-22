@@ -46,7 +46,7 @@ implementation
 
 { TfrmLogin }
 
-uses DBUsers_u, Password;
+uses DBUsers_u, Password, Algorithms_u;
 
 procedure TfrmLogin.btnLoginClick(Sender: TObject);
 Var
@@ -57,8 +57,9 @@ begin
     tblUsers.First;
     if tblUsers.Locate('Username', edtUser.Text, [loCaseInsensitive]) then begin
       if tblUsers['Enabled'] = true then begin
-        if tblUsers['HashedPASS'] = util.ELFhash(edtPass.Text) then begin
+        if tblUsers['HashedPASS'] = crypt.ELFhash(edtPass.Text) then begin
           util.readUser(activeUser);
+          util.logevent('User ' + activeUser.username + ' logged in.', 2);
           frmMain.Show;
           frmLogin.Hide;
         end else
@@ -105,5 +106,6 @@ begin
   frmLogin.Show;
   frmMain.Hide;
   edtUser.SetFocus;
+  edtPass.Clear;
 end;
 end.
