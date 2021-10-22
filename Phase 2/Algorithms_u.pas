@@ -125,8 +125,7 @@ begin
   //Check if Min value is smaller than Max value
   if iMin >= iMax then
     MessageDlg('Please enter the minimum and maximum values in correctly',mtError, mbOKCancel, 0)
-  else
-    begin
+  else begin
       //Initilize for loop counter
       i := 1;
 
@@ -151,8 +150,7 @@ begin
         MessageDlg('Please select characters for the gererator to use',mtError, mbOKCancel, 0);
 
       //Generate Key
-      for i := 1 to iLengthKey do
-        begin
+      for i := 1 to iLengthKey do begin
           sGenKey := sGenKey + sGenAvalible[Randomrange(1, iLengthGenAvalible+1)];
         end;
 
@@ -203,8 +201,7 @@ begin
     sEncryptedMsg := sEncryptedMsg + 'x';
 
   //Encryption
-  for i := 1 to sMsg.length do
-    begin
+  for i := 1 to sMsg.length do begin
       if (upCase(sMsg[i]) IN ['A'..'Z', '0'..'9']) then
         sEncryptedMsg[i] := sAvalibleChars[((Pos(sMsg[i], sAvalibleChars) + Pos(sNewKey[i], sAvalibleChars)) MOD sAvalibleChars.Length)]
       else
@@ -230,8 +227,7 @@ begin
     sDecryptedMsg := sDecryptedMsg + 'x';
 
   //Decryption
-  for i := 1 to sEncryptedMsg.length do
-    begin
+  for i := 1 to sEncryptedMsg.length do begin
       if (upCase(sEncryptedMsg[i]) IN ['A'..'Z', '0'..'9']) then
         sDecryptedMsg[i] := sAvalibleChars[(((Pos(sEncryptedMsg[i], sAvalibleChars) - Pos(sNewKey[i], sAvalibleChars)) + sAvalibleChars.Length) MOD sAvalibleChars.Length)]
       else
@@ -258,8 +254,7 @@ begin
     sNewKeyGen := sNewKeyGen + 'x';
 
   //loop through already genarated key and exstend/shorten it acording to the length of the message
-  for i := 1 to sMsg.length do
-    begin
+  for i := 1 to sMsg.length do begin
       if j = sKeyIn.Length then
          j := 1;
 

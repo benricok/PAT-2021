@@ -21,12 +21,16 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabLogs
+    ActivePage = tabUserManagement
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblUserDash: TLabel
         Left = 16
         Top = 16
@@ -265,6 +269,10 @@ object frmMain: TfrmMain
     end
     object tabDash: TTabSheet
       Caption = 'Dashboard'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblHRDash: TLabel
         Left = 384
         Top = 208
@@ -276,6 +284,10 @@ object frmMain: TfrmMain
     object tabChat: TTabSheet
       Caption = 'Chat'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Button1: TButton
         Left = 360
         Top = 200
@@ -536,6 +548,10 @@ object frmMain: TfrmMain
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object BitBtn1: TBitBtn
