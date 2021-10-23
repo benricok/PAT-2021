@@ -207,17 +207,17 @@ begin
   // Create dynamic form
   frmPassword := TfrmPassword.Create(nil);
   with frmPassword do begin
-    setState(frmConfig);
+    frmPassword.setState(frmConfig);
     Show;
 
-    while NOT((bChanged = true) OR (getState = canceled)) do begin
+    while NOT((bChanged = true) OR (frmPassword.getState = canceled)) do begin
       // Wait for user to trigger 'Cancel' or 'Ok' button event to update state
-      while NOT(getstate IN [done,canceled]) do begin
+      while NOT(frmPassword.getstate IN [done,canceled]) do begin
         Application.ProcessMessages;
         sleep(10);
       end;
       // If Cancel is pressed
-      if getState = canceled then
+      if frmPassword.getState = canceled then
         break;
 
       // Check new password entered and update referanced varable sHashedPassword
@@ -226,16 +226,16 @@ begin
           sHashedPass := Crypt.ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
-          setState(frmConfig);
+          frmPassword.setState(frmConfig);
       end else if frmConfig = newPass then
         if checkNewPass then begin
           sHashedPass := Crypt.ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
-          setState(frmConfig);
+          frmPassword.setState(frmConfig);
     end;
 
-    if getstate = canceled then
+    if frmPassword.getstate = canceled then
       result := false;
 
     // free form object after use
