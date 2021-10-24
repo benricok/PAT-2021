@@ -10,9 +10,9 @@ uses
 type
   TfrmMain = class(TForm)
     tbcMain: TPageControl;
-    tabDash: TTabSheet;
-    tabUserManagement: TTabSheet;
     tabReport: TTabSheet;
+    tabUserManagement: TTabSheet;
+    tabViewReports: TTabSheet;
     tabLogout: TTabSheet;
     dbGridUsers: TDBGrid;
     edtFullname: TEdit;
@@ -25,7 +25,7 @@ type
     lblNewUser: TLabel;
     edtEmail: TEdit;
     tabLogs: TTabSheet;
-    tabUserDash: TTabSheet;
+    tabDash: TTabSheet;
     lblHRDash: TLabel;
     lblUserDash: TLabel;
     Button1: TButton;
