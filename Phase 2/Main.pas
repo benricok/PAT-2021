@@ -53,6 +53,7 @@ type
     lblHeadEnabled: TLabel;
     lblEnabled: TLabel;
     Panel1: TPanel;
+    pnlGridControls: TPanel;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -71,6 +72,8 @@ type
     procedure btnEnabledClick(Sender: TObject);
     procedure updateEnabledLbl;
     procedure BitBtn1Click(Sender: TObject);
+    procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
   public
     { Public declarations }
   end;
@@ -203,6 +206,12 @@ begin
     util.error(sReason, false);
 end;
 
+
+procedure TfrmMain.dbGridUsersColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+begin
+  tblUsers.RecNo := tblUserInfo.RecNo;
+end;
 
 procedure TfrmMain.resetNewUser;
 begin
