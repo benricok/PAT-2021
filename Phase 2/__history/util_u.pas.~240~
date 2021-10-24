@@ -16,21 +16,23 @@ type
     enabled : boolean;
     cellPhone : string[11];
   end;
+  TEventType = (error, info, warning);
   TUtil = class(TComponent)
     Function noSpace(sString : string) : string;
     Function newPassword(var sHashedPass : string; frmConfig : Password.Tstate) : boolean;
     procedure getPriv(var sPriv: string);
     procedure error(sError: string; log : boolean);
     Procedure initFile(const sFileName : string; var tFile : Textfile);
-    Procedure logevent(sEvent : string; iType : integer);
+    Procedure logevent(sEvent : string; EventType: TEventType);
     Procedure deleteFile(const sFileName : string);
     Function cellValid(var sReason : string; const cellNr : string) : boolean;
     Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
     Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
     Procedure writeUser(const user : TUser);
     Procedure readUser(var user : TUser);
+    Procedure warn(sWarn : string; log : boolean);
     function checkGender(var sReason : string; iIndex : integer): boolean;
-    Procedure setupApplication;
+    Procedure importUsers(var arrUsers : array of TUser);
     Var
       const
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
@@ -51,14 +53,6 @@ begin
   if iIndex = -1 then
     result := false;
   sReason := sReason + 'No gender were selected';
-end;
-
-Procedure TUtil.setupApplication;
-Var
-  sBaseDir : string;
-begin
-  // Check directories and create them if they do not exist
-
 end;
 
 Procedure TUtil.readUser(var user : TUser);
@@ -124,6 +118,24 @@ begin
   end;
 end;
 
+Procedure TUtilimportUsers(var arrUsers : array of TUser);
+Var
+  i : integer;
+  tempUser : Tuser;
+begin
+  // import users
+  tblUsers.Open;
+  tblUserInfo.Open;
+  tblUsers.First;
+  tblUserInfo.First;
+    for i := 1 to tblUsers.RecordCount do begin
+      util.readUser(tempUser);
+      arrUsers[i-1] := tempUser;
+      tblUsers.Next;
+      tblUserInfo.Next;
+    end;
+end;
+
 function TUtil.cellValid(var sReason : string; const cellNr: string): boolean;
 begin
   // Validate cell number
@@ -182,15 +194,16 @@ begin
 end;
 
 //Event logger
-procedure TUtil.logevent(sEvent: string; iType: integer);
+procedure TUtil.logevent(sEvent: string; EventType: TEventType);
 Var
   tFile : TextFile;
 begin
   initFile('event.log', tFile);
   Append(tFile);
-  case iType of
-    {error}1: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Error ];' + sEvent);
-    {info} 2: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Info ];' + sEvent);
+  case EventType of
+    {error} TEventType.error: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Error ];' + sEvent);
+    {info} TEventType.info: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Info ];' + sEvent);
+    {warning} TEventType.warning: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Warning ];' + sEvent);
   end;
   CloseFile(tFile);
 end;
@@ -216,17 +229,17 @@ begin
   // Create dynamic form
   frmPassword := TfrmPassword.Create(nil);
   with frmPassword do begin
-    setState(frmConfig);
+    frmPassword.setState(frmConfig);
     Show;
 
-    while NOT((bChanged = true) OR (getState = canceled)) do begin
+    while NOT((bChanged = true) OR (frmPassword.getState = canceled)) do begin
       // Wait for user to trigger 'Cancel' or 'Ok' button event to update state
-      while NOT(getstate IN [done,canceled]) do begin
+      while NOT(frmPassword.getstate IN [done,canceled]) do begin
         Application.ProcessMessages;
         sleep(10);
       end;
       // If Cancel is pressed
-      if getState = canceled then
+      if frmPassword.getState = canceled then
         break;
 
       // Check new password entered and update referanced varable sHashedPassword
@@ -235,16 +248,16 @@ begin
           sHashedPass := Crypt.ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
-          setState(frmConfig);
+          frmPassword.setState(frmConfig);
       end else if frmConfig = newPass then
         if checkNewPass then begin
           sHashedPass := Crypt.ELFhash(edtNewPass.Text);
           bChanged := true;
         end else
-          setState(frmConfig);
+          frmPassword.setState(frmConfig);
     end;
 
-    if getstate = canceled then
+    if frmPassword.getstate = canceled then
       result := false;
 
     // free form object after use
@@ -256,7 +269,14 @@ procedure TUtil.error(sError: string; log : boolean);
 begin
   MessageDlg(sError, mtError, [mbOK], 0);
   if log then
-    logevent(sError, 1); // Log event in event logger
+    logevent(sError, TEventType.error); // Log event in event logger
+end;
+
+Procedure TUtil.warn(sWarn : string; log : boolean);
+begin
+  MessageDlg(sWarn, mtWarning, [mbOK], 0);
+  if log then
+    logevent(sWarn, TEventType.warning); // Log event in event logger
 end;
 
 procedure TUtil.getPriv(var sPriv: string);

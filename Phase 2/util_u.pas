@@ -32,6 +32,7 @@ type
     Procedure readUser(var user : TUser);
     Procedure warn(sWarn : string; log : boolean);
     function checkGender(var sReason : string; iIndex : integer): boolean;
+    Procedure importUsers(var arrUsers : array of TUser);
     Var
       const
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
@@ -115,6 +116,24 @@ begin
       tblUserInfo['Email'] := Null;
     tblUsers['Enabled'] := enabled;
   end;
+end;
+
+Procedure TUtil.importUsers(var arrUsers : array of TUser);
+Var
+  i : integer;
+  tempUser : Tuser;
+begin
+  // import users
+  tblUsers.Open;
+  tblUserInfo.Open;
+  tblUsers.First;
+  tblUserInfo.First;
+    for i := 1 to tblUsers.RecordCount do begin
+      readUser(tempUser);
+      arrUsers[i-1] := tempUser;
+      tblUsers.Next;
+      tblUserInfo.Next;
+    end;
 end;
 
 function TUtil.cellValid(var sReason : string; const cellNr: string): boolean;

@@ -30,7 +30,9 @@ type
     Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
     Procedure writeUser(const user : TUser);
     Procedure readUser(var user : TUser);
+    Procedure warn(sWarn : string; log : boolean);
     function checkGender(var sReason : string; iIndex : integer): boolean;
+    Procedure importUsers(var arrUsers : array of TUser);
     Var
       const
         scInvalidNames : Tsc = [#33..#44, #46..#64, #91..#96, #123..#126];
@@ -116,6 +118,22 @@ begin
   end;
 end;
 
+Procedure importUsers(var arrUsers : array of TUser);
+Var
+  i : integer;
+begin
+  // import users
+  tblUsers.Open;
+  tblUserInfo.Open;
+  tblUsers.First;
+  tblUserInfo.First;
+  while (NOT(tblUsers.Eof)) AND (NOT(tblUserInfo.Eof)) do
+
+  for i := 1 to tblUsers.RecordCount do begin
+    arrUsers[i-1] := readUser
+  end;
+end;
+
 function TUtil.cellValid(var sReason : string; const cellNr: string): boolean;
 begin
   // Validate cell number
@@ -180,9 +198,10 @@ Var
 begin
   initFile('event.log', tFile);
   Append(tFile);
-  case iType of
-    {error}1: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Error ];' + sEvent);
-    {info} 2: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Info ];' + sEvent);
+  case EventType of
+    {error} TEventType.error: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Error ];' + sEvent);
+    {info} TEventType.info: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Info ];' + sEvent);
+    {warning} TEventType.warning: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Warning ];' + sEvent);
   end;
   CloseFile(tFile);
 end;
@@ -248,7 +267,14 @@ procedure TUtil.error(sError: string; log : boolean);
 begin
   MessageDlg(sError, mtError, [mbOK], 0);
   if log then
-    logevent(sError, 1); // Log event in event logger
+    logevent(sError, TEventType.error); // Log event in event logger
+end;
+
+Procedure TUtil.warn(sWarn : string; log : boolean);
+begin
+  MessageDlg(sWarn, mtWarning, [mbOK], 0);
+  if log then
+    logevent(sWarn, TEventType.warning); // Log event in event logger
 end;
 
 procedure TUtil.getPriv(var sPriv: string);

@@ -16,20 +16,21 @@ type
     enabled : boolean;
     cellPhone : string[11];
   end;
-  TEventType = (error, info);
+  TEventType = (error, info, warning);
   TUtil = class(TComponent)
     Function noSpace(sString : string) : string;
     Function newPassword(var sHashedPass : string; frmConfig : Password.Tstate) : boolean;
     procedure getPriv(var sPriv: string);
     procedure error(sError: string; log : boolean);
     Procedure initFile(const sFileName : string; var tFile : Textfile);
-    Procedure logevent(sEvent : string; iType : integer);
+    Procedure logevent(sEvent : string; EventType: TEventType);
     Procedure deleteFile(const sFileName : string);
     Function cellValid(var sReason : string; const cellNr : string) : boolean;
     Function checkChar(var sReason : string; sInput, sMessage : string; scInvalid : Tsc): boolean;
     Function validateUserNames(var sReason : string; sFullname, sSurname : string) : boolean;
     Procedure writeUser(const user : TUser);
     Procedure readUser(var user : TUser);
+    Procedure warn(sWarn : string; log : boolean);
     function checkGender(var sReason : string; iIndex : integer): boolean;
     Var
       const
@@ -174,15 +175,16 @@ begin
 end;
 
 //Event logger
-procedure TUtil.logevent(sEvent: string; iType: integer);
+procedure TUtil.logevent(sEvent: string; EventType: TEventType);
 Var
   tFile : TextFile;
 begin
   initFile('event.log', tFile);
   Append(tFile);
-  case iType of
-    {error}1: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Error ];' + sEvent);
-    {info} 2: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Info ];' + sEvent);
+  case EventType of
+    {error} TEventType.error: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Error ];' + sEvent);
+    {info} TEventType.info: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Info ];' + sEvent);
+    {warning} TEventType.warning: Writeln(tfile, DateToStr(Now) + ' ' + TimeToStr(Now) + ';[ Warning ];' + sEvent);
   end;
   CloseFile(tFile);
 end;
@@ -248,7 +250,14 @@ procedure TUtil.error(sError: string; log : boolean);
 begin
   MessageDlg(sError, mtError, [mbOK], 0);
   if log then
-    logevent(sError, 1); // Log event in event logger
+    logevent(sError, TEventType.error); // Log event in event logger
+end;
+
+Procedure TUtil.warn(sWarn : string; log : boolean);
+begin
+  MessageDlg(sWarn, mtWarning, [mbOK], 0);
+  if log then
+    logevent(sWarn, TEventType.warning); // Log event in event logger
 end;
 
 procedure TUtil.getPriv(var sPriv: string);

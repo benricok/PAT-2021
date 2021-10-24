@@ -52,6 +52,8 @@ type
     lblEnabled: TLabel;
     Panel1: TPanel;
     pnlGridControls: TPanel;
+    memReportBody: TMemo;
+    edtReportTitle: TEdit;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -70,8 +72,8 @@ type
     procedure btnEnabledClick(Sender: TObject);
     procedure updateEnabledLbl;
     procedure BitBtn1Click(Sender: TObject);
-    procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex,
-      ToIndex: Integer);
+    procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer);
+    Procedure loadReport;
   public
     { Public declarations }
   end;
@@ -157,6 +159,14 @@ begin
   end;
   CloseFile(tFile);
   //redEvent.lines.LoadFromFile(sTFname);
+end;
+
+procedure TfrmMain.loadReport;
+Var
+  arrUsers : array of TUser;
+begin
+  SetLength(arrUsers, tblUsers.RecordCount);
+  util.importUsers(arrUsers);
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -337,7 +347,7 @@ begin
   // Focus helper for user on tab change
   case tbcMain.ActivePageIndex of
     0: loadUserDash;
-    1: ;
+    1: loadReport;
     2: ;
     3: updateEnabledLbl;
     4: loadEvents;

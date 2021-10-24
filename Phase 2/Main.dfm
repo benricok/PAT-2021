@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabDash
+    ActivePage = tabReport
     TabOrder = 0
     OnChange = tbcMainChange
     object tabDash: TTabSheet
@@ -269,6 +269,23 @@ object frmMain: TfrmMain
     end
     object tabReport: TTabSheet
       Caption = 'Report'
+      object edtReportTitle: TEdit
+        Left = 16
+        Top = 61
+        Width = 733
+        Height = 21
+        TabOrder = 0
+        TextHint = 'Report title'
+      end
+      object memReportBody: TMemo
+        Left = 16
+        Top = 88
+        Width = 733
+        Height = 153
+        Lines.Strings = (
+          '')
+        TabOrder = 1
+      end
     end
     object tabViewReports: TTabSheet
       Caption = 'View Reports'

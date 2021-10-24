@@ -52,6 +52,8 @@ type
     lblEnabled: TLabel;
     Panel1: TPanel;
     pnlGridControls: TPanel;
+    memReportBody: TMemo;
+    edtReportTitle: TEdit;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -70,8 +72,8 @@ type
     procedure btnEnabledClick(Sender: TObject);
     procedure updateEnabledLbl;
     procedure BitBtn1Click(Sender: TObject);
-    procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex,
-      ToIndex: Integer);
+    procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer);
+    Procedure loadReport;
   public
     { Public declarations }
   end;
@@ -157,6 +159,14 @@ begin
   end;
   CloseFile(tFile);
   //redEvent.lines.LoadFromFile(sTFname);
+end;
+
+procedure TfrmMain.loadReport;
+Var
+  arrUsers : array of TUser;
+begin
+  SetLength(arrUsers, tblUsers.RecordCount);
+  util.importUsers();
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -291,20 +301,25 @@ begin
 
   // Get privilege form login form and configure user interface acordingly
   if frmLogin.getUser.privilege = 'user' then with tbcMain do begin
-    tbcMain.Pages[0].tabVisible := false;
-    tbcMain.Pages[1].tabVisible := false;
-    tbcMain.Pages[2].tabVisible := false;
-    tbcMain.Pages[3].tabVisible := false;
-    tbcMain.Pages[4].tabVisible := false;
+    tbcMain.Pages[0].tabVisible := true; // Dashboard
+    tbcMain.Pages[1].tabVisible := true; // Report
+    tbcMain.Pages[2].tabVisible := false; // View Report
+    tbcMain.Pages[3].tabVisible := false; // User management
+    tbcMain.Pages[4].tabVisible := false; // Event logger
     loadUserDash;
   end else if frmLogin.getUser.privilege = 'HR' then with tbcMain do begin
-    tbcMain.Pages[0].tabVisible := false;
-    tbcMain.Pages[1].tabVisible := false;
-    tbcMain.Pages[2].tabVisible := false;
-    tbcMain.Pages[3].tabVisible := false;
-    tbcMain.Pages[4].tabVisible := false;
+    tbcMain.Pages[0].tabVisible := true; // Dashboard
+    tbcMain.Pages[1].tabVisible := true; // Report
+    tbcMain.Pages[2].tabVisible := true; // View Report
+    tbcMain.Pages[3].tabVisible := false; // User management
+    tbcMain.Pages[4].tabVisible := false; // Event logger
     loadUserDash;
   end else if frmLogin.getUser.privilege = 'admin' then with tbcMain do begin
+    tbcMain.Pages[0].tabVisible := true; // Dashboard
+    tbcMain.Pages[1].tabVisible := true; // Report
+    tbcMain.Pages[2].tabVisible := true; // View Report
+    tbcMain.Pages[3].tabVisible := true; // User management
+    tbcMain.Pages[4].tabVisible := true; // Event logger
     loadUserDash;
   end;
 end;
@@ -332,7 +347,7 @@ begin
   // Focus helper for user on tab change
   case tbcMain.ActivePageIndex of
     0: loadUserDash;
-    1: ;
+    1: loadReport;
     2: ;
     3: updateEnabledLbl;
     4: loadEvents;
