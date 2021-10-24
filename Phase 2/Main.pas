@@ -12,7 +12,7 @@ type
     tbcMain: TPageControl;
     tabDash: TTabSheet;
     tabUserManagement: TTabSheet;
-    tabChat: TTabSheet;
+    tabReport: TTabSheet;
     tabLogout: TTabSheet;
     dbGridUsers: TDBGrid;
     edtFullname: TEdit;

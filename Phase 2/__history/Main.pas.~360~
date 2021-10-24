@@ -53,6 +53,7 @@ type
     lblHeadEnabled: TLabel;
     lblEnabled: TLabel;
     Panel1: TPanel;
+    pnlGridControls: TPanel;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -71,6 +72,8 @@ type
     procedure btnEnabledClick(Sender: TObject);
     procedure updateEnabledLbl;
     procedure BitBtn1Click(Sender: TObject);
+    procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
   public
     { Public declarations }
   end;
@@ -140,6 +143,17 @@ begin
           selText := sLine + #13#10;
           iTotChar := iTotChar + iLen;
         end;
+        'W': begin
+          selStart := iTotChar+1;
+          selLength := iLen;
+          selAttributes.Color := clGray;
+          selText := sDateTime + ' ';
+          selAttributes.Color := clWebDarkOrange;
+          selText := sType + ' ';
+          SelAttributes.Color := clWindowText;
+          selText := sLine + #13#10;
+          iTotChar := iTotChar + iLen;
+        end;
       end;
     end;
   end;
@@ -186,12 +200,18 @@ begin
         util.writeUser(newUser);
       tblUsers.Post;
       tblUserInfo.Post;
-    util.logevent('User ' + username + ' was updated', 2);
+    util.logevent('User ' + username + ' was updated', TEventType.info);
     frmLogin.logout; // For security reasons we log out to refresh information
   end else
     util.error(sReason, false);
 end;
 
+
+procedure TfrmMain.dbGridUsersColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+begin
+  tblUsers.RecNo := tblUserInfo.RecNo;
+end;
 
 procedure TfrmMain.resetNewUser;
 begin
@@ -227,7 +247,7 @@ begin
     tblUsers['HashedPASS'] := sHashedPass;
   tblUsers.Post;
   tblUserInfo.Post;
-  Util.logevent('New user ' + sUsername + ' added.', 2); // Log event as info type (2)
+  Util.logevent('New user ' + sUsername + ' added.', TEventType.info); // Log event as info type (2)
   resetNewUser;
 end;
 
@@ -258,7 +278,7 @@ begin
   if MessageDlg('Are you sure you want to clear the event log?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
     DeleteFile('event.log');
     Util.initFile('event.log', tFile);
-    Util.logevent('Event log was cleared', 2);
+    Util.logevent('Event log was cleared', TEventType.warning);
     CloseFile(tFile);
     redEvent.Clear;
   end;

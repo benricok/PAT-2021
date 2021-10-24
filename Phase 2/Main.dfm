@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabUserDash
+    ActivePage = tabReport
     TabOrder = 0
     OnChange = tbcMainChange
     object tabUserDash: TTabSheet
@@ -277,8 +277,8 @@ object frmMain: TfrmMain
         Caption = 'HR Dash'
       end
     end
-    object tabChat: TTabSheet
-      Caption = 'Chat'
+    object tabReport: TTabSheet
+      Caption = 'Report'
       ImageIndex = 3
       object Button1: TButton
         Left = 360
