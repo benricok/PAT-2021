@@ -59,15 +59,15 @@ begin
       if tblUsers['Enabled'] = true then begin
         if tblUsers['HashedPASS'] = crypt.ELFhash(edtPass.Text) then begin
           util.readUser(activeUser);
-          util.logevent('User ' + activeUser.username + ' logged in.', 2);
+          util.logevent('User ' + activeUser.username + ' logged in.', TEventType.info);
           frmMain.Show;
           frmLogin.Hide;
         end else
-          util.error('Invalid password by user ' + edtUser.Text, true)
+          util.warn('Invalid password by user ' + edtUser.Text, true)
       end else
-        util.error('User ' + edtUser.Text + ' is disabled', true);
+        util.warn('User ' + edtUser.Text + ' is disabled', true);
     end else
-      util.error(edtUser.Text + ' does not exist', true);
+      util.warn(edtUser.Text + ' does not exist', true);
   end else
     util.error('Please enter your credentials before submitting', false);
 end;

@@ -9,7 +9,8 @@ uses
   Password in 'Password.pas' {frmPassword},
   Algorithms_u in 'Algorithms_u.pas',
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  Help in 'Help.pas' {frmHelp};
 
 {$R *.res}
 
@@ -18,6 +19,7 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmLogin, frmLogin);
   Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TfrmHelp, frmHelp);
   //Application.CreateForm(TfrmPassword, frmPassword);
   Application.Run;
 end.

@@ -27,10 +27,6 @@ object frmMain: TfrmMain
     object tabUserDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblUserDash: TLabel
         Left = 16
         Top = 16
@@ -269,10 +265,6 @@ object frmMain: TfrmMain
     end
     object tabDash: TTabSheet
       Caption = 'Dashboard'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblHRDash: TLabel
         Left = 384
         Top = 208
@@ -284,10 +276,6 @@ object frmMain: TfrmMain
     object tabChat: TTabSheet
       Caption = 'Chat'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Button1: TButton
         Left = 360
         Top = 200
@@ -548,10 +536,6 @@ object frmMain: TfrmMain
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object BitBtn1: TBitBtn
@@ -562,5 +546,6 @@ object frmMain: TfrmMain
     Kind = bkHelp
     NumGlyphs = 2
     TabOrder = 1
+    OnClick = BitBtn1Click
   end
 end

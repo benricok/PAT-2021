@@ -70,8 +70,7 @@ type
     procedure btnUserUpdateClick(Sender: TObject);
     procedure btnEnabledClick(Sender: TObject);
     procedure updateEnabledLbl;
-  private
-    sPriv : string;
+    procedure BitBtn1Click(Sender: TObject);
   public
     { Public declarations }
   end;
@@ -83,7 +82,7 @@ implementation
 
 {$R *.dfm}
 
-uses Login, DBUsers_u, util_u, Password;
+uses Login, DBUsers_u, util_u, Password, Help;
 
 procedure TfrmMain.genUsername(var sUsername: string);
 begin
@@ -141,6 +140,17 @@ begin
           selText := sLine + #13#10;
           iTotChar := iTotChar + iLen;
         end;
+        'W': begin
+          selStart := iTotChar+1;
+          selLength := iLen;
+          selAttributes.Color := clGray;
+          selText := sDateTime + ' ';
+          selAttributes.Color := clWebDarkOrange;
+          selText := sType + ' ';
+          SelAttributes.Color := clWindowText;
+          selText := sLine + #13#10;
+          iTotChar := iTotChar + iLen;
+        end;
       end;
     end;
   end;
@@ -187,7 +197,7 @@ begin
         util.writeUser(newUser);
       tblUsers.Post;
       tblUserInfo.Post;
-    util.logevent('User ' + username + ' was updated', 2);
+    util.logevent('User ' + username + ' was updated', TEventType.info);
     frmLogin.logout; // For security reasons we log out to refresh information
   end else
     util.error(sReason, false);
@@ -228,8 +238,13 @@ begin
     tblUsers['HashedPASS'] := sHashedPass;
   tblUsers.Post;
   tblUserInfo.Post;
-  Util.logevent('New user ' + sUsername + ' added.', 2);
+  Util.logevent('New user ' + sUsername + ' added.', TEventType.info); // Log event as info type (2)
   resetNewUser;
+end;
+
+procedure TfrmMain.BitBtn1Click(Sender: TObject);
+begin
+  frmHelp.show;
 end;
 
 Procedure TfrmMain.btnAddUserClick(Sender: TObject);
@@ -254,7 +269,7 @@ begin
   if MessageDlg('Are you sure you want to clear the event log?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
     DeleteFile('event.log');
     Util.initFile('event.log', tFile);
-    Util.logevent('Event log was cleared', 2);
+    Util.logevent('Event log was cleared', TEventType.warning);
     CloseFile(tFile);
     redEvent.Clear;
   end;
