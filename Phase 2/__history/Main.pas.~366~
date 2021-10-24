@@ -10,9 +10,9 @@ uses
 type
   TfrmMain = class(TForm)
     tbcMain: TPageControl;
-    tabDash: TTabSheet;
+    tabReport: TTabSheet;
     tabUserManagement: TTabSheet;
-    tabChat: TTabSheet;
+    tabViewReports: TTabSheet;
     tabLogout: TTabSheet;
     dbGridUsers: TDBGrid;
     edtFullname: TEdit;
@@ -25,10 +25,8 @@ type
     lblNewUser: TLabel;
     edtEmail: TEdit;
     tabLogs: TTabSheet;
-    tabUserDash: TTabSheet;
-    lblHRDash: TLabel;
+    tabDash: TTabSheet;
     lblUserDash: TLabel;
-    Button1: TButton;
     redEvent: TRichEdit;
     btnUserDel: TBitBtn;
     BitBtn1: TBitBtn;
@@ -53,6 +51,7 @@ type
     lblHeadEnabled: TLabel;
     lblEnabled: TLabel;
     Panel1: TPanel;
+    pnlGridControls: TPanel;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -71,6 +70,8 @@ type
     procedure btnEnabledClick(Sender: TObject);
     procedure updateEnabledLbl;
     procedure BitBtn1Click(Sender: TObject);
+    procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex,
+      ToIndex: Integer);
   public
     { Public declarations }
   end;
@@ -204,6 +205,12 @@ begin
 end;
 
 
+procedure TfrmMain.dbGridUsersColumnMoved(Sender: TObject; FromIndex,
+  ToIndex: Integer);
+begin
+  tblUsers.RecNo := tblUserInfo.RecNo;
+end;
+
 procedure TfrmMain.resetNewUser;
 begin
   edtFullname.Clear;
@@ -283,16 +290,28 @@ begin
   tblUsers.First;
 
   // Get privilege form login form and configure user interface acordingly
-  if frmLogin.getUser.privilege = 'user' then begin
-    tbcMain.Pages[1].tabVisible := false;
+  if frmLogin.getUser.privilege = 'user' then with tbcMain do begin
+    tbcMain.Pages[0].tabVisible := true;
+    tbcMain.Pages[1].tabVisible := true;
+    tbcMain.Pages[2].tabVisible := false;
     tbcMain.Pages[3].tabVisible := false;
     tbcMain.Pages[4].tabVisible := false;
     loadUserDash;
-  end else if frmLogin.getUser.privilege = 'HR' then begin
-    tbcMain.Pages[0].tabVisible := false;
+  end else if frmLogin.getUser.privilege = 'HR' then with tbcMain do begin
+    tbcMain.Pages[0].tabVisible := true;
+    tbcMain.Pages[1].tabVisible := true;
+    tbcMain.Pages[2].tabVisible := true;
+    tbcMain.Pages[3].tabVisible := false;
     tbcMain.Pages[4].tabVisible := false;
-  end else if frmLogin.getUser.privilege = 'admin' then
     loadUserDash;
+  end else if frmLogin.getUser.privilege = 'admin' then with tbcMain do begin
+    tbcMain.Pages[0].tabVisible := true;
+    tbcMain.Pages[1].tabVisible := true;
+    tbcMain.Pages[2].tabVisible := true;
+    tbcMain.Pages[3].tabVisible := true;
+    tbcMain.Pages[4].tabVisible := true;
+    loadUserDash;
+  end;
 end;
 
 Procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);

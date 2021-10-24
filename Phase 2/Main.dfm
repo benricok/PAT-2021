@@ -269,25 +269,10 @@ object frmMain: TfrmMain
     end
     object tabReport: TTabSheet
       Caption = 'Report'
-      object lblHRDash: TLabel
-        Left = 384
-        Top = 208
-        Width = 41
-        Height = 13
-        Caption = 'HR Dash'
-      end
     end
     object tabViewReports: TTabSheet
       Caption = 'View Reports'
       ImageIndex = 3
-      object Button1: TButton
-        Left = 360
-        Top = 200
-        Width = 75
-        Height = 25
-        Caption = 'Button1'
-        TabOrder = 0
-      end
     end
     object tabUserManagement: TTabSheet
       Caption = 'User Management'

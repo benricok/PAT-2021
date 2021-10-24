@@ -26,9 +26,7 @@ type
     edtEmail: TEdit;
     tabLogs: TTabSheet;
     tabDash: TTabSheet;
-    lblHRDash: TLabel;
     lblUserDash: TLabel;
-    Button1: TButton;
     redEvent: TRichEdit;
     btnUserDel: TBitBtn;
     BitBtn1: TBitBtn;
@@ -292,16 +290,28 @@ begin
   tblUsers.First;
 
   // Get privilege form login form and configure user interface acordingly
-  if frmLogin.getUser.privilege = 'user' then begin
-    tbcMain.Pages[1].tabVisible := false;
-    tbcMain.Pages[3].tabVisible := false;
-    tbcMain.Pages[4].tabVisible := false;
+  if frmLogin.getUser.privilege = 'user' then with tbcMain do begin
+    tbcMain.Pages[0].tabVisible := true; // Dashboard
+    tbcMain.Pages[1].tabVisible := true; // Report
+    tbcMain.Pages[2].tabVisible := false; // View Report
+    tbcMain.Pages[3].tabVisible := false; // User management
+    tbcMain.Pages[4].tabVisible := false; // Event logger
     loadUserDash;
-  end else if frmLogin.getUser.privilege = 'HR' then begin
-    tbcMain.Pages[0].tabVisible := false;
-    tbcMain.Pages[4].tabVisible := false;
-  end else if frmLogin.getUser.privilege = 'admin' then
+  end else if frmLogin.getUser.privilege = 'HR' then with tbcMain do begin
+    tbcMain.Pages[0].tabVisible := true; // Dashboard
+    tbcMain.Pages[1].tabVisible := true; // Report
+    tbcMain.Pages[2].tabVisible := true; // View Report
+    tbcMain.Pages[3].tabVisible := false; // User management
+    tbcMain.Pages[4].tabVisible := false; // Event logger
     loadUserDash;
+  end else if frmLogin.getUser.privilege = 'admin' then with tbcMain do begin
+    tbcMain.Pages[0].tabVisible := true; // Dashboard
+    tbcMain.Pages[1].tabVisible := true; // Report
+    tbcMain.Pages[2].tabVisible := true; // View Report
+    tbcMain.Pages[3].tabVisible := true; // User management
+    tbcMain.Pages[4].tabVisible := true; // Event logger
+    loadUserDash;
+  end;
 end;
 
 Procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
