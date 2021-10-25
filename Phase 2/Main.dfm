@@ -269,6 +269,19 @@ object frmMain: TfrmMain
     end
     object tabReport: TTabSheet
       Caption = 'Report'
+      object lblHeadReport: TLabel
+        Left = 24
+        Top = 24
+        Width = 56
+        Height = 23
+        Caption = 'Report'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
       object edtReportTitle: TEdit
         Left = 16
         Top = 61
@@ -285,6 +298,14 @@ object frmMain: TfrmMain
         Lines.Strings = (
           '')
         TabOrder = 1
+      end
+      object BitBtn2: TBitBtn
+        Left = 16
+        Top = 391
+        Width = 75
+        Height = 25
+        Caption = 'BitBtn2'
+        TabOrder = 2
       end
     end
     object tabViewReports: TTabSheet
@@ -407,7 +428,7 @@ object frmMain: TfrmMain
         object lblEnabled: TLabel
           Left = 253
           Top = 47
-          Width = 77
+          Width = 3
           Height = 13
         end
         object lblHeadEnabled: TLabel

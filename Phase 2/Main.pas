@@ -54,6 +54,8 @@ type
     pnlGridControls: TPanel;
     memReportBody: TMemo;
     edtReportTitle: TEdit;
+    lblHeadReport: TLabel;
+    BitBtn2: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
