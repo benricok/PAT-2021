@@ -21,7 +21,7 @@ object frmMain: TfrmMain
     Top = 0
     Width = 806
     Height = 449
-    ActivePage = tabViewReports
+    ActivePage = tabDash
     TabOrder = 0
     OnChange = tbcMainChange
     object tabDash: TTabSheet
@@ -29,7 +29,7 @@ object frmMain: TfrmMain
       ImageIndex = 6
       object lblUserDash: TLabel
         Left = 16
-        Top = 16
+        Top = 10
         Width = 91
         Height = 23
         Caption = 'Dashboard'
@@ -42,8 +42,8 @@ object frmMain: TfrmMain
       end
       object pnlMyInfoUser: TPanel
         Left = 16
-        Top = 45
-        Width = 289
+        Top = 40
+        Width = 733
         Height = 340
         Color = cl3DLight
         ParentBackground = False
@@ -256,22 +256,12 @@ object frmMain: TfrmMain
           TabOrder = 6
         end
       end
-      object Panel1: TPanel
-        Left = 328
-        Top = 45
-        Width = 421
-        Height = 340
-        Caption = 'Panel1'
-        Color = cl3DLight
-        ParentBackground = False
-        TabOrder = 1
-      end
     end
     object tabReport: TTabSheet
       Caption = 'Report'
       object lblHeadReport: TLabel
         Left = 16
-        Top = 24
+        Top = 10
         Width = 56
         Height = 23
         Caption = 'Report'
@@ -297,7 +287,7 @@ object frmMain: TfrmMain
       end
       object edtReportTitle: TEdit
         Left = 16
-        Top = 53
+        Top = 40
         Width = 733
         Height = 21
         TabOrder = 0
@@ -305,9 +295,9 @@ object frmMain: TfrmMain
       end
       object memReportBody: TMemo
         Left = 16
-        Top = 80
+        Top = 70
         Width = 733
-        Height = 251
+        Height = 261
         ScrollBars = ssVertical
         TabOrder = 1
       end
@@ -406,11 +396,24 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      object Label1: TLabel
+        Left = 16
+        Top = 10
+        Width = 153
+        Height = 23
+        Caption = 'User Management'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
       object dbGridUsers: TDBGrid
         Left = 16
-        Top = 16
+        Top = 40
         Width = 733
-        Height = 217
+        Height = 190
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgTitleHotTrack]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
@@ -431,14 +434,14 @@ object frmMain: TfrmMain
         object lblNewUser: TLabel
           Left = 8
           Top = 0
-          Width = 60
+          Width = 65
           Height = 16
           Caption = 'New User:'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
           Font.Name = 'Tahoma'
-          Font.Style = []
+          Font.Style = [fsBold]
           ParentFont = False
         end
         object edtFullname: TEdit
@@ -523,14 +526,33 @@ object frmMain: TfrmMain
           Height = 13
         end
         object lblHeadEnabled: TLabel
-          Left = 253
+          Left = 245
           Top = 15
-          Width = 72
+          Width = 83
           Height = 13
           Caption = 'Selected user: '
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblHeadSort: TLabel
+          Left = 16
+          Top = 87
+          Width = 180
+          Height = 13
+          Caption = 'Sorting of data (Alphabetically):'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object btnDBnavDOWN: TBitBtn
-          Left = 8
+          Left = 16
           Top = 42
           Width = 77
           Height = 25
@@ -570,7 +592,7 @@ object frmMain: TfrmMain
           OnClick = btnDBnavDOWNClick
         end
         object btnDBnavUP: TBitBtn
-          Left = 8
+          Left = 16
           Top = 11
           Width = 77
           Height = 25
@@ -631,16 +653,45 @@ object frmMain: TfrmMain
           TabOrder = 3
           OnClick = btnUserDelClick
         end
+        object btnSortAlphaAZ: TButton
+          Left = 16
+          Top = 106
+          Width = 73
+          Height = 25
+          Caption = '(A - Z)'
+          TabOrder = 4
+        end
+        object btnSortAlphaZA: TButton
+          Left = 95
+          Top = 106
+          Width = 73
+          Height = 25
+          Caption = '(Z - A)'
+          TabOrder = 5
+        end
       end
     end
     object tabLogs: TTabSheet
       Caption = 'Event Logger'
       ImageIndex = 5
+      object Label2: TLabel
+        Left = 16
+        Top = 10
+        Width = 153
+        Height = 23
+        Caption = 'User Management'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
       object redEvent: TRichEdit
         Left = 16
-        Top = 16
+        Top = 40
         Width = 733
-        Height = 369
+        Height = 346
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11

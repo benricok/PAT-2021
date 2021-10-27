@@ -50,7 +50,6 @@ type
     edtCellphone: TEdit;
     lblHeadEnabled: TLabel;
     lblEnabled: TLabel;
-    Panel1: TPanel;
     pnlGridControls: TPanel;
     memReportBody: TMemo;
     edtReportTitle: TEdit;
@@ -62,6 +61,11 @@ type
     btnAddUSerToReport: TBitBtn;
     btnReportUsersClear: TBitBtn;
     btnReportClearAll: TBitBtn;
+    btnSortAlphaAZ: TButton;
+    lblHeadSort: TLabel;
+    btnSortAlphaZA: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);

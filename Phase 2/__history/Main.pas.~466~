@@ -61,7 +61,10 @@ type
     lblHeadReportUsers: TLabel;
     btnAddUSerToReport: TBitBtn;
     btnReportUsersClear: TBitBtn;
-    BitBtn2: TBitBtn;
+    btnReportClearAll: TBitBtn;
+    btnSortAlphaAZ: TButton;
+    lblHeadSort: TLabel;
+    btnSortAlphaZA: TButton;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -86,6 +89,7 @@ type
     procedure btnReportUsersClearClick(Sender: TObject);
     procedure btnSubmitReportClick(Sender: TObject);
     procedure loadUsers;
+    procedure btnReportClearAllClick(Sender: TObject);
   end;
 
 var
@@ -442,9 +446,14 @@ begin
     util.error('You cannot disable the admin user', false);
 end;
 
+procedure TfrmMain.btnReportClearAllClick(Sender: TObject);
+begin
+  loadReport;
+end;
+
 procedure TfrmMain.btnReportUsersClearClick(Sender: TObject);
 begin
-  reloadUsers;
+  loadUsers;
 end;
 
 procedure TfrmMain.btnSubmitReportClick(Sender: TObject);
@@ -455,18 +464,17 @@ begin
   if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) <> 6 then
     exit;
 
-
   util.initFile('Reports.txt', tFile);
   Append(tFile);
-
-  Writeln(tFile, '*-*-*-*');
-  Writeln(tFile, edtReportTitle.Text);
-  Writeln(tFile, edtUsersInReport.Text);
-
-  for i := 0 to memReportBody.Lines.Count do
-    Writeln(tFile, memReportBody.Lines[i]{.ValueFromIndex[i]} );
-
+    Writeln(tFile, '*-*-*-*');
+    Writeln(tFile, edtReportTitle.Text);
+    Writeln(tFile, edtUsersInReport.Text);
+    for i := 0 to memReportBody.Lines.Count do
+      Writeln(tFile, memReportBody.Lines[i]{.ValueFromIndex[i]} );
   CloseFile(tFile);
+
+  MessageDlg('Your report have been successfully submited.', mtInformation, [mbOK], 2);
+  util.logevent('User ' + frmlogin.getUser.username + ' created a report', TEventType.info);
 
   loadReport;
 end;
