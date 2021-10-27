@@ -61,6 +61,7 @@ type
     lblHeadReportUsers: TLabel;
     btnAddUSerToReport: TBitBtn;
     btnReportUsersClear: TBitBtn;
+    btnReportClearAll: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -83,6 +84,9 @@ type
     Procedure loadReport;
     procedure btnAddUSerToReportClick(Sender: TObject);
     procedure btnReportUsersClearClick(Sender: TObject);
+    procedure btnSubmitReportClick(Sender: TObject);
+    procedure loadUsers;
+    procedure btnReportClearAllClick(Sender: TObject);
   end;
 
 var
@@ -169,16 +173,11 @@ begin
 end;
 
 procedure TfrmMain.loadReport;
-Var
-  arrUsers : array of TUser;
-  i : integer;
 begin
-  cbxSelectUserReport.Items.Clear;
-  edtUsersInReport.Clear;
-  SetLength(arrUsers, tblUsers.RecordCount);
-  util.importUsers(arrUsers);
-  for i := 0 to length(arrUsers)-1 do
-      cbxSelectUserReport.Items.Append(arrUsers[i].fullname + ' ' + arrUsers[i].surname);
+  memReportBody.Clear;
+  edtReportTitle.Clear;
+
+  loadUsers;
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -195,6 +194,20 @@ begin
       'N': rpgGenderDashUser.ItemIndex := -1;
     end;
   end;
+end;
+
+procedure TfrmMain.loadUsers;
+Var
+  arrUsers : array of TUser;
+  i : integer;
+begin
+  cbxSelectUserReport.Items.Clear;
+  edtUsersInReport.Clear;
+
+  SetLength(arrUsers, tblUsers.RecordCount);
+  util.importUsers(arrUsers);
+  for i := 0 to length(arrUsers)-1 do
+      cbxSelectUserReport.Items.Append(arrUsers[i].fullname + ' ' + arrUsers[i].surname);
 end;
 
 procedure TfrmMain.btnUserUpdateClick(Sender: TObject);
@@ -430,25 +443,54 @@ begin
     util.error('You cannot disable the admin user', false);
 end;
 
+procedure TfrmMain.btnReportClearAllClick(Sender: TObject);
+begin
+  loadReport;
+end;
+
 procedure TfrmMain.btnReportUsersClearClick(Sender: TObject);
 begin
+  loadUsers;
+end;
+
+procedure TfrmMain.btnSubmitReportClick(Sender: TObject);
+Var
+  tFile : TextFile;
+  i : integer;
+begin
+  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) <> 6 then
+    exit;
+
+  util.initFile('Reports.txt', tFile);
+  Append(tFile);
+    Writeln(tFile, '*-*-*-*');
+    Writeln(tFile, edtReportTitle.Text);
+    Writeln(tFile, edtUsersInReport.Text);
+    for i := 0 to memReportBody.Lines.Count do
+      Writeln(tFile, memReportBody.Lines[i]{.ValueFromIndex[i]} );
+  CloseFile(tFile);
+
+  MessageDlg('Your report have been successfully submited.', mtInformation, [mbOK], 2);
+  util.logevent('User ' + frmlogin.getUser.username + ' created a report', TEventType.info);
+
   loadReport;
 end;
 
 procedure TfrmMain.btnUserDelClick(Sender: TObject);
 begin
-  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) = 6 then begin
-    // Check if admin user is selected and throw error
-    if tblUserInfo['Username'] = 'admin' then
-      Util.error('You cannot delete the admin user', false)
-    else if tblUserInfo['Username'] = frmLogin.getUser.username then
-      Util.error('You cannot delete your own user', false)
-    else begin
-      tblUsers.RecNo := tblUserInfo.RecNo;
-      tblUserInfo.Delete;
-      tblUsers.Delete;
-    end;
+  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) <> 6 then
+    exit;
+  // Check if admin user is selected and throw error
+  if tblUserInfo['Username'] = 'admin' then
+    Util.error('You cannot delete the admin user', false)
+  else if tblUserInfo['Username'] = frmLogin.getUser.username then
+    Util.error('You cannot delete your own user', false)
+  else begin
+    tblUsers.RecNo := tblUserInfo.RecNo;
+    tblUserInfo.Delete;
+    tblUsers.Delete;
   end;
+
 end;
 
 end.
