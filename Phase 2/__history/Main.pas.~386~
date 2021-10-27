@@ -57,7 +57,7 @@ type
     lblHeadReport: TLabel;
     btnSubmitReport: TBitBtn;
     cbxSelectUserReport: TComboBox;
-    edtUserInReport: TEdit;
+    edtUsersInReport: TEdit;
     lblHeadReportUsers: TLabel;
     btnAddUSerToReport: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -288,7 +288,8 @@ end;
 
 procedure TfrmMain.btnAddUSerToReportClick(Sender: TObject);
 begin
-  edtUsersInReport
+  if cbxSelectUserReport.ItemIndex <> -1 then
+    edtUsersInReport.Text := edtUsersInReport.Text + cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex];
 end;
 
 procedure TfrmMain.btnClearLogClick(Sender: TObject);
@@ -376,7 +377,6 @@ begin
 end;
 
 //TODO check email and gender
-
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
 begin
   tblUserInfo.Next;

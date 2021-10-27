@@ -171,9 +171,15 @@ end;
 procedure TfrmMain.loadReport;
 Var
   arrUsers : array of TUser;
+  i : integer;
 begin
+  cbxSelectUserReport.Clear;
   SetLength(arrUsers, tblUsers.RecordCount);
-  util.importUsers(arrUsers);
+  for i := 0 to tblUsers.RecordCount do begin
+      util.importUsers(arrUsers[i]);
+      cbxSelectUserReport.Items.Append(arrUsers[1].username);
+
+  end;
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -288,7 +294,10 @@ end;
 
 procedure TfrmMain.btnAddUSerToReportClick(Sender: TObject);
 begin
-  edtUsersInReport.Text := edtUsersInReport.Text + cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex];
+  if cbxSelectUserReport.ItemIndex <> -1 then
+    edtUsersInReport.Text := edtUsersInReport.Text + cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex]
+  else
+    util.error('Please select a user', false);
 end;
 
 procedure TfrmMain.btnClearLogClick(Sender: TObject);
@@ -375,8 +384,7 @@ begin
     lblEnabled.Caption := 'Disabled';
 end;
 
-//TODO check email and gender
-
+// TODO check email and gender
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
 begin
   tblUserInfo.Next;

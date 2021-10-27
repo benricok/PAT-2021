@@ -269,8 +269,6 @@ object frmMain: TfrmMain
     end
     object tabReport: TTabSheet
       Caption = 'Report'
-      ExplicitLeft = 8
-      ExplicitTop = 28
       object lblHeadReport: TLabel
         Left = 24
         Top = 24
@@ -337,9 +335,11 @@ object frmMain: TfrmMain
         Top = 277
         Width = 733
         Height = 21
+        ParentShowHint = False
         ReadOnly = True
+        ShowHint = False
         TabOrder = 4
-        TextHint = 'Add users'
+        TextHint = 'Add feature'
       end
       object btnAddUSerToReport: TBitBtn
         Left = 167

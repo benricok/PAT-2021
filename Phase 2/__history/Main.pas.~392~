@@ -57,7 +57,7 @@ type
     lblHeadReport: TLabel;
     btnSubmitReport: TBitBtn;
     cbxSelectUserReport: TComboBox;
-    edtUserInReport: TEdit;
+    edtUsersInReport: TEdit;
     lblHeadReportUsers: TLabel;
     btnAddUSerToReport: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -80,6 +80,7 @@ type
     procedure BitBtn1Click(Sender: TObject);
     procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer);
     Procedure loadReport;
+    procedure btnAddUSerToReportClick(Sender: TObject);
   public
     { Public declarations }
   end;
@@ -170,9 +171,11 @@ end;
 procedure TfrmMain.loadReport;
 Var
   arrUsers : array of TUser;
+  i : integer;
 begin
   SetLength(arrUsers, tblUsers.RecordCount);
-  util.importUsers(arrUsers);
+  for i := 0 to tblUsers.RecordCount do
+      util.importUsers(arrUsers[i]);
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -285,6 +288,14 @@ begin
     util.error('Invaild User information:'+ #13 + sReason, false);
 end;
 
+procedure TfrmMain.btnAddUSerToReportClick(Sender: TObject);
+begin
+  if cbxSelectUserReport.ItemIndex <> -1 then
+    edtUsersInReport.Text := edtUsersInReport.Text + cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex]
+  else
+    util.error('Please select a user', false);
+end;
+
 procedure TfrmMain.btnClearLogClick(Sender: TObject);
 Var
   tFile : TextFile;
@@ -369,8 +380,7 @@ begin
     lblEnabled.Caption := 'Disabled';
 end;
 
-//TODO check email and gender
-
+// TODO check email and gender
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
 begin
   tblUserInfo.Next;

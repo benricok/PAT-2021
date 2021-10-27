@@ -54,6 +54,12 @@ type
     pnlGridControls: TPanel;
     memReportBody: TMemo;
     edtReportTitle: TEdit;
+    lblHeadReport: TLabel;
+    btnSubmitReport: TBitBtn;
+    cbxSelectUserReport: TComboBox;
+    edtUsersInReport: TEdit;
+    lblHeadReportUsers: TLabel;
+    btnAddUSerToReport: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -74,6 +80,7 @@ type
     procedure BitBtn1Click(Sender: TObject);
     procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer);
     Procedure loadReport;
+    procedure btnAddUSerToReportClick(Sender: TObject);
   public
     { Public declarations }
   end;
@@ -162,8 +169,11 @@ begin
 end;
 
 procedure TfrmMain.loadReport;
+Var
+  arrUsers : array of TUser;
 begin
-  importUsers(var arrUsers : array of TUser);
+  SetLength(arrUsers, tblUsers.RecordCount);
+  util.importUsers(arrUsers);
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -274,6 +284,13 @@ begin
       addUser(sUsername, sPriv, sHashedPass);
   end else
     util.error('Invaild User information:'+ #13 + sReason, false);
+end;
+
+procedure TfrmMain.btnAddUSerToReportClick(Sender: TObject);
+begin
+  if cbxSelectUserReport.Items <> -1 then
+  
+  edtUsersInReport.Text := edtUsersInReport.Text + cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex];
 end;
 
 procedure TfrmMain.btnClearLogClick(Sender: TObject);
