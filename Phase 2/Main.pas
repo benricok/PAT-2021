@@ -60,6 +60,7 @@ type
     edtUsersInReport: TEdit;
     lblHeadReportUsers: TLabel;
     btnAddUSerToReport: TBitBtn;
+    btnReportUsersClear: TBitBtn;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -81,8 +82,7 @@ type
     procedure dbGridUsersColumnMoved(Sender: TObject; FromIndex, ToIndex: Integer);
     Procedure loadReport;
     procedure btnAddUSerToReportClick(Sender: TObject);
-  public
-    { Public declarations }
+    procedure btnReportUsersClearClick(Sender: TObject);
   end;
 
 var
@@ -173,13 +173,12 @@ Var
   arrUsers : array of TUser;
   i : integer;
 begin
-  cbxSelectUserReport.Clear;
+  cbxSelectUserReport.Items.Clear;
+  edtUsersInReport.Clear;
   SetLength(arrUsers, tblUsers.RecordCount);
-  for i := 0 to tblUsers.RecordCount do begin
-      util.importUsers(arrUsers[i]);
-      cbxSelectUserReport.Items.Append(arrUsers[1].username);
-
-  end;
+  util.importUsers(arrUsers);
+  for i := 0 to length(arrUsers)-1 do
+      cbxSelectUserReport.Items.Append(arrUsers[i].fullname + ' ' + arrUsers[i].surname);
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -293,11 +292,25 @@ begin
 end;
 
 procedure TfrmMain.btnAddUSerToReportClick(Sender: TObject);
+Var
+  sSpacer, sUser, sEdit : string;
 begin
+  sSpacer := ', ';
+  sEdit := edtUsersInReport.Text;
+  sUser := cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex];
   if cbxSelectUserReport.ItemIndex <> -1 then
-    edtUsersInReport.Text := edtUsersInReport.Text + cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex]
+    if Copy(sUser, 1, 7) <> '<added>' then begin
+      if sEdit = '' then
+        sSpacer := '';
+      edtUsersInReport.Text := sEdit + sSpacer + sUser;
+      cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex] := '<added> ' + sUser;
+    end else
+      util.error('You already added this user, please select a diffrent one', false)
   else
     util.error('Please select a user', false);
+
+  cbxSelectUserReport.ItemIndex := -1;
+  cbxSelectUserReport.SetFocus;
 end;
 
 procedure TfrmMain.btnClearLogClick(Sender: TObject);
@@ -415,6 +428,11 @@ begin
       util.error('You cannot disable your own user', false)
   else
     util.error('You cannot disable the admin user', false);
+end;
+
+procedure TfrmMain.btnReportUsersClearClick(Sender: TObject);
+begin
+  loadReport;
 end;
 
 procedure TfrmMain.btnUserDelClick(Sender: TObject);

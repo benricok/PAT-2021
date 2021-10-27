@@ -376,6 +376,17 @@ object frmMain: TfrmMain
         TabOrder = 5
         OnClick = btnAddUSerToReportClick
       end
+      object btnReportUsersClear: TBitBtn
+        Left = 248
+        Top = 304
+        Width = 75
+        Height = 21
+        Caption = '&Clear'
+        Kind = bkCancel
+        NumGlyphs = 2
+        TabOrder = 6
+        OnClick = btnReportUsersClearClick
+      end
     end
     object tabViewReports: TTabSheet
       Caption = 'View Reports'
