@@ -269,6 +269,8 @@ object frmMain: TfrmMain
     end
     object tabReport: TTabSheet
       Caption = 'Report'
+      ExplicitLeft = 8
+      ExplicitTop = 28
       object lblHeadReport: TLabel
         Left = 24
         Top = 24
@@ -282,6 +284,19 @@ object frmMain: TfrmMain
         Font.Style = []
         ParentFont = False
       end
+      object lblHeadReportUsers: TLabel
+        Left = 24
+        Top = 257
+        Width = 91
+        Height = 14
+        Caption = 'Users involved:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
       object edtReportTitle: TEdit
         Left = 16
         Top = 61
@@ -292,20 +307,74 @@ object frmMain: TfrmMain
       end
       object memReportBody: TMemo
         Left = 16
-        Top = 88
+        Top = 91
         Width = 733
         Height = 153
         Lines.Strings = (
           '')
         TabOrder = 1
       end
-      object BitBtn2: TBitBtn
+      object btnSubmitReport: TBitBtn
         Left = 16
         Top = 391
         Width = 75
         Height = 25
-        Caption = 'BitBtn2'
+        Caption = '&Report'
+        Kind = bkOK
+        NumGlyphs = 2
         TabOrder = 2
+      end
+      object cbxSelectUserReport: TComboBox
+        Left = 16
+        Top = 304
+        Width = 145
+        Height = 21
+        TabOrder = 3
+        Text = 'Select user'
+      end
+      object edtUsersInReport: TEdit
+        Left = 16
+        Top = 277
+        Width = 733
+        Height = 21
+        ReadOnly = True
+        TabOrder = 4
+        TextHint = 'Add users'
+      end
+      object btnAddUSerToReport: TBitBtn
+        Left = 167
+        Top = 304
+        Width = 75
+        Height = 21
+        Caption = '&Add User'
+        Glyph.Data = {
+          06030000424D060300000000000036000000280000000F0000000F0000000100
+          180000000000D002000000000000000000000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFE7A46BE18B44E28F4AE18B44E7A46BFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE7A46BE18B44E2
+          8F4AE18B44E7A46BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFE7A46BE18B44E28F4AE18B44E7A46BFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE7A46BE18B44E2
+          8F4AE18B44E7A46BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFE7A66FE18B44E28F4AE18B44E7A66FFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFF000000E7A46BE7A46BE7A46BE7A46BE8A670E2924FE18E48E2
+          8F4AE18E48E2924FE8A670E7A46BE7A46BE7A46BE7A46B000000E18B44E18B44
+          E18B44E18B44E18B44E18E48E28F4AE28F4AE28F4AE18E48E18B44E18B44E18B
+          44E18B44E18B44000000E28F4AE28F4AE28F4AE28F4AE28F4AE28F4AE28F4AE2
+          8F4AE28F4AE28F4AE28F4AE28F4AE28F4AE28F4AE28F4A000000E18B44E18B44
+          E18B44E18B44E18B44E18E48E28F4AE28F4AE28F4AE18E48E18B44E18B44E18B
+          44E18B44E18B44000000E7A46BE7A46BE7A46BE7A46BE8A670E2924FE18E48E2
+          8F4AE18E48E2924FE8A670E7A46BE7A46BE7A46BE7A46B000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFE7A66FE18B44E28F4AE18B44E7A66FFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE7A46BE18B44E2
+          8F4AE18B44E7A46BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFE7A46BE18B44E28F4AE18B44E7A46BFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE7A46BE18B44E2
+          8F4AE18B44E7A46BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFE7A46BE18B44E28F4AE18B44E7A46BFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFF000000}
+        TabOrder = 5
+        OnClick = btnAddUSerToReportClick
       end
     end
     object tabViewReports: TTabSheet
