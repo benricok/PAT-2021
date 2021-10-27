@@ -1,17 +1,8 @@
-*-*-*-*
-Test
-Barbara Jones
-line 2
 
 *-*-*-*
-Test
-Barbara Jones, Peggy Meyer
-line 2
-
-*-*-*-*
-Test2
-Gustavo Jones, Roger Rankins
-line1
-line2
-line3
+Report 1
+Louise Gallagher, Roger Rankins, Jeffrey Juarez
+Very serious complaint against my boss:
+- Giving me a hard time
+- Lets me work overtime without exstra payment 
 

@@ -66,6 +66,11 @@ type
     btnSortAlphaZA: TButton;
     Label1: TLabel;
     Label2: TLabel;
+    cbxAvalibleReports: TComboBox;
+    Label3: TLabel;
+    lblHeadingViewReportsSelectReport: TLabel;
+    btnLoad: TButton;
+    redSelectedReport: TRichEdit;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
@@ -91,6 +96,8 @@ type
     procedure btnSubmitReportClick(Sender: TObject);
     procedure loadUsers;
     procedure btnReportClearAllClick(Sender: TObject);
+    procedure loadReports;
+    procedure btnLoadClick(Sender: TObject); // Loads tab where HR views reports
   end;
 
 var
@@ -176,12 +183,79 @@ begin
   //redEvent.lines.LoadFromFile(sTFname);
 end;
 
+// Loads tab where users report issues
 procedure TfrmMain.loadReport;
 begin
   memReportBody.Clear;
   edtReportTitle.Clear;
 
   loadUsers;
+end;
+
+// Loads tab where HR views reports
+procedure TfrmMain.loadReports;
+Var
+  tFile : TextFile;
+  sLine : string;
+begin
+  util.initFile('Reports.txt', tFile);
+  Reset(tFile);
+
+  cbxAvalibleReports.Items.Clear;
+  cbxAvalibleReports.Text := '';
+  cbxAvalibleReports.ItemIndex := -1;
+  cbxAvalibleReports.AutoComplete := true;
+  redSelectedReport.Clear;
+
+  while NOT(EOF(tFile)) do begin
+    Readln(tFile, sLine);
+    if sLine <> '*-*-*-*' then    // loops until report begin marker is found
+      continue;
+
+    Readln(tFile, sLine);        // gets title from report text block and loops till next marker
+    cbxAvalibleReports.Items.Append(sLine);
+  end;
+
+end;
+
+// Load selected report from file
+procedure TfrmMain.btnLoadClick(Sender: TObject);
+Var
+  tFile : TextFile;
+  sLine, sSearchFor : string;
+begin
+if cbxAvalibleReports.Items.Count = 0 then
+    util.error('No reports avalible', false)
+  else if cbxAvalibleReports.ItemIndex = -1 then
+    util.error('Please select a report from the list', false)
+  else begin
+    util.initFile('Reports.txt', tFile);
+    Reset(tFile);
+
+    sSearchFor := cbxAvalibleReports.Items[cbxAvalibleReports.ItemIndex];
+
+    while NOT(EOF(tFile)) do begin
+      Readln(tFile, sLine);
+      if sLine <> '*-*-*-*' then    // loops until report begin marker is found
+        continue;
+
+      Readln(tFile, sLine);
+      if sLine <> sSearchFor then  // Check if title matches what we search for
+        continue;
+
+      Readln(tFile, sLine);
+      redSelectedReport.Lines.Add('Users involved: ' + sLine + #13#13'Report:');
+
+      while NOT(EOF(tFile)) do begin
+        readln(tFile, sLine);
+        if sLine = '' then begin
+          CloseFile(tFile);
+          exit;
+        end;
+        redSelectedReport.Lines.Add(sLine);
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmMain.loadUserDash;
@@ -399,7 +473,7 @@ begin
   case tbcMain.ActivePageIndex of
     0: loadUserDash;
     1: loadReport;
-    2: ;
+    2: loadReports;
     3: updateEnabledLbl;
     4: loadEvents;
     5: Login.frmLogin.logout; // Log user out on tab logout click

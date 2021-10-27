@@ -45,7 +45,7 @@ object frmMain: TfrmMain
         Top = 40
         Width = 733
         Height = 340
-        Color = cl3DLight
+        Color = clMenu
         ParentBackground = False
         TabOrder = 0
         object lblUsernameUser: TLabel
@@ -392,6 +392,65 @@ object frmMain: TfrmMain
     object tabViewReports: TTabSheet
       Caption = 'View Reports'
       ImageIndex = 3
+      ExplicitLeft = 8
+      ExplicitTop = 28
+      object Label3: TLabel
+        Left = 16
+        Top = 10
+        Width = 153
+        Height = 23
+        Caption = 'User Management'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblHeadingViewReportsSelectReport: TLabel
+        Left = 16
+        Top = 39
+        Width = 93
+        Height = 13
+        Caption = 'Avalible reports:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object cbxAvalibleReports: TComboBox
+        Left = 16
+        Top = 58
+        Width = 652
+        Height = 21
+        TabOrder = 0
+        TextHint = 'Select an avalible report to view it'
+      end
+      object btnLoad: TButton
+        Left = 674
+        Top = 56
+        Width = 75
+        Height = 25
+        Caption = 'Load Report'
+        TabOrder = 1
+        OnClick = btnLoadClick
+      end
+      object redSelectedReport: TRichEdit
+        Left = 16
+        Top = 85
+        Width = 733
+        Height = 300
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        Zoom = 100
+      end
     end
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
@@ -428,7 +487,7 @@ object frmMain: TfrmMain
         Top = 246
         Width = 369
         Height = 139
-        Color = cl3DLight
+        Color = clMenu
         ParentBackground = False
         TabOrder = 1
         object lblNewUser: TLabel
@@ -516,7 +575,7 @@ object frmMain: TfrmMain
         Top = 246
         Width = 349
         Height = 139
-        Color = cl3DLight
+        Color = clMenu
         ParentBackground = False
         TabOrder = 2
         object lblEnabled: TLabel
