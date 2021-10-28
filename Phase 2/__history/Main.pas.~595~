@@ -248,6 +248,7 @@ if cmbAvalibleReports.Items.Count = 0 then
     util.initFile('Reports.txt', tFile);
     Reset(tFile);
 
+    redSelectedReport.Clear;
     sSearchFor := cmbAvalibleReports.Items[cmbAvalibleReports.ItemIndex];
 
     while NOT(EOF(tFile)) do begin
@@ -259,12 +260,18 @@ if cmbAvalibleReports.Items.Count = 0 then
       if sLine <> sSearchFor then  // Check if title matches what we search for
         continue;
 
-      Readln(tFile, sLine);
-      redSelectedReport.Lines.Add('Users involved: ' + sLine + #13#13'Report:');
+      Readln(tFile, sLine);  // Read who wrote it
+      redSelectedReport.Lines.Add('Written by: ' + sLine);
+      Readln(tFile, sLine);  // Read which users where involved
+      redSelectedReport.Lines.Add('Users involved: ' + sLine + #13);
+      redSelectedReport.SelStart := 1;
+      redSelectedReport.SelLength := 7;
+      redSelectedReport.SelAttributes.Style := [fsBold];
+      redSelectedReport.Lines.Add('Report:');
 
       while NOT(EOF(tFile)) do begin
         readln(tFile, sLine);
-        if sLine = '' then begin
+        if sLine = '%-%-%-%' then begin
           CloseFile(tFile);
           exit;
         end;
@@ -503,7 +510,7 @@ end;
 
 procedure TfrmMain.tbcMainChange(Sender: TObject);
 begin
-  // Focus helper for user on tab change
+  // Tab loading procedures triggered on the tab change events
   case tbcMain.ActivePageIndex of
     0: loadUserDash;
     1: loadReport;
@@ -621,11 +628,12 @@ begin
   util.initFile('Reports.txt', tFile);
   Append(tFile);
     Writeln(tFile, '*-*-*-*');
-    Writeln(tFile, edtReportTitle.Text);
-    Writeln(tFile, frmLogin.getUser.fullname + frmLogin.getUser.surname;
+    Writeln(tFile, edtReportTitle.Text); // Add title
+    Writeln(tFile, frmLogin.getUser.fullname + ' ' + frmLogin.getUser.surname);   // Add current user's name
     Writeln(tFile, edtUsersInReport.Text);
     for i := 0 to memReportBody.Lines.Count do
       Writeln(tFile, memReportBody.Lines[i]{.ValueFromIndex[i]} );
+    Writeln(tFile, '%-%-%-%');
   CloseFile(tFile);
 
   MessageDlg('Your report have been successfully submited.', mtInformation, [mbOK], 2);

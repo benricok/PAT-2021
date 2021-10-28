@@ -248,6 +248,7 @@ if cmbAvalibleReports.Items.Count = 0 then
     util.initFile('Reports.txt', tFile);
     Reset(tFile);
 
+    redSelectedReport.Clear;
     sSearchFor := cmbAvalibleReports.Items[cmbAvalibleReports.ItemIndex];
 
     while NOT(EOF(tFile)) do begin
@@ -259,14 +260,16 @@ if cmbAvalibleReports.Items.Count = 0 then
       if sLine <> sSearchFor then  // Check if title matches what we search for
         continue;
 
-      Readln(tFile, sLine);  // Read who wrote it
-      redSelectedReport.Lines.Add('Written by: ' + sLine);
-      Readln(tFile, sLine);  // Read which users where involved
-      redSelectedReport.Lines.Add('Users involved: ' + sLine + #13#13'Report:');
+      with redSelectedReport do begin
+        Readln(tFile, sLine);  // Read who wrote it
+        Lines.Add('Written by: ' + sLine);
+        Readln(tFile, sLine);  // Read which users where involved
+        Lines.Add('Users involved: ' + sLine + #13#13'Report:');
+      end;
 
       while NOT(EOF(tFile)) do begin
         readln(tFile, sLine);
-        if sLine = '' then begin
+        if sLine = '%-%-%-%' then begin
           CloseFile(tFile);
           exit;
         end;
@@ -628,6 +631,7 @@ begin
     Writeln(tFile, edtUsersInReport.Text);
     for i := 0 to memReportBody.Lines.Count do
       Writeln(tFile, memReportBody.Lines[i]{.ValueFromIndex[i]} );
+    Writeln(tFile, '%-%-%-%');
   CloseFile(tFile);
 
   MessageDlg('Your report have been successfully submited.', mtInformation, [mbOK], 2);
