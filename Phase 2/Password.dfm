@@ -85,7 +85,6 @@ object frmPassword: TfrmPassword
     Anchors = [akLeft, akBottom]
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 133
     object btnPassCancel: TBitBtn
       Left = 69
       Top = 0

@@ -29,7 +29,6 @@ object frmMain: TfrmMain
     object tabDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
-      ExplicitHeight = 421
       object lblUserDash: TLabel
         Left = 16
         Top = 10
@@ -291,7 +290,6 @@ object frmMain: TfrmMain
     end
     object tabReport: TTabSheet
       Caption = 'Report'
-      ExplicitHeight = 421
       object lblHeadReport: TLabel
         Left = 16
         Top = 10
@@ -425,9 +423,6 @@ object frmMain: TfrmMain
     object tabViewReports: TTabSheet
       Caption = 'View Reports'
       ImageIndex = 3
-      ExplicitLeft = 8
-      ExplicitTop = 28
-      ExplicitHeight = 421
       object Label3: TLabel
         Left = 16
         Top = 10
@@ -489,7 +484,6 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
-      ExplicitHeight = 425
       object Label1: TLabel
         Left = 16
         Top = 10
@@ -789,7 +783,6 @@ object frmMain: TfrmMain
     object tabLogs: TTabSheet
       Caption = 'Event Logger'
       ImageIndex = 5
-      ExplicitHeight = 421
       object Label2: TLabel
         Left = 16
         Top = 10
@@ -834,7 +827,6 @@ object frmMain: TfrmMain
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
-      ExplicitHeight = 421
     end
   end
   object BitBtn1: TBitBtn

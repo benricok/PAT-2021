@@ -61,10 +61,13 @@ object frmHelp: TfrmHelp
       Width = 492
       Height = 381
       Lines.Strings = (
-        '# Delphi PAT grade 10'
-        '1. By Benrico Krog'
+        '# Delphi PAT grade 11'
+        'Topic: Encryption and Decryption'
+        'Algorithm: ELFHashing'
+        'Created by Benrico Krog'
+        'Source released under AGPL-3.0 licence'
+        ''
         '2. Uses the vigenere algorithm for encryption and decryption'
-        '3. Topic: Encryption and Decryption.'
         ''
         '## How to use the tool'
         '1. Open the endecryptToool.exe application.'
