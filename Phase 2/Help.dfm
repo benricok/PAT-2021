@@ -60,6 +60,11 @@ object frmHelp: TfrmHelp
       Top = 52
       Width = 492
       Height = 381
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
       Lines.Strings = (
         '# Delphi PAT grade 11'
         'Topic: Encryption and Decryption'
@@ -69,61 +74,91 @@ object frmHelp: TfrmHelp
         ''
         '2. Uses the vigenere algorithm for encryption and decryption'
         ''
-        '## How to use the tool'
-        '1. Open the endecryptToool.exe application.'
-        '2. The Help button will show you this message.'
+        '## How to use the tool (User)'
+        '1. Open the PAT2-21_p.exe application.'
         
-          '3. There are two modes to for processing the message. Encrypting' +
-          ' and Decrypting.'
+          '2. If you have your login credentials, please fill it in and pre' +
+          'ss the login button.'
+        '       - You can check your password by clicking the eye button'
+        
+          '    Else contact your HR department or the administrator to crea' +
+          'te one for you'
+        
+          '3. After your login was successful, the main appliaction window ' +
+          'will be opened.'
+        
+          '4. Your first see your personal information, you can of course c' +
+          'hange this and'
+        '    update your information by clicking the update button'
+        
+          '5. You also have the option to change you password by clicking t' +
+          'he change '
+        '    pasword button'
+        
+          '6. 2 Other tabs will also be visible to you namly '#39'Logout'#39' and '#39 +
+          'Report'#39
+        
+          '7. The logout tab logs you out of your user account and resets t' +
+          'he application'
+        
+          '8.The report tab alllows you to create a report consiting of a t' +
+          'itle, message and'
+        '    a list of users who were involved'
+        
+          '9. The help button in the bottom right corner opens up this read' +
+          'me file. '
         ''
-        '## Encryption'
+        '## How to use the tool (HR)'
+        '1. Open the PAT2-21_p.exe application.'
         
-          '1. Paste your message in the box below the label "Input" or clic' +
-          'k the button "Import from file" to '
-        'load a file.'
-        '2. Switch to the second tab labeled "key" by clicking on it.'
+          '2. If you have your login credentials, please fill it in and pre' +
+          'ss the login button.'
+        '       - You can check your password by clicking the eye button'
         
-          '3. A key will be generated automatically each time you open the ' +
-          'application. You can select '
+          '    Else contact your HR colleague or the administrator to creat' +
+          'e one for you'
         
-          'what character my be used by the genarator and click the button ' +
-          'called "Genarate" to make a '
-        'new key.'
+          '3. After your login was successful, the main appliaction window ' +
+          'will be opened.'
         
-          '4. Switch back to the first tab and click on the button labeled ' +
-          '"Encrypt".'
+          '4. Your first see your personal information, you can of course c' +
+          'hange this and'
+        '    update your information by clicking the update button'
         
-          '5. The encrypted message will appear in the second box underneat' +
-          'h the label "Output".'
+          '5. You also have the option to change you password by clicking t' +
+          'he change '
+        '    pasword button'
         
-          '6. A Prompt will also be displayed with the key to decrypt the m' +
-          'essage.'
+          '6. 4 Other tabs will also be visible to you namly '#39'Logout'#39', '#39'Rep' +
+          'ort'#39', '#39'User '
+        'management'#39
+        '    and '#39'View Reports'#39
         
-          '6. If you'#39'd like to save it directly to a text file, you can cli' +
-          'ck on the button labled "Export to file" '
-        'and provide the path to the file in the dialog.'
+          '7. The logout tab logs you out of your user account and resets t' +
+          'he application'
+        
+          '8.The report tab alllows you to create a report consiting of a t' +
+          'itle, message and'
+        '    a list of users who were involved'
+        
+          '9. The View Reports tab allows users part of the HR group to vie' +
+          'w user '
+        '     submited Reports'
+        
+          '10. The user management tab allows users part of the HR group to' +
+          ' add, remove'
+        '     and view all users'#39' information '
+        
+          '11. The help button in the bottom right corner opens up this rea' +
+          'dme file. '
         ''
-        '## Decryption'
         
-          '1. Paste your encrypted message in the box below the label "Inpu' +
-          't" or click the button "Import '
-        'from file" to load a file.'
-        '2. Switch to the second tab labeled "key" by clicking on it.'
-        
-          '3. A key will be generated automatically each time you open the ' +
-          'application. Enter the key '
-        'provided with the encrypted message into the editbox.'
-        
-          '4. Switch back to the first tab and click on the button labeled ' +
-          '"Decrypt".'
-        
-          '5. The decrypted message will appear in the second box underneat' +
-          'h the label "Output".'
-        
-          '6. If you'#39'd like to save it directly to a text file, you can cli' +
-          'ck on the button labled "Export to file" '
-        'and provide the path to the file in the dialog.'
-        '')
+          'If you found a bug in this application, please report it to this' +
+          ' project'#39's github '
+        'repo at: https://github.com/benricok/PAT-2021'
+        ''
+        'Enjoy! ')
+      ParentFont = False
       ScrollBars = ssVertical
       TabOrder = 0
     end
