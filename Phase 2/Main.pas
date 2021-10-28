@@ -55,7 +55,7 @@ type
     edtReportTitle: TEdit;
     lblHeadReport: TLabel;
     btnSubmitReport: TBitBtn;
-    cbxSelectUserReport: TComboBox;
+    cmbSelectUserReport: TComboBox;
     edtUsersInReport: TEdit;
     lblHeadReportUsers: TLabel;
     btnAddUSerToReport: TBitBtn;
@@ -66,17 +66,20 @@ type
     btnSortAlphaZA: TButton;
     Label1: TLabel;
     Label2: TLabel;
-    cbxAvalibleReports: TComboBox;
+    cmbAvalibleReports: TComboBox;
     Label3: TLabel;
     lblHeadingViewReportsSelectReport: TLabel;
     btnLoad: TButton;
     redSelectedReport: TRichEdit;
+    memWelcome: TMemo;
+    Label4: TLabel;
+    lblSalaries: TLabel;
     Procedure FormClose(Sender: TObject; var Action: TCloseAction);
     Procedure FormActivate(Sender: TObject);
     Procedure btnDBnavUPClick(Sender: TObject);
     Procedure btnDBnavDOWNClick(Sender: TObject);
     Procedure btnAddUserClick(Sender: TObject);
-    Procedure addUser(sUsername, sPriv, sHashedPass : string);
+    Procedure addUser(sUsername, sPriv, sHashedPass : string; rSalary : real);
     Procedure genUsername(var sUsername : string);
     Procedure FormCreate(Sender: TObject);
     Procedure tbcMainChange(Sender: TObject);
@@ -97,7 +100,12 @@ type
     procedure loadUsers;
     procedure btnReportClearAllClick(Sender: TObject);
     procedure loadReports;
-    procedure btnLoadClick(Sender: TObject); // Loads tab where HR views reports
+    procedure btnLoadClick(Sender: TObject);
+    procedure btnSortAlphaAZClick(Sender: TObject);
+    procedure btnSortAlphaZAClick(Sender: TObject);
+    procedure loadUserManager;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   end;
 
 var
@@ -120,6 +128,14 @@ begin
   sUsername := LowerCase(edtFullname.Text[1] + util.noSpace(edtSurname.Text)) + IntToStr(RandomRange(1000, 10000));
 end;
 
+// Show taskbar icon
+procedure TfrmMain.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
+end;
+
+// Load events from event.log textfile and formate/display with styling in richedit
 procedure TfrmMain.loadEvents;
 Var
   tFile : Textfile;
@@ -201,10 +217,10 @@ begin
   util.initFile('Reports.txt', tFile);
   Reset(tFile);
 
-  cbxAvalibleReports.Items.Clear;
-  cbxAvalibleReports.Text := '';
-  cbxAvalibleReports.ItemIndex := -1;
-  cbxAvalibleReports.AutoComplete := true;
+  cmbAvalibleReports.Items.Clear;
+  cmbAvalibleReports.Text := '';
+  cmbAvalibleReports.ItemIndex := -1;
+  cmbAvalibleReports.AutoComplete := true;
   redSelectedReport.Clear;
 
   while NOT(EOF(tFile)) do begin
@@ -213,7 +229,7 @@ begin
       continue;
 
     Readln(tFile, sLine);        // gets title from report text block and loops till next marker
-    cbxAvalibleReports.Items.Append(sLine);
+    cmbAvalibleReports.Items.Append(sLine);
   end;
 
 end;
@@ -224,15 +240,15 @@ Var
   tFile : TextFile;
   sLine, sSearchFor : string;
 begin
-if cbxAvalibleReports.Items.Count = 0 then
+if cmbAvalibleReports.Items.Count = 0 then
     util.error('No reports avalible', false)
-  else if cbxAvalibleReports.ItemIndex = -1 then
+  else if cmbAvalibleReports.ItemIndex = -1 then
     util.error('Please select a report from the list', false)
   else begin
     util.initFile('Reports.txt', tFile);
     Reset(tFile);
 
-    sSearchFor := cbxAvalibleReports.Items[cbxAvalibleReports.ItemIndex];
+    sSearchFor := cmbAvalibleReports.Items[cmbAvalibleReports.ItemIndex];
 
     while NOT(EOF(tFile)) do begin
       Readln(tFile, sLine);
@@ -243,7 +259,9 @@ if cbxAvalibleReports.Items.Count = 0 then
       if sLine <> sSearchFor then  // Check if title matches what we search for
         continue;
 
-      Readln(tFile, sLine);
+      Readln(tFile, sLine);  // Read who wrote it
+      redSelectedReport.Lines.Add('Written by: ' + sLine);
+      Readln(tFile, sLine);  // Read which users where involved
       redSelectedReport.Lines.Add('Users involved: ' + sLine + #13#13'Report:');
 
       while NOT(EOF(tFile)) do begin
@@ -258,6 +276,7 @@ if cbxAvalibleReports.Items.Count = 0 then
   end;
 end;
 
+// Display user personal information on tab load
 procedure TfrmMain.loadUserDash;
 begin
   with frmLogin.getUser do begin
@@ -274,20 +293,23 @@ begin
   end;
 end;
 
+// Procedure to load users from database into a dynamic array of Tuser objects
 procedure TfrmMain.loadUsers;
 Var
   arrUsers : array of TUser;
   i : integer;
 begin
-  cbxSelectUserReport.Items.Clear;
+  cmbSelectUserReport.Items.Clear;
   edtUsersInReport.Clear;
 
   SetLength(arrUsers, tblUsers.RecordCount);
   util.importUsers(arrUsers);
   for i := 0 to length(arrUsers)-1 do
-      cbxSelectUserReport.Items.Append(arrUsers[i].fullname + ' ' + arrUsers[i].surname);
+      cmbSelectUserReport.Items.Append(arrUsers[i].fullname + ' ' + arrUsers[i].surname);
 end;
 
+
+// procedure to update user's personal information
 procedure TfrmMain.btnUserUpdateClick(Sender: TObject);
 Var
   newUser : TUser;
@@ -317,13 +339,14 @@ begin
     util.error(sReason, false);
 end;
 
-
+// procedure to sync databases
 procedure TfrmMain.dbGridUsersColumnMoved(Sender: TObject; FromIndex,
   ToIndex: Integer);
 begin
-  tblUsers.RecNo := tblUserInfo.RecNo;
+  tblUsers.RecNo := tblUserInfo.RecNo; // Sync index
 end;
 
+// Reset the add new user fields
 procedure TfrmMain.resetNewUser;
 begin
   edtFullname.Clear;
@@ -334,10 +357,15 @@ begin
   tbcMain.ActivePageIndex := 3;
 end;
 
-procedure TfrmMain.addUser(sUsername, sPriv, sHashedPass : string);
+
+// Procedure to add a new user to the system
+procedure TfrmMain.addUser(sUsername, sPriv, sHashedPass : string; rSalary : real);
 Var
   newUser : util_u.TUser;
 begin
+  // First we write all the user data to a user object
+  // and then we pass it to the helper procedure util.writeuser
+  // that will write it to the database
   with newUser do begin
     username := sUsername;
     privilege := sPriv;
@@ -348,6 +376,8 @@ begin
     cellphone := edtCellphone.Text;
     enabled := true;
   end;
+
+  // Write the user to the database
   tblUsers.Open;
   tblUserInfo.Open;
   tblUsers.Last;
@@ -356,12 +386,14 @@ begin
   tblUsers.Insert;
     util.writeUser(newUser);
     tblUsers['HashedPASS'] := sHashedPass;
+    tblUserInfo['Salary'] := rSalary;
   tblUsers.Post;
   tblUserInfo.Post;
   Util.logevent('New user ' + sUsername + ' added.', TEventType.info); // Log event as info type (2)
   resetNewUser;
 end;
 
+// Shwo Help form
 procedure TfrmMain.BitBtn1Click(Sender: TObject);
 begin
   frmHelp.show;
@@ -377,33 +409,36 @@ begin
     genUsername(sUsername);
     util.getPriv(sPriv);
     if util.newPassword(sHashedPass, newPass) then
-      addUser(sUsername, sPriv, sHashedPass);
+      addUser(sUsername, sPriv, sHashedPass, StrToFloat(InputBox('Salary','Enter the user'#27' salary:','0.0')));
   end else
     util.error('Invaild User information:'+ #13 + sReason, false);
 end;
 
+// Procedure to add users involved/mentioned in the message to the report
 procedure TfrmMain.btnAddUSerToReportClick(Sender: TObject);
 Var
   sSpacer, sUser, sEdit : string;
 begin
   sSpacer := ', ';
   sEdit := edtUsersInReport.Text;
-  sUser := cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex];
-  if cbxSelectUserReport.ItemIndex <> -1 then
-    if Copy(sUser, 1, 7) <> '<added>' then begin
-      if sEdit = '' then
+  sUser := cmbSelectUserReport.Items[cmbSelectUserReport.ItemIndex]; // Get currently selected user
+
+  if cmbSelectUserReport.ItemIndex <> -1 then
+    if Copy(sUser, 1, 7) <> '<added>' then begin // Check if user was already added
+      if sEdit = '' then // Adds a comma only if there already exists a name
         sSpacer := '';
-      edtUsersInReport.Text := sEdit + sSpacer + sUser;
-      cbxSelectUserReport.Items[cbxSelectUserReport.ItemIndex] := '<added> ' + sUser;
+      cmbSelectUserReport.Text := sEdit + sSpacer + sUser;
+      cmbSelectUserReport.Items[cmbSelectUserReport.ItemIndex] := '<added> ' + sUser;
     end else
       util.error('You already added this user, please select a diffrent one', false)
   else
     util.error('Please select a user', false);
 
-  cbxSelectUserReport.ItemIndex := -1;
-  cbxSelectUserReport.SetFocus;
+  cmbSelectUserReport.ItemIndex := -1;
+  cmbSelectUserReport.SetFocus;
 end;
 
+// Procedure to clear the event log and also log that it was cleared
 procedure TfrmMain.btnClearLogClick(Sender: TObject);
 Var
   tFile : TextFile;
@@ -436,7 +471,7 @@ begin
     tbcMain.Pages[0].tabVisible := true; // Dashboard
     tbcMain.Pages[1].tabVisible := true; // Report
     tbcMain.Pages[2].tabVisible := true; // View Report
-    tbcMain.Pages[3].tabVisible := false; // User management
+    tbcMain.Pages[3].tabVisible := true; // User management
     tbcMain.Pages[4].tabVisible := false; // Event logger
     loadUserDash;
   end else if frmLogin.getUser.privilege = 'admin' then with tbcMain do begin
@@ -449,6 +484,7 @@ begin
   end;
 end;
 
+// Close application
 Procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
  Application.Terminate;
@@ -469,17 +505,40 @@ end;
 
 procedure TfrmMain.tbcMainChange(Sender: TObject);
 begin
-  // Focus helper for user on tab change
+  // Tab loading procedures triggered on the tab change events
   case tbcMain.ActivePageIndex of
     0: loadUserDash;
     1: loadReport;
     2: loadReports;
-    3: updateEnabledLbl;
+    3: loadUserManager;
     4: loadEvents;
     5: Login.frmLogin.logout; // Log user out on tab logout click
   end;
 end;
 
+// Load usermanager tab
+procedure TfrmMain.loadUserManager;
+Var
+  rTotal : Real;
+begin
+  updateEnabledLbl;
+  // calculate total salary
+
+  with tblUserInfo do begin
+    Open;
+    First;
+    while NOT(tblUserInfo.Eof) do begin
+      if tblUSerInfo['Salary'] <> Null then
+        rTotal := rTotal + tblUserInfo['Salary'];
+      tblUserInfo.Next;
+    end;
+  end;
+  lblSalaries.Caption := FormatFloat('R0.00', rTotal);
+  tblUserInfo.First; // Sync indexs
+  tblUsers.First;
+end;
+
+// Helper procedure to update enabled label state
 procedure TfrmMain.updateEnabledLbl;
 begin
  if tblUsers['Enabled'] = True then
@@ -488,21 +547,23 @@ begin
     lblEnabled.Caption := 'Disabled';
 end;
 
-// TODO check email and gender
+// navigation button
 Procedure TfrmMain.btnDBnavDOWNClick(Sender: TObject);
 begin
   tblUserInfo.Next;
-  tblUsers.RecNo := tblUserInfo.RecNo;
+  tblUsers.RecNo := tblUserInfo.RecNo; // Sync index
   updateEnabledLbl;
 end;
 
+// navigation button
 Procedure TfrmMain.btnDBnavUPClick(Sender: TObject);
 begin
   tblUserInfo.Prior;
-  tblUsers.RecNo := tblUserInfo.RecNo;
+  tblUsers.RecNo := tblUserInfo.RecNo; // Sync index
   updateEnabledLbl;
 end;
 
+// Handel if the admin wants to disable/enable user and update database
 procedure TfrmMain.btnEnabledClick(Sender: TObject);
 begin
   if NOT(tblUsers['Username'] = 'admin') then
@@ -521,28 +582,49 @@ begin
     util.error('You cannot disable the admin user', false);
 end;
 
+// Button to reset the whole tab
 procedure TfrmMain.btnReportClearAllClick(Sender: TObject);
 begin
   loadReport;
 end;
 
+// Button to reset the users involved section of the tab
 procedure TfrmMain.btnReportUsersClearClick(Sender: TObject);
 begin
   loadUsers;
 end;
 
+// Button to sort the database
+procedure TfrmMain.btnSortAlphaAZClick(Sender: TObject);
+begin
+  tblUsers.Sort := 'Username ASC';
+  tblUserInfo.Sort := 'Username ASC';
+  tblUsers.RecNo := tblUserInfo.RecNo; // Sync index
+end;
+
+// Button to sort the database
+procedure TfrmMain.btnSortAlphaZAClick(Sender: TObject);
+begin
+  tblUsers.Sort := 'Username DESC';
+  tblUserInfo.Sort := 'Username DESC';
+  tblUsers.RecNo := tblUserInfo.RecNo; // Sync index
+end;
+
+// Procedure to question the user for confirmation and
+// then write the report to the textfile
 procedure TfrmMain.btnSubmitReportClick(Sender: TObject);
 Var
   tFile : TextFile;
   i : integer;
 begin
-  if MessageDlg('Are you sure you want to delete the user?', mtConfirmation, [mbYes,mbCancel], 2) <> 6 then
+  if MessageDlg('Are you sure you want to submit your report?', mtConfirmation, [mbYes,mbCancel], 2) <> 6 then
     exit;
 
   util.initFile('Reports.txt', tFile);
   Append(tFile);
     Writeln(tFile, '*-*-*-*');
-    Writeln(tFile, edtReportTitle.Text);
+    Writeln(tFile, edtReportTitle.Text); // Add title
+    Writeln(tFile, frmLogin.getUser.fullname + ' ' + frmLogin.getUser.surname);   // Add current user's name
     Writeln(tFile, edtUsersInReport.Text);
     for i := 0 to memReportBody.Lines.Count do
       Writeln(tFile, memReportBody.Lines[i]{.ValueFromIndex[i]} );
@@ -564,7 +646,8 @@ begin
   else if tblUserInfo['Username'] = frmLogin.getUser.username then
     Util.error('You cannot delete your own user', false)
   else begin
-    tblUsers.RecNo := tblUserInfo.RecNo;
+    tblUsers.RecNo := tblUserInfo.RecNo; // Sync index
+    util.logevent('User ' + tblUserInfo['Username'] + ' was deleted', TEventType.warning);
     tblUserInfo.Delete;
     tblUsers.Delete;
   end;

@@ -1,9 +1,11 @@
 object frmMain: TfrmMain
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Main'
-  ClientHeight = 449
-  ClientWidth = 774
+  ClientHeight = 452
+  ClientWidth = 773
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,13 +22,14 @@ object frmMain: TfrmMain
     Left = 0
     Top = 0
     Width = 806
-    Height = 449
-    ActivePage = tabDash
+    Height = 460
+    ActivePage = tabUserManagement
     TabOrder = 0
     OnChange = tbcMainChange
     object tabDash: TTabSheet
       Caption = 'Dashboard'
       ImageIndex = 6
+      ExplicitHeight = 421
       object lblUserDash: TLabel
         Left = 16
         Top = 10
@@ -42,14 +45,14 @@ object frmMain: TfrmMain
       end
       object pnlMyInfoUser: TPanel
         Left = 16
-        Top = 40
+        Top = 39
         Width = 733
         Height = 340
         Color = clMenu
         ParentBackground = False
         TabOrder = 0
         object lblUsernameUser: TLabel
-          Left = 14
+          Left = 24
           Top = 60
           Width = 62
           Height = 14
@@ -62,8 +65,8 @@ object frmMain: TfrmMain
           ParentFont = False
         end
         object lblFullnameUser: TLabel
-          Left = 14
-          Top = 88
+          Left = 24
+          Top = 98
           Width = 55
           Height = 14
           Caption = 'Fullname: '
@@ -75,8 +78,8 @@ object frmMain: TfrmMain
           ParentFont = False
         end
         object lblSurnameUser: TLabel
-          Left = 14
-          Top = 116
+          Left = 24
+          Top = 134
           Width = 56
           Height = 14
           Caption = 'Surname: '
@@ -88,8 +91,8 @@ object frmMain: TfrmMain
           ParentFont = False
         end
         object lblCellUser: TLabel
-          Left = 14
-          Top = 141
+          Left = 24
+          Top = 168
           Width = 61
           Height = 14
           Caption = 'Cellphone: '
@@ -101,8 +104,8 @@ object frmMain: TfrmMain
           ParentFont = False
         end
         object lblEmailuser: TLabel
-          Left = 14
-          Top = 168
+          Left = 24
+          Top = 206
           Width = 35
           Height = 14
           Caption = 'Email: '
@@ -127,7 +130,7 @@ object frmMain: TfrmMain
           ParentFont = False
         end
         object lblUsernameDashUser: TLabel
-          Left = 96
+          Left = 115
           Top = 60
           Width = 4
           Height = 16
@@ -139,8 +142,8 @@ object frmMain: TfrmMain
           ParentFont = False
         end
         object edtFullnameDashUser: TEdit
-          Left = 96
-          Top = 85
+          Left = 112
+          Top = 96
           Width = 169
           Height = 21
           Hint = 'Enter your Fullname'
@@ -149,8 +152,8 @@ object frmMain: TfrmMain
           TabOrder = 0
         end
         object edtSurnameDashUser: TEdit
-          Left = 96
-          Top = 112
+          Left = 112
+          Top = 132
           Width = 169
           Height = 21
           Hint = 'Enter your surname'
@@ -159,8 +162,8 @@ object frmMain: TfrmMain
           TabOrder = 1
         end
         object edtCellDashUser: TEdit
-          Left = 96
-          Top = 139
+          Left = 112
+          Top = 166
           Width = 169
           Height = 21
           Hint = 'Enter your cellphone (numerical values after +27)'
@@ -169,8 +172,8 @@ object frmMain: TfrmMain
           TabOrder = 2
         end
         object edtEmailDashUser: TEdit
-          Left = 96
-          Top = 166
+          Left = 112
+          Top = 199
           Width = 169
           Height = 21
           Hint = 'Enter your email'
@@ -180,7 +183,7 @@ object frmMain: TfrmMain
         end
         object btnUserUpdate: TBitBtn
           Left = 167
-          Top = 257
+          Top = 273
           Width = 75
           Height = 25
           Hint = 'Update your personal information'
@@ -194,7 +197,7 @@ object frmMain: TfrmMain
         end
         object btnChangePasswordUser: TBitBtn
           Left = 144
-          Top = 226
+          Top = 234
           Width = 121
           Height = 25
           Hint = 'Change your password'
@@ -246,7 +249,7 @@ object frmMain: TfrmMain
         end
         object rpgGenderDashUser: TRadioGroup
           Left = 16
-          Top = 209
+          Top = 226
           Width = 122
           Height = 81
           Caption = 'Gender'
@@ -256,9 +259,39 @@ object frmMain: TfrmMain
           TabOrder = 6
         end
       end
+      object memWelcome: TMemo
+        Left = 384
+        Top = 82
+        Width = 329
+        Height = 264
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Lines.Strings = (
+          'Welcome <Fullname> <Surname>!'
+          ''
+          'This application makes filing formal reports and '
+          'complaints easier for the employee and the '
+          'Human Resources department of your company.  '
+          ''
+          'This tab allows you to view and change your personal '
+          'information as well as updating your password. There '
+          'is a help button located on the bottom right part of '
+          'the main application, viewable form all tabs. Please '
+          'refer to it for any common enquiries, otherwse'
+          'raise an issue at this project'#39's official github repo:'
+          ''
+          'https://github.com/benricok/PAT-2021')
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 1
+      end
     end
     object tabReport: TTabSheet
       Caption = 'Report'
+      ExplicitHeight = 421
       object lblHeadReport: TLabel
         Left = 16
         Top = 10
@@ -302,7 +335,7 @@ object frmMain: TfrmMain
         TabOrder = 1
       end
       object btnSubmitReport: TBitBtn
-        Left = 487
+        Left = 538
         Top = 391
         Width = 90
         Height = 25
@@ -312,10 +345,10 @@ object frmMain: TfrmMain
         TabOrder = 2
         OnClick = btnSubmitReportClick
       end
-      object cbxSelectUserReport: TComboBox
+      object cmbSelectUserReport: TComboBox
         Left = 16
-        Top = 391
-        Width = 169
+        Top = 392
+        Width = 228
         Height = 21
         TabOrder = 3
         Text = 'Select user'
@@ -332,7 +365,7 @@ object frmMain: TfrmMain
         TextHint = 'Users'
       end
       object btnAddUSerToReport: TBitBtn
-        Left = 199
+        Left = 250
         Top = 391
         Width = 90
         Height = 25
@@ -367,7 +400,7 @@ object frmMain: TfrmMain
         OnClick = btnAddUSerToReportClick
       end
       object btnReportUsersClear: TBitBtn
-        Left = 295
+        Left = 346
         Top = 391
         Width = 90
         Height = 25
@@ -378,8 +411,8 @@ object frmMain: TfrmMain
         OnClick = btnReportUsersClearClick
       end
       object btnReportClearAll: TBitBtn
-        Left = 391
-        Top = 393
+        Left = 442
+        Top = 391
         Width = 90
         Height = 25
         Caption = '&Clear All'
@@ -394,6 +427,7 @@ object frmMain: TfrmMain
       ImageIndex = 3
       ExplicitLeft = 8
       ExplicitTop = 28
+      ExplicitHeight = 421
       object Label3: TLabel
         Left = 16
         Top = 10
@@ -420,7 +454,7 @@ object frmMain: TfrmMain
         Font.Style = [fsBold]
         ParentFont = False
       end
-      object cbxAvalibleReports: TComboBox
+      object cmbAvalibleReports: TComboBox
         Left = 16
         Top = 58
         Width = 652
@@ -455,6 +489,7 @@ object frmMain: TfrmMain
     object tabUserManagement: TTabSheet
       Caption = 'User Management'
       ImageIndex = 2
+      ExplicitHeight = 425
       object Label1: TLabel
         Left = 16
         Top = 10
@@ -600,15 +635,34 @@ object frmMain: TfrmMain
         object lblHeadSort: TLabel
           Left = 16
           Top = 87
-          Width = 180
+          Width = 186
           Height = 13
-          Caption = 'Sorting of data (Alphabetically):'
+          Caption = 'Sort usernames (Alphabetically):'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+        end
+        object Label4: TLabel
+          Left = 232
+          Top = 88
+          Width = 106
+          Height = 13
+          Caption = 'Total salaries cost:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblSalaries: TLabel
+          Left = 252
+          Top = 107
+          Width = 3
+          Height = 13
         end
         object btnDBnavDOWN: TBitBtn
           Left = 16
@@ -691,7 +745,7 @@ object frmMain: TfrmMain
           OnClick = btnDBnavUPClick
         end
         object btnEnabled: TBitBtn
-          Left = 113
+          Left = 105
           Top = 42
           Width = 109
           Height = 25
@@ -702,7 +756,7 @@ object frmMain: TfrmMain
           OnClick = btnEnabledClick
         end
         object btnUserDel: TBitBtn
-          Left = 113
+          Left = 105
           Top = 11
           Width = 109
           Height = 25
@@ -719,6 +773,7 @@ object frmMain: TfrmMain
           Height = 25
           Caption = '(A - Z)'
           TabOrder = 4
+          OnClick = btnSortAlphaAZClick
         end
         object btnSortAlphaZA: TButton
           Left = 95
@@ -727,12 +782,14 @@ object frmMain: TfrmMain
           Height = 25
           Caption = '(Z - A)'
           TabOrder = 5
+          OnClick = btnSortAlphaZAClick
         end
       end
     end
     object tabLogs: TTabSheet
       Caption = 'Event Logger'
       ImageIndex = 5
+      ExplicitHeight = 421
       object Label2: TLabel
         Left = 16
         Top = 10
@@ -777,6 +834,7 @@ object frmMain: TfrmMain
     object tabLogout: TTabSheet
       Caption = 'Logout'
       ImageIndex = 4
+      ExplicitHeight = 421
     end
   end
   object BitBtn1: TBitBtn

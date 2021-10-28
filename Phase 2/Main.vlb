@@ -31,9 +31,6 @@ Coordinates=10,416,85,58
 [edtCellDashUser]
 Coordinates=237,280,112,58
 
-[cbxSelectUserReport]
-Coordinates=145,10,136,124
-
 [pnlGridControls]
 Coordinates=608,416,104,58
 
@@ -157,9 +154,6 @@ Coordinates=762,212,223,58
 [btnReportUsersClear]
 Coordinates=711,10,135,58
 
-[cbxAvalibleReports]
-Coordinates=10,10,125,124
-
 [Label1]
 Coordinates=359,280,53,58
 
@@ -187,4 +181,10 @@ Coordinates=96,280,131,58
 [redSelectedReport]
 Coordinates=430,484,70,36
 Visible=True
+
+[cmbSelectUserReport]
+Coordinates=145,10,136,124
+
+[cmbAvalibleReports]
+Coordinates=10,10,125,124
 

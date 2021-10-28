@@ -2,20 +2,23 @@ object frmPassword: TfrmPassword
   Left = 0
   Top = 0
   BorderIcons = []
+  BorderStyle = bsSingle
   Caption = 'Change Password'
-  ClientHeight = 164
-  ClientWidth = 231
+  ClientHeight = 174
+  ClientWidth = 230
   Color = clBtnFace
+  DefaultMonitor = dmPrimary
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  FormStyle = fsStayOnTop
   OldCreateOrder = False
   OnActivate = FormActivate
   DesignSize = (
-    231
-    164)
+    230
+    174)
   PixelsPerInch = 96
   TextHeight = 13
   object pnlPasswordForm: TPanel
@@ -76,12 +79,13 @@ object frmPassword: TfrmPassword
   end
   object pnlPassButtons: TPanel
     Left = 0
-    Top = 133
+    Top = 143
     Width = 233
     Height = 28
     Anchors = [akLeft, akBottom]
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 133
     object btnPassCancel: TBitBtn
       Left = 69
       Top = 0
