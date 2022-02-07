@@ -455,7 +455,7 @@ begin
     if Copy(sUser, 1, 7) <> '<added>' then begin // Check if user was already added
       if sEdit = '' then // Adds a comma only if there already exists a name
         sSpacer := '';
-      cmbSelectUserReport.Text := sEdit + sSpacer + sUser;
+      edtUsersInReport.Text := sEdit + sSpacer + sUser;
       cmbSelectUserReport.Items[cmbSelectUserReport.ItemIndex] := '<added> ' + sUser;
     end else
       util.error('You already added this user, please select a diffrent one', false)
