@@ -1,7 +1,7 @@
 # Delphi PAT grade 11
 Topic: Encryption and Decryption
 Algorithm: ELFHashing
-Created by Benrico Krog
+Created by: Benrico Krog
 Source released under AGPL-3.0 licence
 
 2. Uses the vigenere algorithm for encryption and decryption
